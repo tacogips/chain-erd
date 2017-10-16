@@ -1,2 +1,2 @@
-require('babel-core/register'); // development.jsでES6を使えるようにする
+require('babel-core/register'); // enable webpack.config.dev.js
 module.exports = require('./webpack.config.dev.js')
