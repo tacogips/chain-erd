@@ -1,10 +1,9 @@
-package serve
+package grpc
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/tacogips/chain/grpc/gen"
+	"github.com/ajainc/chain/grpc/gen"
 
 	"google.golang.org/grpc"
 )
@@ -25,12 +24,11 @@ func newFactorServer(ctx context.Context) *factorServer {
 
 func registerServices(ctx context.Context, grpcServer *grpc.Server) error {
 	// register server
-	pb.RegisterFactorsServer(grpcServer, *newIssueCuepointServer(ctx))
+	gen.RegisterFactorsServer(grpcServer, *newFactorServer(ctx))
 	return nil
 }
 
-func Serve() http.Handler {
-	NewHttpHandler
+func Serve() {
 	//TODO tacogips add handlers
 	//TODO what WAF used
 

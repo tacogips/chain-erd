@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package primefactor;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package                      = "gen";
+option (gogoproto.marshaler_all)       = true;
+option (gogoproto.sizer_all)           = true;
+option (gogoproto.unmarshaler_all)     = true;
+option (gogoproto.goproto_getters_all) = false;
+
+message Coordinate {
+  float x = 1;
+  float y = 2;
+}
+
+message Movement {}
+
+message Entity {
+	Coordinate
+}
+
+service EntityService {
+
+}
+
+service CoulumnGroupService {
+
+}
+
+// EntityService
+service ERDEventService {
+  rpc PrimeFactors(stream Request) returns (stream Response) {}
+}
+
+service RelationService {
+  rpc PrimeFactors(stream Request) returns (stream Response) {}
+}
+
+message Request { int64 num = 1; }
+
+message Response { int64 result = 1; }

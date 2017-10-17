@@ -1,0 +1,29 @@
+
+syntax = "proto3";
+
+package activity;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package                      = "gen";
+option (gogoproto.marshaler_all)       = true;
+option (gogoproto.sizer_all)           = true;
+option (gogoproto.unmarshaler_all)     = true;
+option (gogoproto.goproto_getters_all) = false;
+
+message Activity {
+  float id = 1;
+  float time = 1;
+}
+
+message showActivityCondition {
+	int32 num = 1;
+	int32 order = 2;
+}
+
+service ActivityService {
+  rpc showLatest(stream Request) returns (stream Response) {}
+  rpc undo(stream Request) returns (stream Response) {}
+}
