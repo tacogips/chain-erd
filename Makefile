@@ -1,4 +1,8 @@
-clean:
+.PHONY: clean-proto protoc
+
+clean-proto:
+	rm  -rf grpc/gen/*.pb.go
+
 protoc:
 	protoc \
     --proto_path=grpc/_protobuf \
@@ -9,7 +13,7 @@ Mgoogle/protobuf/duration.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/struct.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
-plugins=grpc:./grpc \
-	  gprc/_protobuf/*.proto
+plugins=grpc:./grpc/gen \
+	  grpc/_protobuf/*.proto
 
-
+cprotoc: clean-proto protoc
