@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package primefactor;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package                      = "gen";
+option (gogoproto.marshaler_all)       = true;
+option (gogoproto.sizer_all)           = true;
+option (gogoproto.unmarshaler_all)     = true;
+option (gogoproto.goproto_getters_all) = false;
+
+
+// Prime factors service definition.
+service Factors {
+  // We have a method called `PrimeFactors` which takes
+  // parameter called `Request` and returns the message `Response`
+
+  // The stream keyword is specified before both the request type and response
+  // type to make it as bidirectional streaming RPC method.
+
+  rpc PrimeFactors (stream Request) returns (stream Response) {}
+}
+
+message Request {
+  int64 num = 1;
+}
+
+message Response {
+  int64 result = 1;
+}
