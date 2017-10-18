@@ -2,7 +2,6 @@ package chain
 
 import (
 	"io"
-	"net/http"
 )
 
 //NewChain make new chain serve
@@ -17,12 +16,6 @@ type ChainConfig struct {
 // Chain
 type Chain struct {
 	Config ChainConfig
-}
-
-//HttpHandler
-func (chain Chain) HttpHandler() http.Handler {
-	//TODO tacogips impl
-
 }
 
 //Load

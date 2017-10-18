@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package erd;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package                      = "gen";
+option (gogoproto.marshaler_all)       = true;
+option (gogoproto.sizer_all)           = true;
+option (gogoproto.unmarshaler_all)     = true;
+option (gogoproto.goproto_getters_all) = false;
+
+message Coordinate {
+  float x = 1;
+  float y = 2;
+}
+
+message Activity {
+  float id                            = 1;
+  float datetime                      = 2;
+  string name                         = 3;
+  repeated string affected_object_ids = 4;
+}
+
+enum Order {
+  ASC  = 0;
+  DESC = 1;
+}
+
+message showActivityFilter {
+  int32 number      = 1;
+  int32 skip_number = 2;
+  Order order       = 3;
+}
+
+message ObjectID {
+	string id = 1;
+}
+
+service ActivityService {
+  rpc find(stream showActivityFilter) returns (stream Activity);
+	//  rpc undo(stream Request) returns (stream Response);
+}

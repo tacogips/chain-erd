@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package entity;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "erd.proto";
+
+option go_package                      = "gen";
+option (gogoproto.marshaler_all)       = true;
+option (gogoproto.sizer_all)           = true;
+option (gogoproto.unmarshaler_all)     = true;
+option (gogoproto.goproto_getters_all) = false;
+
+// version_id will be used to detect conflict action.
+message Entity {
+  erd.ObjectID object_id        = 1;
+  erd.Coordinate cordinate      = 2; // position of top-left
+  float width                   = 3;
+  float height                  = 4;
+  repeated EntityColumn columns = 5;
+  int64 version_id              = 6;
+  int64 z_index                 = 7; // depth
+}
+
+// TODO tacogips add other types
+enum ColumnType {
+  BIT       = 0;
+  TINYINT   = 1;
+  BOOL      = 2;
+  SMALLINT  = 3;
+  MIDIUM    = 4;
+  INT       = 5;
+  INTEGER   = 6;
+  VARCHAR   = 7;
+  CHAR      = 8;
+  DATE      = 9;
+  DATETIME  = 10;
+  TIMESTAMP = 11;
+}
+
+message EntityColumn {
+  int32 idx               = 1;
+  int32 name              = 2;
+  ColumnType type         = 3;
+  EntityColumnAttrs attrs = 4;
+}
+
+message EntityColumnAttrs {
+  ColumnAttrEnum attr_enum     = 1 [ (gogoproto.nullable) = true ];
+  ColumnAttrNumber attr_number = 2 [ (gogoproto.nullable) = true ];
+  ColumnAttrString attr_string = 3 [ (gogoproto.nullable) = true ];
+}
+
+message ColumnAttrEnum {
+  repeated string vals = 1;
+  string default_value = 2;
+}
+
+message ColumnAttrString {
+  int32 length         = 1;
+  string default_value = 2;
+}
+
+message ColumnAttrNumber {
+  int32 length        = 1;
+  int32 decimal       = 2;
+  bool is_unsigned    = 3;
+  float default_value = 4;
+}
+
+message EntityActivity {
+  erd.Activity activity = 1;
+  Entity entity         = 2;
+}
+
+// EntityService cantains actions affects entity
+service EntityService { rpc CreateNewEntity(stream Entity) returns (stream EntityActivity); }

@@ -17,3 +17,10 @@ plugins=grpc:./grpc/gen \
 	  grpc/_protobuf/*.proto
 
 cprotoc: clean-proto protoc
+
+doc:
+	 protoc \
+		--doc_out=markdown:grpc/doc \
+    --proto_path=grpc/_protobuf \
+		./$${dir}/*.proto && cd - ; \
+
