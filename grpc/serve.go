@@ -4,27 +4,15 @@ import (
 	"context"
 
 	"github.com/ajainc/chain/grpc/gen"
+	"github.com/ajainc/chain/grpc/server"
 
 	"google.golang.org/grpc"
 )
 
-type factorServer struct {
-	Ctx context.Context
-}
-
-func (server factorServer) PrimeFactors(gen.Factors_PrimeFactorsServer) error {
-	return nil
-}
-
-func newFactorServer(ctx context.Context) *factorServer {
-	return &factorServer{
-		Ctx: ctx,
-	}
-}
-
 func registerServices(ctx context.Context, grpcServer *grpc.Server) error {
-	// register server
-	gen.RegisterFactorsServer(grpcServer, *newFactorServer(ctx))
+
+	// entity server
+	gen.RegisterEntityServiceServer(grpcServer, *server.NewEntityServer(ctx))
 	return nil
 }
 
