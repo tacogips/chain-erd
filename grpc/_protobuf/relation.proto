@@ -22,20 +22,28 @@ enum RelationPointType {
 
 // relation between enitties
 message Relation {
-  string object_id          = 1;
+  erd.ObjectID object_id          = 1;
+  RelationPoint start_point       = 2;
+  RelationPoint end_point         = 3;
+  repeated erd.Coordinate bent_points = 4; // sorted from start_point to end_end
+}
+
+message RelationPoint {
+  entity.Entity connected_enitity = 1;
+  // TODO tacogips add relation style
+}
+
+message NewConnectRelation {
   RelationPoint start_point = 2;
   RelationPoint end_point   = 3;
 }
 
-message RelationPoint {
-  Coordinate cordinate     = 1;
-  Entity connected_enitity = 2;
-  // TODO tacogips add relation style
+message RelationActivity {
+  erd.Activity activity = 1;
+  Relation relation = 2;
 }
-
 
 service RelationService {
-  rpc PrimeFactors(stream Request) returns (stream Response) {}
+  rpc ConnectRelation(stream NewConnectRelation) returns (stream RelationActivity) {};
+  rpc DeleteRelation(stream erd.ObjectID) returns (stream RelationActivity) {};
 }
-
-

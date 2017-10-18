@@ -15,8 +15,8 @@ option (gogoproto.goproto_getters_all) = false;
 
 // version_id will be used to detect conflict action.
 message Entity {
-  string object_id              = 1;
-  Coordinate cordinate          = 2; // position of top-left
+  erd.ObjectID object_id        = 1;
+  erd.Coordinate cordinate      = 2; // position of top-left
   float width                   = 3;
   float height                  = 4;
   repeated EntityColumn columns = 5;
@@ -34,10 +34,10 @@ enum ColumnType {
   INT       = 5;
   INTEGER   = 6;
   VARCHAR   = 7;
-  CHAR      = 7;
-  DATE      = 8;
-  DATETIME  = 9;
-  TIMESTAMP = 10;
+  CHAR      = 8;
+  DATE      = 9;
+  DATETIME  = 10;
+  TIMESTAMP = 11;
 }
 
 message EntityColumn {
@@ -48,9 +48,9 @@ message EntityColumn {
 }
 
 message EntityColumnAttrs {
-  EnumColumn enum_val           = 1 [ (gogoproto.nullable) = true ];
-  ColumnAttrEnum enum_vals      = 2 [ (gogoproto.nullable) = true ];
-  ColumnAttrNumber number_attre = 3 [ (gogoproto.nullable) = true ];
+  ColumnAttrEnum attr_enum     = 1 [ (gogoproto.nullable) = true ];
+  ColumnAttrNumber attr_number = 2 [ (gogoproto.nullable) = true ];
+  ColumnAttrString attr_string = 3 [ (gogoproto.nullable) = true ];
 }
 
 message ColumnAttrEnum {
@@ -71,11 +71,9 @@ message ColumnAttrNumber {
 }
 
 message EntityActivity {
-  Activity activity = 1;
-  Entity entity     = 2;
+  erd.Activity activity = 1;
+  Entity entity         = 2;
 }
 
 // EntityService cantains actions affects entity
-service EntityService {
-  rpc CreateNewEntity(stream Entity) returns (stream EntityActivity);
-}
+service EntityService { rpc CreateNewEntity(stream Entity) returns (stream EntityActivity); }
