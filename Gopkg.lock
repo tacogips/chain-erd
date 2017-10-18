@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/cayleygraph/cayley"
+  packages = [".","clog","graph","graph/iterator","graph/memstore","graph/memstore/b","graph/path","quad","voc","voc/schema","writer"]
+  revision = "c33467000f64158c88c3031d221e5d21b504aa66"
+  version = "v0.6.1"
+
+[[projects]]
   name = "github.com/gogo/protobuf"
   packages = ["gogoproto","proto","protoc-gen-gogo/descriptor","sortkeys","types"]
   revision = "100ba4e885062801d56799d78530b73b178a78f3"
@@ -12,6 +18,12 @@
   name = "github.com/golang/protobuf"
   packages = ["proto","ptypes","ptypes/any","ptypes/duration","ptypes/timestamp"]
   revision = "130e6b02ab059e7b717a096f397c5b60111cae74"
+
+[[projects]]
+  name = "github.com/pborman/uuid"
+  packages = ["."]
+  revision = "e790cca94e6cc75c7064b1332e63811d4aae1a53"
+  version = "v1.1"
 
 [[projects]]
   branch = "master"
@@ -40,6 +52,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d2a09ab4ee269d03afa07815e1e5b64e135446c4320478cffb191c381b663738"
+  inputs-digest = "3f0098e02fb32b9898bd51883136bce2c1f7bc66f50f07dfd02c5630e7f183ec"
   solver-name = "gps-cdcl"
   solver-version = 1

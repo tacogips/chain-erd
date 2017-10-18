@@ -33,3 +33,7 @@
   version = "1.6.0"
 
 
+
+[[constraint]]
+  name = "github.com/cayleygraph/cayley"
+  version = "0.6.1"
