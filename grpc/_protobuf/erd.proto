@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package primefactor;
+package erd;
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
@@ -17,29 +17,25 @@ message Coordinate {
   float y = 2;
 }
 
-message Movement {}
-
-message Entity {
-	Coordinate
+message Activity {
+  float id                            = 1;
+  float datetime                      = 2;
+  string name                         = 3;
+  repeated string affected_object_ids = 4;
 }
 
-service EntityService {
-
+enum Order {
+  ASC  = 0;
+  DESC = 1;
 }
 
-service CoulumnGroupService {
-
+message showActivityFilter {
+  int32 number      = 1;
+  int32 skip_number = 2;
+  Order order       = 3;
 }
 
-// EntityService
-service ERDEventService {
-  rpc PrimeFactors(stream Request) returns (stream Response) {}
+service ActivityService {
+  rpc find(stream showActivityFilter) returns (stream Activity);
+  rpc undo(stream Request) returns (stream Response);
 }
-
-service RelationService {
-  rpc PrimeFactors(stream Request) returns (stream Response) {}
-}
-
-message Request { int64 num = 1; }
-
-message Response { int64 result = 1; }

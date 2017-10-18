@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package relation;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "erd.proto";
+import "entity.proto";
+
+option go_package                      = "gen";
+option (gogoproto.marshaler_all)       = true;
+option (gogoproto.sizer_all)           = true;
+option (gogoproto.unmarshaler_all)     = true;
+option (gogoproto.goproto_getters_all) = false;
+
+// start point/ end pont
+enum RelationPointType {
+  START = 0;
+  END   = 1;
+}
+
+// relation between enitties
+message Relation {
+  string object_id          = 1;
+  RelationPoint start_point = 2;
+  RelationPoint end_point   = 3;
+}
+
+message RelationPoint {
+  Coordinate cordinate     = 1;
+  Entity connected_enitity = 2;
+  // TODO tacogips add relation style
+}
+
+
+service RelationService {
+  rpc PrimeFactors(stream Request) returns (stream Response) {}
+}
+
+
