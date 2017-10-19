@@ -17,11 +17,10 @@ option (gogoproto.goproto_getters_all) = false;
 message Entity {
   erd.ObjectID object_id        = 1;
   erd.Coordinate cordinate      = 2; // position of top-left
-  float width                   = 3;
-  float height                  = 4;
-  repeated EntityColumn columns = 5;
-  int64 version_id              = 6;
-  int64 z_index                 = 7; // depth
+  erd.Size size                 = 3;
+  repeated EntityColumn columns = 4;
+  int64 version_id              = 5;
+  int64 z_index                 = 6; // depth //TODO
 }
 
 // TODO tacogips add other types
@@ -76,4 +75,4 @@ message EntityActivity {
 }
 
 // EntityService cantains actions affects entity
-service EntityService { rpc CreateNewEntity(stream Entity) returns (stream EntityActivity); }
+service EntityService { rpc CreateNewEntity(stream erd.CoordinateAndSize) returns (stream EntityActivity); }

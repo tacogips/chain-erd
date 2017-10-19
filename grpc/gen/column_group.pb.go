@@ -18,7 +18,9 @@ It has these top-level messages:
 	ColumnAttrString
 	ColumnAttrNumber
 	EntityActivity
+	CoordinateAndSize
 	Coordinate
+	Size
 	Activity
 	ShowActivityFilter
 	ObjectID

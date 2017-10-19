@@ -43,6 +43,16 @@ func (x Order) String() string {
 }
 func (Order) EnumDescriptor() ([]byte, []int) { return fileDescriptorErd, []int{0} }
 
+type CoordinateAndSize struct {
+	Coordinate *Coordinate `protobuf:"bytes,1,opt,name=coordinate" json:"coordinate,omitempty"`
+	Size_      *Size       `protobuf:"bytes,2,opt,name=size" json:"size,omitempty"`
+}
+
+func (m *CoordinateAndSize) Reset()                    { *m = CoordinateAndSize{} }
+func (m *CoordinateAndSize) String() string            { return proto.CompactTextString(m) }
+func (*CoordinateAndSize) ProtoMessage()               {}
+func (*CoordinateAndSize) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{0} }
+
 type Coordinate struct {
 	X float32 `protobuf:"fixed32,1,opt,name=x,proto3" json:"x,omitempty"`
 	Y float32 `protobuf:"fixed32,2,opt,name=y,proto3" json:"y,omitempty"`
@@ -51,19 +61,29 @@ type Coordinate struct {
 func (m *Coordinate) Reset()                    { *m = Coordinate{} }
 func (m *Coordinate) String() string            { return proto.CompactTextString(m) }
 func (*Coordinate) ProtoMessage()               {}
-func (*Coordinate) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{0} }
+func (*Coordinate) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{1} }
+
+type Size struct {
+	Width  float32 `protobuf:"fixed32,1,opt,name=width,proto3" json:"width,omitempty"`
+	Height float32 `protobuf:"fixed32,2,opt,name=height,proto3" json:"height,omitempty"`
+}
+
+func (m *Size) Reset()                    { *m = Size{} }
+func (m *Size) String() string            { return proto.CompactTextString(m) }
+func (*Size) ProtoMessage()               {}
+func (*Size) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{2} }
 
 type Activity struct {
-	Id                float32  `protobuf:"fixed32,1,opt,name=id,proto3" json:"id,omitempty"`
-	Datetime          float32  `protobuf:"fixed32,2,opt,name=datetime,proto3" json:"datetime,omitempty"`
-	Name              string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	AffectedObjectIds []string `protobuf:"bytes,4,rep,name=affected_object_ids,json=affectedObjectIds" json:"affected_object_ids,omitempty"`
+	Id                float32     `protobuf:"fixed32,1,opt,name=id,proto3" json:"id,omitempty"`
+	Datetime          float32     `protobuf:"fixed32,2,opt,name=datetime,proto3" json:"datetime,omitempty"`
+	Name              string      `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	AffectedObjectIds []*ObjectID `protobuf:"bytes,4,rep,name=affected_object_ids,json=affectedObjectIds" json:"affected_object_ids,omitempty"`
 }
 
 func (m *Activity) Reset()                    { *m = Activity{} }
 func (m *Activity) String() string            { return proto.CompactTextString(m) }
 func (*Activity) ProtoMessage()               {}
-func (*Activity) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{1} }
+func (*Activity) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{3} }
 
 type ShowActivityFilter struct {
 	Number     int32 `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
@@ -74,19 +94,21 @@ type ShowActivityFilter struct {
 func (m *ShowActivityFilter) Reset()                    { *m = ShowActivityFilter{} }
 func (m *ShowActivityFilter) String() string            { return proto.CompactTextString(m) }
 func (*ShowActivityFilter) ProtoMessage()               {}
-func (*ShowActivityFilter) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{2} }
+func (*ShowActivityFilter) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{4} }
 
 type ObjectID struct {
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Val string `protobuf:"bytes,1,opt,name=val,proto3" json:"val,omitempty"`
 }
 
 func (m *ObjectID) Reset()                    { *m = ObjectID{} }
 func (m *ObjectID) String() string            { return proto.CompactTextString(m) }
 func (*ObjectID) ProtoMessage()               {}
-func (*ObjectID) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{3} }
+func (*ObjectID) Descriptor() ([]byte, []int) { return fileDescriptorErd, []int{5} }
 
 func init() {
+	proto.RegisterType((*CoordinateAndSize)(nil), "erd.CoordinateAndSize")
 	proto.RegisterType((*Coordinate)(nil), "erd.Coordinate")
+	proto.RegisterType((*Size)(nil), "erd.Size")
 	proto.RegisterType((*Activity)(nil), "erd.Activity")
 	proto.RegisterType((*ShowActivityFilter)(nil), "erd.showActivityFilter")
 	proto.RegisterType((*ObjectID)(nil), "erd.ObjectID")
@@ -197,6 +219,44 @@ var _ActivityService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "erd.proto",
 }
 
+func (m *CoordinateAndSize) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CoordinateAndSize) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Coordinate != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintErd(dAtA, i, uint64(m.Coordinate.Size()))
+		n1, err := m.Coordinate.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if m.Size_ != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintErd(dAtA, i, uint64(m.Size_.Size()))
+		n2, err := m.Size_.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	return i, nil
+}
+
 func (m *Coordinate) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -221,6 +281,34 @@ func (m *Coordinate) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x15
 		i++
 		i = encodeFixed32Erd(dAtA, i, uint32(math.Float32bits(float32(m.Y))))
+	}
+	return i, nil
+}
+
+func (m *Size) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Size) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Width != 0 {
+		dAtA[i] = 0xd
+		i++
+		i = encodeFixed32Erd(dAtA, i, uint32(math.Float32bits(float32(m.Width))))
+	}
+	if m.Height != 0 {
+		dAtA[i] = 0x15
+		i++
+		i = encodeFixed32Erd(dAtA, i, uint32(math.Float32bits(float32(m.Height))))
 	}
 	return i, nil
 }
@@ -257,18 +345,15 @@ func (m *Activity) MarshalTo(dAtA []byte) (int, error) {
 		i += copy(dAtA[i:], m.Name)
 	}
 	if len(m.AffectedObjectIds) > 0 {
-		for _, s := range m.AffectedObjectIds {
+		for _, msg := range m.AffectedObjectIds {
 			dAtA[i] = 0x22
 			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+			i = encodeVarintErd(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i += n
 		}
 	}
 	return i, nil
@@ -322,11 +407,11 @@ func (m *ObjectID) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Id) > 0 {
+	if len(m.Val) > 0 {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintErd(dAtA, i, uint64(len(m.Id)))
-		i += copy(dAtA[i:], m.Id)
+		i = encodeVarintErd(dAtA, i, uint64(len(m.Val)))
+		i += copy(dAtA[i:], m.Val)
 	}
 	return i, nil
 }
@@ -358,6 +443,20 @@ func encodeVarintErd(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
+func (m *CoordinateAndSize) Size() (n int) {
+	var l int
+	_ = l
+	if m.Coordinate != nil {
+		l = m.Coordinate.Size()
+		n += 1 + l + sovErd(uint64(l))
+	}
+	if m.Size_ != nil {
+		l = m.Size_.Size()
+		n += 1 + l + sovErd(uint64(l))
+	}
+	return n
+}
+
 func (m *Coordinate) Size() (n int) {
 	var l int
 	_ = l
@@ -365,6 +464,18 @@ func (m *Coordinate) Size() (n int) {
 		n += 5
 	}
 	if m.Y != 0 {
+		n += 5
+	}
+	return n
+}
+
+func (m *Size) Size() (n int) {
+	var l int
+	_ = l
+	if m.Width != 0 {
+		n += 5
+	}
+	if m.Height != 0 {
 		n += 5
 	}
 	return n
@@ -384,8 +495,8 @@ func (m *Activity) Size() (n int) {
 		n += 1 + l + sovErd(uint64(l))
 	}
 	if len(m.AffectedObjectIds) > 0 {
-		for _, s := range m.AffectedObjectIds {
-			l = len(s)
+		for _, e := range m.AffectedObjectIds {
+			l = e.Size()
 			n += 1 + l + sovErd(uint64(l))
 		}
 	}
@@ -410,7 +521,7 @@ func (m *ShowActivityFilter) Size() (n int) {
 func (m *ObjectID) Size() (n int) {
 	var l int
 	_ = l
-	l = len(m.Id)
+	l = len(m.Val)
 	if l > 0 {
 		n += 1 + l + sovErd(uint64(l))
 	}
@@ -429,6 +540,122 @@ func sovErd(x uint64) (n int) {
 }
 func sozErd(x uint64) (n int) {
 	return sovErd(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *CoordinateAndSize) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowErd
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CoordinateAndSize: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CoordinateAndSize: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Coordinate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowErd
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthErd
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Coordinate == nil {
+				m.Coordinate = &Coordinate{}
+			}
+			if err := m.Coordinate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Size_", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowErd
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthErd
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Size_ == nil {
+				m.Size_ = &Size{}
+			}
+			if err := m.Size_.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipErd(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthErd
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *Coordinate) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -487,6 +714,84 @@ func (m *Coordinate) Unmarshal(dAtA []byte) error {
 			v |= uint32(dAtA[iNdEx-2]) << 16
 			v |= uint32(dAtA[iNdEx-1]) << 24
 			m.Y = float32(math.Float32frombits(v))
+		default:
+			iNdEx = preIndex
+			skippy, err := skipErd(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthErd
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Size) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowErd
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Size: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Size: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Width", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += 4
+			v = uint32(dAtA[iNdEx-4])
+			v |= uint32(dAtA[iNdEx-3]) << 8
+			v |= uint32(dAtA[iNdEx-2]) << 16
+			v |= uint32(dAtA[iNdEx-1]) << 24
+			m.Width = float32(math.Float32frombits(v))
+		case 2:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += 4
+			v = uint32(dAtA[iNdEx-4])
+			v |= uint32(dAtA[iNdEx-3]) << 8
+			v |= uint32(dAtA[iNdEx-2]) << 16
+			v |= uint32(dAtA[iNdEx-1]) << 24
+			m.Height = float32(math.Float32frombits(v))
 		default:
 			iNdEx = preIndex
 			skippy, err := skipErd(dAtA[iNdEx:])
@@ -598,7 +903,7 @@ func (m *Activity) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AffectedObjectIds", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowErd
@@ -608,20 +913,22 @@ func (m *Activity) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthErd
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AffectedObjectIds = append(m.AffectedObjectIds, string(dAtA[iNdEx:postIndex]))
+			m.AffectedObjectIds = append(m.AffectedObjectIds, &ObjectID{})
+			if err := m.AffectedObjectIds[len(m.AffectedObjectIds)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -782,7 +1089,7 @@ func (m *ObjectID) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Val", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -807,7 +1114,7 @@ func (m *ObjectID) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Id = string(dAtA[iNdEx:postIndex])
+			m.Val = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -938,29 +1245,34 @@ var (
 func init() { proto.RegisterFile("erd.proto", fileDescriptorErd) }
 
 var fileDescriptorErd = []byte{
-	// 381 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x91, 0xc1, 0xae, 0x93, 0x40,
-	0x14, 0x86, 0xef, 0x00, 0xbd, 0xc2, 0x51, 0xaf, 0xd7, 0x31, 0x2a, 0x61, 0xc1, 0x25, 0xac, 0x88,
-	0x89, 0x5c, 0x53, 0x9f, 0xa0, 0xb6, 0x35, 0x71, 0x63, 0x13, 0xba, 0x73, 0xd3, 0x00, 0x73, 0xa0,
-	0xa3, 0x85, 0x69, 0x86, 0xa1, 0xb6, 0x3e, 0x61, 0x97, 0x3e, 0x82, 0xf6, 0x49, 0x0c, 0x03, 0xa8,
-	0xd1, 0xdd, 0xfc, 0xe7, 0xfb, 0xcf, 0x9c, 0xf3, 0xe7, 0x80, 0x83, 0x92, 0xc5, 0x7b, 0x29, 0x94,
-	0xa0, 0x26, 0x4a, 0xe6, 0xbd, 0x2e, 0xb9, 0xda, 0xb6, 0x59, 0x9c, 0x8b, 0xea, 0xbe, 0x14, 0xa5,
-	0xb8, 0xd7, 0x2c, 0x6b, 0x0b, 0xad, 0xb4, 0xd0, 0xaf, 0xbe, 0xc7, 0xf3, 0x4b, 0x21, 0xca, 0x1d,
-	0xfe, 0x71, 0xb1, 0x56, 0xa6, 0x8a, 0x8b, 0x7a, 0xe0, 0x77, 0xff, 0x72, 0xc5, 0x2b, 0x6c, 0x54,
-	0x5a, 0xed, 0x7b, 0x43, 0x18, 0x01, 0xcc, 0x85, 0x90, 0x8c, 0xd7, 0xa9, 0x42, 0xfa, 0x08, 0xc8,
-	0xd1, 0x25, 0x01, 0x89, 0x8c, 0x84, 0x1c, 0x3b, 0x75, 0x72, 0x8d, 0x5e, 0x9d, 0xc2, 0x6f, 0x60,
-	0xcf, 0x72, 0xc5, 0x0f, 0x5c, 0x9d, 0xe8, 0x0d, 0x18, 0x9c, 0x0d, 0x46, 0x83, 0x33, 0xea, 0x81,
-	0xcd, 0x52, 0x85, 0xdd, 0xe7, 0x43, 0xc3, 0x6f, 0x4d, 0x29, 0x58, 0x75, 0x5a, 0xa1, 0x6b, 0x06,
-	0x24, 0x72, 0x12, 0xfd, 0xa6, 0x31, 0x3c, 0x4b, 0x8b, 0x02, 0x73, 0x85, 0x6c, 0x23, 0xb2, 0xcf,
-	0x98, 0xab, 0x0d, 0x67, 0x8d, 0x6b, 0x05, 0x66, 0xe4, 0x24, 0x4f, 0x47, 0xb4, 0xd2, 0xe4, 0x03,
-	0x6b, 0x42, 0x01, 0xb4, 0xd9, 0x8a, 0xaf, 0xe3, 0xfc, 0xf7, 0x7c, 0xa7, 0x50, 0xd2, 0x17, 0x70,
-	0x5d, 0xb7, 0x55, 0x86, 0x52, 0x6f, 0x32, 0x49, 0x06, 0x45, 0xef, 0xe0, 0x61, 0xf3, 0x85, 0xef,
-	0x37, 0x03, 0x34, 0x34, 0x84, 0xae, 0xf4, 0xb1, 0x37, 0x04, 0x30, 0x11, 0x92, 0xa1, 0xd4, 0x3b,
-	0xdd, 0x4c, 0x21, 0xee, 0x8e, 0xb0, 0xea, 0x2a, 0x49, 0x0f, 0x42, 0x0f, 0xec, 0x61, 0xfa, 0xe2,
-	0xaf, 0xb0, 0x4e, 0x17, 0xf6, 0x95, 0x07, 0x13, 0xed, 0xa5, 0x0f, 0xc0, 0x9c, 0xad, 0xe7, 0xb7,
-	0x57, 0xd4, 0x06, 0x6b, 0xb1, 0x5c, 0xcf, 0x6f, 0xc9, 0x74, 0x09, 0x4f, 0xc6, 0x25, 0xd7, 0x28,
-	0x0f, 0x3c, 0x47, 0x3a, 0x05, 0xab, 0xe0, 0x35, 0xa3, 0x2f, 0xf5, 0x94, 0xff, 0x63, 0x78, 0x8f,
-	0x35, 0x18, 0x8b, 0x11, 0x79, 0x43, 0xde, 0x3d, 0x3f, 0xff, 0xf4, 0xaf, 0xce, 0x17, 0x9f, 0x7c,
-	0xbf, 0xf8, 0xe4, 0xc7, 0xc5, 0x27, 0x9f, 0xcc, 0x12, 0xeb, 0xec, 0x5a, 0xdf, 0xec, 0xed, 0xaf,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0x81, 0xde, 0x32, 0x7b, 0x35, 0x02, 0x00, 0x00,
+	// 460 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x52, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xee, 0xda, 0x4e, 0x49, 0xa6, 0xd0, 0xa6, 0xcb, 0x5f, 0x14, 0x81, 0x1b, 0xf9, 0x64, 0x21,
+	0x91, 0x20, 0xc3, 0x95, 0x43, 0x48, 0x8b, 0xc4, 0x05, 0x24, 0xe7, 0xc6, 0x25, 0xb2, 0xbd, 0x13,
+	0x7b, 0x21, 0xf6, 0x46, 0xeb, 0x4d, 0xda, 0xf4, 0x0d, 0x78, 0xb3, 0x1e, 0x79, 0x04, 0xc8, 0x93,
+	0x20, 0x8f, 0xed, 0x06, 0xc1, 0x6d, 0xbe, 0xbf, 0x9d, 0x6f, 0x2c, 0x43, 0x0f, 0xb5, 0x18, 0xaf,
+	0xb5, 0x32, 0x8a, 0xdb, 0xa8, 0xc5, 0xf0, 0x75, 0x2a, 0x4d, 0xb6, 0x89, 0xc7, 0x89, 0xca, 0x27,
+	0xa9, 0x4a, 0xd5, 0x84, 0xb4, 0x78, 0xb3, 0x24, 0x44, 0x80, 0xa6, 0x3a, 0x33, 0x74, 0x53, 0xa5,
+	0xd2, 0x15, 0x1e, 0x5c, 0x62, 0xa3, 0x23, 0x23, 0x55, 0xd1, 0xe8, 0x17, 0xff, 0xea, 0x46, 0xe6,
+	0x58, 0x9a, 0x28, 0x5f, 0xd7, 0x06, 0x2f, 0x81, 0xf3, 0x99, 0x52, 0x5a, 0xc8, 0x22, 0x32, 0x38,
+	0x2d, 0xc4, 0x5c, 0xde, 0x22, 0x9f, 0x00, 0x24, 0xf7, 0xe4, 0x80, 0x8d, 0x98, 0x7f, 0x12, 0x9c,
+	0x8d, 0xab, 0xa6, 0x07, 0x6f, 0xf8, 0x97, 0x85, 0xbf, 0x04, 0xa7, 0x94, 0xb7, 0x38, 0xb0, 0xc8,
+	0xda, 0x23, 0x6b, 0xf5, 0x52, 0x48, 0xb4, 0xe7, 0x03, 0x1c, 0x82, 0xfc, 0x21, 0xb0, 0x1b, 0x7a,
+	0xd4, 0x0a, 0xd9, 0x4d, 0x85, 0x76, 0x94, 0xb3, 0x42, 0xb6, 0xf3, 0xde, 0x81, 0x43, 0x0d, 0x9e,
+	0x40, 0xe7, 0x5a, 0x0a, 0x93, 0x35, 0xbe, 0x1a, 0xf0, 0x67, 0x70, 0x9c, 0xa1, 0x4c, 0x33, 0xd3,
+	0x04, 0x1a, 0xe4, 0xfd, 0x60, 0xd0, 0x9d, 0x26, 0x46, 0x6e, 0xa5, 0xd9, 0xf1, 0x53, 0xb0, 0xa4,
+	0x68, 0x72, 0x96, 0x14, 0x7c, 0x08, 0x5d, 0x11, 0x19, 0xac, 0x0e, 0x6f, 0x62, 0xf7, 0x98, 0x73,
+	0x70, 0x8a, 0x28, 0xc7, 0x81, 0x3d, 0x62, 0x7e, 0x2f, 0xa4, 0x99, 0xbf, 0x87, 0xc7, 0xd1, 0x72,
+	0x89, 0x89, 0x41, 0xb1, 0x50, 0xf1, 0x37, 0x4c, 0xcc, 0x42, 0x8a, 0x72, 0xe0, 0x8c, 0x6c, 0xff,
+	0x24, 0x78, 0x44, 0xa7, 0x7d, 0x21, 0xfa, 0xd3, 0x65, 0x78, 0xde, 0x3a, 0x1b, 0x46, 0x94, 0x9e,
+	0x02, 0x5e, 0x66, 0xea, 0xba, 0xad, 0xf3, 0x51, 0xae, 0x0c, 0xea, 0xaa, 0x79, 0xb1, 0xc9, 0x63,
+	0xd4, 0x54, 0xac, 0x13, 0x36, 0x88, 0x5f, 0xc0, 0x49, 0xf9, 0x5d, 0xae, 0x17, 0x8d, 0x68, 0x91,
+	0x08, 0x15, 0xf5, 0xb9, 0x36, 0x8c, 0xa0, 0xa3, 0xb4, 0x40, 0x4d, 0x15, 0x4f, 0x03, 0xa8, 0xf7,
+	0x57, 0x4c, 0x58, 0x0b, 0xde, 0x0b, 0xe8, 0xb6, 0x7d, 0x78, 0x1f, 0xec, 0x6d, 0xb4, 0xa2, 0x1d,
+	0xbd, 0xb0, 0x1a, 0x5f, 0x0d, 0xa1, 0x43, 0x6e, 0xfe, 0x00, 0xec, 0xe9, 0x7c, 0xd6, 0x3f, 0xe2,
+	0x5d, 0x70, 0x2e, 0xaf, 0xe6, 0xb3, 0x3e, 0x0b, 0xae, 0xe0, 0xac, 0xad, 0x39, 0x47, 0xbd, 0x95,
+	0x09, 0xf2, 0x00, 0x9c, 0xa5, 0x2c, 0x04, 0x7f, 0x4e, 0x7b, 0xfe, 0x3f, 0x64, 0x58, 0x7f, 0x80,
+	0x96, 0xf4, 0xd9, 0x1b, 0xf6, 0xe1, 0xe9, 0xdd, 0x6f, 0xf7, 0xe8, 0x6e, 0xef, 0xb2, 0x9f, 0x7b,
+	0x97, 0xfd, 0xda, 0xbb, 0xec, 0xab, 0x9d, 0x62, 0x11, 0x1f, 0xd3, 0x0f, 0xf6, 0xf6, 0x4f, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0xc8, 0x1e, 0xe3, 0xd2, 0xe2, 0x02, 0x00, 0x00,
 }

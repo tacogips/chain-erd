@@ -12,16 +12,27 @@ option (gogoproto.sizer_all)           = true;
 option (gogoproto.unmarshaler_all)     = true;
 option (gogoproto.goproto_getters_all) = false;
 
+
+message CoordinateAndSize {
+  Coordinate coordinate = 1;
+  Size size             = 2;
+}
+
 message Coordinate {
   float x = 1;
   float y = 2;
 }
 
+message Size {
+  float width  = 1;
+  float height = 2;
+}
+
 message Activity {
-  float id                            = 1;
-  float datetime                      = 2;
-  string name                         = 3;
-  repeated string affected_object_ids = 4;
+  float id                              = 1;
+  float datetime                        = 2;
+  string name                           = 3;
+  repeated ObjectID affected_object_ids = 4;
 }
 
 enum Order {
@@ -35,11 +46,9 @@ message showActivityFilter {
   Order order       = 3;
 }
 
-message ObjectID {
-	string id = 1;
-}
+message ObjectID { string val = 1; }
 
 service ActivityService {
   rpc find(stream showActivityFilter) returns (stream Activity);
-	//  rpc undo(stream Request) returns (stream Response);
+  //  rpc undo(stream Request) returns (stream Response);
 }
