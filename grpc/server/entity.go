@@ -5,6 +5,7 @@ import (
 	"io"
 
 	"github.com/ajainc/chain/grpc/gen"
+	"github.com/ajainc/chain/grpc/store"
 )
 
 type EntityServer struct {
@@ -14,7 +15,7 @@ type EntityServer struct {
 // CreateNewEntity
 func (server EntityServer) CreateNewEntity(stream gen.EntityService_CreateNewEntityServer) error {
 	for {
-		req, err := stream.Recv()
+		position, err := stream.Recv()
 		if err == io.EOF {
 			break
 		} else if err != nil {
@@ -23,9 +24,11 @@ func (server EntityServer) CreateNewEntity(stream gen.EntityService_CreateNewEnt
 
 		// TODO tacogips make meaningful result
 		result := &gen.EntityActivity{}
+		entityActivity, err := store.RegisterNewEntity(server.AppCtx, position)
 
-		stream.Send(result)
+		stream.Send(&entityActivity)
 	}
+
 	return nil
 }
 

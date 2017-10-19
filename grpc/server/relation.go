@@ -10,6 +10,7 @@ type RelationServer struct {
 	Ctx context.Context
 }
 
+//ConnectRelation connects two Entities with relation
 func (server RelationServer) ConnectRelation(service gen.RelationService_ConnectRelationServer) error {
 	return nil
 }

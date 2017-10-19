@@ -19,7 +19,6 @@ message Entity {
   erd.Coordinate cordinate      = 2; // position of top-left
   erd.Size size                 = 3;
   repeated EntityColumn columns = 4;
-  int64 version_id              = 5;
   int64 z_index                 = 6; // depth //TODO
 }
 
@@ -40,10 +39,11 @@ enum ColumnType {
 }
 
 message EntityColumn {
-  int32 idx               = 1;
-  int32 name              = 2;
-  ColumnType type         = 3;
-  EntityColumnAttrs attrs = 4;
+  erd.ObjectID object_id  = 1;
+  int32 idx               = 2;
+  int32 name              = 3;
+  ColumnType type         = 4;
+  EntityColumnAttrs attrs = 5;
 }
 
 message EntityColumnAttrs {

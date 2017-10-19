@@ -21,8 +21,9 @@ func main() {
 
 	ctx := context.Background()
 
+	// graphdb
 	var graphdbOnCloseFn func() error
-	ctx, graphdbOnCloseFn, err = graphdb.WithContext(ctx, "", nil)
+	ctx, graphdbOnCloseFn, err = graphdb.WithContext(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -33,6 +34,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.Printf("staring server.listening %s", port)
+	log.Printf("staring server. listening %s", port)
 	server.Serve(listener)
 }

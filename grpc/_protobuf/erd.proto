@@ -12,7 +12,6 @@ option (gogoproto.sizer_all)           = true;
 option (gogoproto.unmarshaler_all)     = true;
 option (gogoproto.goproto_getters_all) = false;
 
-
 message CoordinateAndSize {
   Coordinate coordinate = 1;
   Size size             = 2;

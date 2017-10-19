@@ -3,11 +3,8 @@ package graphdb
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
-	"os"
 
 	"github.com/cayleygraph/cayley"
-	"github.com/cayleygraph/cayley/graph"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -26,21 +23,16 @@ func FromContext(ctx context.Context) *cayley.Handle {
 }
 
 // WithContext
-func WithContext(ctx context.Context, dbFileName string, opts graph.Options) (context.Context, CloseFunc, error) {
-	boltdbFile, err := ioutil.TempFile("", dbFileName)
-	if err != nil {
-		return ctx, nil, err
-	}
-
-	store, err := cayley.NewGraph("chain_graph", boltdbFile.Name(), opts)
+func WithContext(ctx context.Context) (context.Context, CloseFunc, error) {
+	// TODO tacogips
+	store, err := cayley.NewMemoryGraph()
 	if err != nil {
 		return ctx, nil, err
 	}
 
 	ctx = context.WithValue(ctx, key, store)
-
 	closeFunc := func() error {
-		err := os.Remove(boltdbFile.Name()) // clean up
+		err := store.Close()
 		return err
 	}
 
