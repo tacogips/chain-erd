@@ -21,7 +21,7 @@ func newObjectID(ctx context.Context) gen.ObjectID {
 }
 
 func addColumnToEntity(gdb *graph.Transaction, entityID gen.ObjectID, columnID gen.ObjectID) error {
-	return gdb.AddQuad(quad.Make(entityID, PredHasColumn, columnID))
+	return gdb.AddQuad(quad.Make(entityID, PredHasColumn, columnID, nil))
 }
 
 func setEntityPosition(gdb *graph.Transaction, entityID gen.ObjectID, coordinate gen.Coordinate) error {
