@@ -3,12 +3,17 @@ package store
 type Predicate string
 
 const (
-	PredHasColumn Predicate = "HasColumn"
-	PredVersion             = "Version"
+	PredColumn Predicate = "column"
+	PredName             = "name"
 
-	PredHasWidth  = "HasWidth"
-	PredHasHeight = "HasHeight"
+	// relation
+	PredOneToMany = "one_to_many"
 
-	PredAtCoordinateX = "AtCoordinateX"
-	PredAtCoordinateY = "AtCoordinateY"
+	PredSize   = "size"
+	PredWidth  = "width"
+	PredHeight = "height"
+
+	PredCoord  = "coord"
+	PredCoordX = "x"
+	PredCoordY = "y"
 )

@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	"github.com/ajainc/chain/ctx/graphdb"
 	chaingrpc "github.com/ajainc/chain/grpc"
 )
 
-//TODO tacogips implmenet commands
+//TODO (tacogips) implement commands with option
 func main() {
 	port := "50051"
 
@@ -19,21 +20,36 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	ctx := context.Background()
+	ctx, cancelContext := context.WithCancel(context.Background())
 
 	// graphdb
-	var graphdbOnCloseFn func() error
-	ctx, graphdbOnCloseFn, err = graphdb.WithContext(ctx)
+	ctx, err = graphdb.WithContext(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	defer graphdbOnCloseFn()
-
-	server, err := chaingrpc.Setup(ctx)
+	grpcServer, err := chaingrpc.Setup(ctx)
 	if err != nil {
 		panic(err)
 	}
-	log.Printf("staring server. listening %s", port)
-	server.Serve(listener)
+
+	go func() {
+		log.Printf("staring server. listening %s", port)
+		grpcServer.Serve(listener)
+	}()
+
+	waitShutdown := make(chan struct{})
+	signals := make(chan os.Signal, 1)
+	go func() {
+		for {
+			select {
+			case <-ctx.Done:
+				waitShutdown <- struct{}{}
+			case <-sigs:
+				cancelContext()
+			}
+		}
+	}()
+
+	<-waitShutdown
 }

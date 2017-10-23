@@ -19,7 +19,7 @@ message Entity {
   erd.Coordinate cordinate      = 2; // position of top-left
   erd.Size size                 = 3;
   repeated EntityColumn columns = 4;
-  int64 z_index                 = 6; // depth //TODO
+  int64 z_index                 = 5; // depth //TODO
 }
 
 // TODO tacogips add other types

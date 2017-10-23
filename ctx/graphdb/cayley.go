@@ -3,8 +3,11 @@ package graphdb
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/cayleygraph/cayley"
+	cserver "github.com/cayleygraph/cayley/server/http"
+	cserver "github.com/cayleygraph/cayley/server/http/"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -14,8 +17,8 @@ type cayleyKey int
 var key cayleyKey = 1
 
 // FromContext
-func FromContext(ctx context.Context) *cayley.Handle {
-	store, ok := ctx.Value(key).(*cayley.Handle)
+func FromContext(c context.Context) *cayley.Handle {
+	store, ok := c.Value(key).(*cayley.Handle)
 	if !ok {
 		panic(fmt.Errorf("no db store in the context "))
 	}
@@ -23,18 +26,49 @@ func FromContext(ctx context.Context) *cayley.Handle {
 }
 
 // WithContext
-func WithContext(ctx context.Context) (context.Context, CloseFunc, error) {
+func WithContext(c context.Context) (context.Context, error) {
 	// TODO tacogips
 	store, err := cayley.NewMemoryGraph()
 	if err != nil {
-		return ctx, nil, err
+		return c, err
 	}
 
-	ctx = context.WithValue(ctx, key, store)
+	c = context.WithValue(c, key, store)
+
 	closeFunc := func() error {
 		err := store.Close()
 		return err
 	}
 
-	return ctx, closeFunc, nil
+	go func() {
+		select {
+		case <-c.Done():
+			closeFunc()
+		}
+	}()
+
+	return c, nil
+}
+
+//Serve serve cayley browser
+func Serve(c context.Context) error {
+	gdb := FromContext(c)
+
+	api := cserver.NewAPIv2(gdb)
+	cayleyServer := &http.Server{
+		Addr:    fmt.Sprintf(":%d", 10111),
+		Handler: api,
+	}
+
+	go func() {
+		cayleyServer.ListenAndServe()
+	}()
+
+	for {
+		select {
+		case cs <- c.Done():
+			cayleyServer.Shutdown(context.Background())
+		}
+	}
+
 }

@@ -45,7 +45,10 @@ message showActivityFilter {
   Order order       = 3;
 }
 
-message ObjectID { string val = 1; }
+message ObjectID {
+  string type = 1;
+  string id   = 2;
+}
 
 service ActivityService {
   rpc find(stream showActivityFilter) returns (stream Activity);

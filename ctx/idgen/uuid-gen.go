@@ -23,8 +23,8 @@ func (_ defaultIDGenerator) Gen() string {
 }
 
 // FromContext
-func FromContext(ctx context.Context) IDGenerator {
-	gen, ok := ctx.Value(key).(IDGenerator)
+func FromContext(c context.Context) IDGenerator {
+	gen, ok := c.Value(key).(IDGenerator)
 	if !ok {
 		panic(fmt.Errorf("no db store in the context "))
 	}
@@ -32,12 +32,13 @@ func FromContext(ctx context.Context) IDGenerator {
 }
 
 // WithContext
-func WithContext(ctx context.Context) context.Context {
-	ctx = context.WithValue(ctx, key, defaultIDGenerator{})
-	return ctx
+func WithContext(c context.Context) context.Context {
+	c = context.WithValue(c, key, defaultIDGenerator{})
+	return c
 }
 
-func SpecificWithContext(ctx context.Context, iDgen IDGenerator) context.Context {
-	ctx = context.WithValue(ctx, key, iDgen)
-	return ctx
+// SpecificWithContext
+func SpecificWithContext(c context.Context, iDgen IDGenerator) context.Context {
+	c = context.WithValue(c, key, iDgen)
+	return c
 }

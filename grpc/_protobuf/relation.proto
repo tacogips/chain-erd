@@ -22,9 +22,9 @@ enum RelationPointType {
 
 // relation between enitties
 message Relation {
-  erd.ObjectID object_id          = 1;
-  RelationPoint start_point       = 2;
-  RelationPoint end_point         = 3;
+  erd.ObjectID object_id              = 1;
+  RelationPoint start_point           = 2;
+  RelationPoint end_point             = 3;
   repeated erd.Coordinate bent_points = 4; // sorted from start_point to end_end
 }
 
@@ -40,7 +40,7 @@ message NewConnectRelation {
 
 message RelationActivity {
   erd.Activity activity = 1;
-  Relation relation = 2;
+  Relation relation     = 2;
 }
 
 service RelationService {
