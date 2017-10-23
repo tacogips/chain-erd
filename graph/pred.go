@@ -1,4 +1,4 @@
-package store
+package graph
 
 type Predicate string
 

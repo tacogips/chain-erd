@@ -1,4 +1,4 @@
-package store
+package graph
 
 import (
 	"context"
@@ -10,8 +10,9 @@ import (
 
 type EventName string
 
-//GraphDBEvent stand for graphdb edit event. all events  are enable to be serialized into json object, and stored a file.
+//GraphDBEvent stand for a event affet to graphdb. all events  are enable to be serialized into json object, and stored a file.
 type GraphDBEvent interface {
+	EventName()
 	Occur(context.Context) error
 	Undo(context.Context) error
 }
@@ -23,23 +24,21 @@ const (
 
 // RegisterNewEntityEvent is
 type NewEntityEvent struct {
-	ObjectID   gen.ObjectID   `json:"objectId"`
-	Coordinate gen.Coordinate `json:"coordinate"`
-	Size       gen.Size       `json:"size"`
+	ObjectID     gen.ObjectID          `json:"object_id"`
+	CoordAndSize gen.CoordinateAndSize `json:"coordinate_and_size"`
 }
 
-func (ev NewEntityEvent) Occur(ctx context.Context) error {
-	gdb := graphdb.FromContext(ctx)
-
+func (ev NewEntityEvent) Occur(c context.Context) error {
+	gdb := graphdb.FromContext(c)
 	err := withTx(gdb, func(tx *graph.Transaction) error {
-		setEntityPosition(tx, ev.ObjectID, ev.Coordinate)
-
+		entityID := NewEntityObjectID(c)
+		RegisterNewEntity(c, ev.ObjectID, ev.CoordAndSize)
 	})
 	return err
 }
 
-func (ev NewEntityEvent) Undo(ctx context.Context) error {
-	//TODO tacogips
+func (ev NewEntityEvent) Undo(c context.Context) error {
+	//TODO tacogips implment
 	return nil
 }
 
