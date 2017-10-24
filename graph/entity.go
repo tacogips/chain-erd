@@ -11,7 +11,7 @@ import (
 )
 
 // RegisterNewEntity register new entity
-func CreateNewEntity(c context.Context, objPosition gen.ObjectPosition) (gen.Activity, error) {
+func CreateEntity(c context.Context, objPosition gen.ObjectPosition) (*gen.Activity, error) {
 	gdb := graphdb.FromContext(c)
 
 	err := withTx(gdb, func(tx *graph.Transaction) error {
@@ -26,10 +26,10 @@ func CreateNewEntity(c context.Context, objPosition gen.ObjectPosition) (gen.Act
 	})
 
 	if err != nil {
-		return gen.EntityActivity{}, err
+		return nil, err
 	}
 
-	return gen.EntityActivity{}, err
+	return nil, err
 }
 
 func setEntityCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, entityID string, coordinate gen.Coordinate) error {
