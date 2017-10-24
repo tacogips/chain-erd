@@ -33,7 +33,7 @@ func CreateNewEntity(c context.Context, objPosition gen.ObjectPosition) (gen.Act
 }
 
 func setEntityCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, entityID string, coordinate gen.Coordinate) error {
-	p := cayley.StartPath(gdb).Has(Reverse)
+	p := cayley.StartPath(gdb, entityID).Out(PredCoord)
 
 	p.Iterate(nil).EachValue(nil, func(v quad.Value) {
 		//TODO tacogips remove
