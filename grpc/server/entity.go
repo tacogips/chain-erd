@@ -30,7 +30,7 @@ type EntityServer struct {
 
 // CreateNewEntity
 func (server EntityServer) CreateEntity(_ context.Context, position *gen.ObjectPosition) (*gen.Activity, error) {
-	graph.CreateEntity(server.AppCtx, *objPosition)
+	graph.CreateEntity(server.AppCtx, objPosition)
 }
 
 func NewEntityServer(ctx context.Context) *EntityServer {

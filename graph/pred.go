@@ -9,13 +9,11 @@ const (
 	// relation
 	PredOneToMany = "one_to_many"
 
-	PredSize   = "size"
-	PredWidth  = "width"
-	PredHeight = "height"
+	PredSizeWidth  = "size_width"
+	PredSizeHeight = "size_height"
 
-	PredCoord  = "coord"
-	PredCoordX = "x"
-	PredCoordY = "y"
+	PredCoordX = "coord_x"
+	PredCoordY = "coord_y"
 
 	// stands for order of something.
 	// e.g.
