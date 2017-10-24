@@ -4,8 +4,8 @@ import (
 	"context"
 	"io"
 
+	"github.com/ajainc/chain/graph"
 	"github.com/ajainc/chain/grpc/gen"
-	"github.com/ajainc/chain/grpc/store"
 )
 
 type EntityServer struct {
@@ -24,7 +24,7 @@ func (server EntityServer) CreateNewEntity(stream gen.EntityService_CreateNewEnt
 
 		// TODO tacogips make meaningful result
 		result := &gen.EntityActivity{}
-		entityActivity, err := store.RegisterNewEntity(server.AppCtx, position)
+		entityActivity, err := graph.RegisterNewEntity(server.AppCtx, position)
 
 		stream.Send(&entityActivity)
 	}

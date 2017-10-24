@@ -1,0 +1,26 @@
+
+syntax = "proto3";
+
+package entity;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "erd.proto";
+import "event.proto";
+
+option go_package                      = "gen";
+option (gogoproto.marshaler_all)       = true;
+option (gogoproto.sizer_all)           = true;
+option (gogoproto.unmarshaler_all)     = true;
+option (gogoproto.goproto_getters_all) = false;
+
+
+service StreamService {
+  rpc Entity(erd.Empty) returns (stream EntityActivity);
+  rpc Relation(erd.Empty) returns (stream RelationActivity);
+
+	//TODO tacogips implement
+  //rpc DeletionEntity(erd.Empty) returns (stream ObjectID);
+  //rpc DeletionRelation(erd.Empty) returns (stream ObjectID);
+}

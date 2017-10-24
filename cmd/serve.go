@@ -7,7 +7,9 @@ import (
 	"net"
 	"os"
 
+	"github.com/ajainc/chain/ctx/activitystore"
 	"github.com/ajainc/chain/ctx/graphdb"
+	"github.com/ajainc/chain/ctx/idgen"
 	chaingrpc "github.com/ajainc/chain/grpc"
 )
 
@@ -15,22 +17,17 @@ import (
 func main() {
 	port := "50051"
 
+	c := setupCtx()
+
+	//  setup grpc server
+	grpcServer, err := chaingrpc.Setup(c)
+	if err != nil {
+		panic(err)
+	}
+
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
-	}
-
-	ctx, cancelContext := context.WithCancel(context.Background())
-
-	// graphdb
-	ctx, err = graphdb.WithContext(ctx)
-	if err != nil {
-		panic(err)
-	}
-
-	grpcServer, err := chaingrpc.Setup(ctx)
-	if err != nil {
-		panic(err)
 	}
 
 	go func() {
@@ -52,4 +49,29 @@ func main() {
 	}()
 
 	<-waitShutdown
+}
+
+func setupCtx() context.Context {
+
+	c := context.BackGround()
+
+	// graphdb
+	c, err = graphdb.WithContext(c)
+	if err != nil {
+		panic(err)
+	}
+
+	// activity store
+	c := activitystore.WithContext(c)
+
+	//  clock
+	c, err = clock.WithContext(c, clock.New())
+	if err != nil {
+		panic(err)
+	}
+
+	// id generator
+	c := idgen.WithContext(c)
+
+	return c
 }

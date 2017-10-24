@@ -8,22 +8,25 @@ It is generated from these files:
 	column_group.proto
 	entity.proto
 	erd.proto
+	event.proto
 	relation.proto
 
 It has these top-level messages:
 	Entity
 	EntityColumn
-	EntityColumnAttrs
-	ColumnAttrEnum
-	ColumnAttrString
-	ColumnAttrNumber
+	EntityColumnAttributes
+	EnumColumnAttribute
+	StringColumnAttribute
+	NumberColumnAttribute
 	EntityActivity
-	CoordinateAndSize
 	Coordinate
 	Size
 	Activity
 	ShowActivityFilter
 	ObjectID
+	Empty
+	EventCreateEntity
+	EventMoveEntity
 	Relation
 	RelationPoint
 	NewConnectRelation

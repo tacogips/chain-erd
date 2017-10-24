@@ -21,21 +21,14 @@ enum RelationPointType {
 }
 
 // relation between enitties
-message Relation {
-  erd.ObjectID object_id              = 1;
-  RelationPoint start_point           = 2;
-  RelationPoint end_point             = 3;
-  repeated erd.Coordinate bent_points = 4; // sorted from start_point to end_end
+message OneToManyRelation {
+  entity.Column one          = 1;
+  entity.Column many         = 2;
+  RelationAttribute attribute = 3;
 }
 
-message RelationPoint {
-  entity.Entity connected_enitity = 1;
-  // TODO tacogips add relation style
-}
-
-message NewConnectRelation {
-  RelationPoint start_point = 2;
-  RelationPoint end_point   = 3;
+message RelationAttribute {
+  repeated erd.Coordinate bent_points = 1; // sorted from start_point to end_end
 }
 
 message RelationActivity {

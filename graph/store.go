@@ -3,7 +3,6 @@ package graph
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/ajainc/chain/ctx/idgen"
 	"github.com/ajainc/chain/grpc/gen"
@@ -12,20 +11,6 @@ import (
 )
 
 var NoObjecIDError = errors.New("No Object ID")
-
-type StoreableID string
-
-// ObjToStoreableObject
-func ObjIDToStoreableID(gen.ObjectID) StoreableObject {
-	return fmt.Sprintf("%s:%s", o.Type, o.ID)
-}
-
-func newObjectID(ctx context.Context) gen.ObjectID {
-	idg := idgen.FromContext(ctx)
-	return gen.ObjectID{
-		Val: idg.Gen(),
-	}
-}
 
 func withTx(chdr *cayley.Handle, fn func(*graph.Transaction) error) error {
 	tx := cayley.NewTransaction()
@@ -36,26 +21,22 @@ func withTx(chdr *cayley.Handle, fn func(*graph.Transaction) error) error {
 	return chdr.ApplyTransaction(tx)
 }
 
-func NewEntityObjectID(c context.Context) ObjectID {
-	g := idgen.FromContext(c)
-	return ObjectID{
-		Type: "entity",
-		Id:   g.Gen(),
-	}
+func NewEntityObjectID(c context.Context) gen.ObjectID {
+	return newObjectID(c, "entity")
 }
 
-func NewColumnObjectID(c context.Context) ObjectID {
-	g := idgen.FromContext(c)
-	return ObjectID{
-		Type: "column",
-		Id:   g.Gen(),
-	}
+func NewColumnObjectID(c context.Context) gen.ObjectID {
+	return newObjectID(c, "column")
 }
 
-func NewCoordObjectID(c context.Context) ObjectID {
+func NewCoordObjectID(c context.Context) gen.ObjectID {
+	return newObjectID(c, "coord")
+}
+
+func newObjectID(c context.Context, objType string) gen.ObjectID {
 	g := idgen.FromContext(c)
-	return ObjectID{
-		Type: "coord",
-		Id:   g.Gen(),
+	return gen.ObjectID{
+		Type: objType,
+		Val:  g.Gen(),
 	}
 }

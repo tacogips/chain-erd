@@ -6,6 +6,7 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "erd.proto";
+import "event.proto";
 
 option go_package                      = "gen";
 option (gogoproto.marshaler_all)       = true;
@@ -39,30 +40,30 @@ enum ColumnType {
 }
 
 message EntityColumn {
-  erd.ObjectID object_id  = 1;
-  int32 idx               = 2;
-  int32 name              = 3;
-  ColumnType type         = 4;
-  EntityColumnAttrs attrs = 5;
+  erd.ObjectID object_id       = 1;
+  int32 idx                    = 2;
+  int32 name                   = 3;
+  ColumnType type              = 4;
+  EntityColumnAttributes attrs = 5;
 }
 
-message EntityColumnAttrs {
-  ColumnAttrEnum attr_enum     = 1 [ (gogoproto.nullable) = true ];
-  ColumnAttrNumber attr_number = 2 [ (gogoproto.nullable) = true ];
-  ColumnAttrString attr_string = 3 [ (gogoproto.nullable) = true ];
+message EntityColumnAttributes {
+  EnumColumnAttribute attr_enum     = 1 [ (gogoproto.nullable) = true ];
+  NumberColumnAttribute attr_number = 2 [ (gogoproto.nullable) = true ];
+  StringColumnAttribute attr_string = 3 [ (gogoproto.nullable) = true ];
 }
 
-message ColumnAttrEnum {
+message EnumColumnAttribute {
   repeated string vals = 1;
   string default_value = 2;
 }
 
-message ColumnAttrString {
+message StringColumnAttribute {
   int32 length         = 1;
   string default_value = 2;
 }
 
-message ColumnAttrNumber {
+message NumberColumnAttribute {
   int32 length        = 1;
   int32 decimal       = 2;
   bool is_unsigned    = 3;
@@ -75,4 +76,8 @@ message EntityActivity {
 }
 
 // EntityService cantains actions affects entity
-service EntityService { rpc CreateNewEntity(stream erd.CoordinateAndSize) returns (stream EntityActivity); }
+service EntityService {
+  rpc CreateEntity(stream event.EventCreateEntity) returns (stream EntityActivity);
+  rpc MoveEntity(stream event.EventMoveEntity) returns (stream EntityActivity);
+}
+

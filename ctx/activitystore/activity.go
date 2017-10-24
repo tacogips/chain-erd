@@ -12,9 +12,8 @@ type activityStoreKey int
 var key activityStoreKey = 1
 
 type ActivityData struct {
-	ActivityID        string
-	AffectedObjectIDs []string
-	Event             interface{}
+	ActivityID string
+	Event      interface{} //TODO tacogips  persist with gob or other serialization
 }
 
 // defined error. this error will be throwed when only if Chomp() called and stores index is <= 0.
@@ -26,8 +25,8 @@ var ErrorStoreEmpty = errors.New("there is no activity")
 type ActivityStore interface {
 	// All
 	All(ActivityData) []ActivityData
-	// Put
-	Put(ActivityData)
+	// Put Acitivity
+	Put(ActivityData) error
 	// GetByID get
 	GetByID(string) (ActivityData, error)
 	//Chomp return latest activity and set stores latest to previous one
@@ -48,8 +47,18 @@ func (oas *OnMemoryActivityStore) All(ActivityData) []ActivityData {
 }
 
 // Put
-func (oas *OnMemoryActivityStore) Put(ActivityData) {
-	//TODO  tacogips impl
+func (oas *OnMemoryActivityStore) Put(activityData ActivityData) error {
+	oas.l.Lock()
+	defer oas.l.Unlock()
+
+	oas.curIndex += 1
+	if oas.curIndex < len(oas.activities) {
+		oas.activities[oas.curIndex] = activityData
+	} else {
+		oas.activities = append(oas.activities, activityData)
+	}
+
+	return nil
 }
 
 // GetByID get

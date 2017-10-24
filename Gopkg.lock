@@ -2,10 +2,22 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/101loops/clock"
+  packages = ["."]
+  revision = "e4ec0ab5053ee441dab6c55d0c3633f275269f72"
+
+[[projects]]
   name = "github.com/cayleygraph/cayley"
   packages = [".","clog","graph","graph/iterator","graph/memstore","graph/memstore/b","graph/path","quad","voc","voc/schema","writer"]
   revision = "c33467000f64158c88c3031d221e5d21b504aa66"
   version = "v0.6.1"
+
+[[projects]]
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  revision = "a0583e0143b1624142adab07e0e97fe106d99561"
+  version = "v1.3"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -20,10 +32,22 @@
   revision = "130e6b02ab059e7b717a096f397c5b60111cae74"
 
 [[projects]]
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  revision = "5160b48509cf5c877bc22c11c373f8c7738cdb38"
+  version = "v1.3.0"
+
+[[projects]]
   name = "github.com/pborman/uuid"
   packages = ["."]
   revision = "e790cca94e6cc75c7064b1332e63811d4aae1a53"
   version = "v1.1"
+
+[[projects]]
+  name = "github.com/satori/go.uuid"
+  packages = ["."]
+  revision = "879c5887cd475cd7864858769793b2ceb0d44feb"
+  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
@@ -45,13 +69,13 @@
 
 [[projects]]
   name = "google.golang.org/grpc"
-  packages = [".","balancer","codes","connectivity","credentials","grpclb/grpc_lb_v1/messages","grpclog","internal","keepalive","metadata","naming","peer","resolver","stats","status","tap","transport"]
+  packages = [".","balancer","codes","connectivity","credentials","grpclb/grpc_lb_v1/messages","grpclog","health","health/grpc_health_v1","internal","keepalive","metadata","naming","peer","resolver","stats","status","tap","transport"]
   revision = "f7bf885db0b7479a537ec317c6e48ce53145f3db"
   version = "v1.7.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3f0098e02fb32b9898bd51883136bce2c1f7bc66f50f07dfd02c5630e7f183ec"
+  inputs-digest = "71f4ffe069a32569f332c21781787cbb5262a58a240781ee6b74e1db86cd96b6"
   solver-name = "gps-cdcl"
   solver-version = 1
