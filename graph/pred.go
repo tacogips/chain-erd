@@ -16,4 +16,10 @@ const (
 	PredCoord  = "coord"
 	PredCoordX = "x"
 	PredCoordY = "y"
+
+	// stands for order of something.
+	// e.g.
+	//   column_1 come_before column_2
+	//
+	PredComeBefore = "come_before"
 )

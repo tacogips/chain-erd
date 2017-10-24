@@ -11,14 +11,16 @@ import (
 )
 
 // RegisterNewEntity register new entity
-func RegisterNewEntity(c context.Context, entityID gen.ObjectID, createEntityEvent gen.EventCreateEntity) (gen.EntityActivity, error) {
+func CreateNewEntity(c context.Context, objPosition gen.ObjectPosition) (gen.Activity, error) {
 	gdb := graphdb.FromContext(c)
 
 	err := withTx(gdb, func(tx *graph.Transaction) error {
-		err := setEntityCoord(c, gdb, tx, entityID, *createEntityEvent.Coord)
+		err := setEntityCoord(c, gdb, tx, objPosition.ObjectId, objPosition.Coord)
 		if err != nil {
 			return err
 		}
+
+		//TODO tacogips also set size
 
 		return nil
 	})
@@ -30,12 +32,7 @@ func RegisterNewEntity(c context.Context, entityID gen.ObjectID, createEntityEve
 	return gen.EntityActivity{}, err
 }
 
-func GetEntity(objectID gen.ObjectID) (gen.Entity, error) {
-	// TODO tacogips impl
-	return gen.Entity{}, nil
-}
-
-func setEntityCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, entityID gen.ObjectID, coordinate gen.Coordinate) error {
+func setEntityCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, entityID string, coordinate gen.Coordinate) error {
 	p := cayley.StartPath(gdb).Has(Reverse)
 
 	p.Iterate(nil).EachValue(nil, func(v quad.Value) {

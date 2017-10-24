@@ -40,10 +40,9 @@ enum ColumnType {
 
 message Column {
   string object_id             = 1;
-  int32 idx                    = 2;
-  int32 name                   = 3;
-  ColumnType type              = 4;
-  EntityColumnAttributes attrs = 5;
+  int32 name                   = 2;
+  ColumnType type              = 3;
+  EntityColumnAttributes attrs = 4;
 }
 
 message EntityColumnAttributes {
@@ -80,7 +79,7 @@ message RelationAttribute {
   repeated erd.Coordinate bent_points = 1; // sorted from start_point to end_end
 }
 
-message ObjectPosition {
+message ObjectCoordSize {
   string object_id     = 1;
   erd.Coordinate coord = 2;
   erd.Size size        = 3;
@@ -98,7 +97,7 @@ message Activity {
 
 // EntityService cantains actions affects entity
 service EntityService {
-  rpc CreateEntity(ObjectPosition) returns (Activity);
+  rpc CreateEntity(ObjectCoordSize) returns (Activity);
   rpc MoveEntity(ObjectMove)  returns (Activity);
 }
 

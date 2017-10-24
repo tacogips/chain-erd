@@ -13,7 +13,6 @@ import (
 
 func registerServices(ctx context.Context, grpcServer *grpc.Server) error {
 	gen.RegisterEntityServiceServer(grpcServer, *server.NewEntityServer(ctx))
-	gen.RegisterRelationServiceServer(grpcServer, *server.NewRelationServer(ctx))
 	healthpb.RegisterHealthServer(grpcServer, health.NewServer())
 
 	return nil
