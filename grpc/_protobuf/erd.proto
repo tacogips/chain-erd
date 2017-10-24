@@ -22,27 +22,10 @@ message Size {
   float height = 2;
 }
 
-message Activity { float id = 1; }
-
 enum Order {
   ASC  = 0;
   DESC = 1;
 }
 
-message showActivityFilter {
-  int32 number      = 1;
-  int32 skip_number = 2;
-  Order order       = 3;
-}
-
-message ObjectID {
-  string type = 1;
-  string val  = 2;
-}
-
 message Empty {}
 
-service ActivityService {
-  rpc find(Empty) returns (stream Activity);
-  //  rpc undo(stream Request) returns (stream Response);
-}

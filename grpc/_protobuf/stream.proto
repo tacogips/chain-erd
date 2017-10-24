@@ -1,13 +1,13 @@
 
 syntax = "proto3";
 
-package entity;
+package stream;
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "erd.proto";
-import "event.proto";
+import "entity.proto";
 
 option go_package                      = "gen";
 option (gogoproto.marshaler_all)       = true;
@@ -17,8 +17,8 @@ option (gogoproto.goproto_getters_all) = false;
 
 
 service StreamService {
-  rpc Entity(erd.Empty) returns (stream EntityActivity);
-  rpc Relation(erd.Empty) returns (stream RelationActivity);
+  rpc Entity(erd.Empty) returns (stream entity.Entity);
+  rpc Relation(erd.Empty) returns (stream entity.OneToManyRelation);
 
 	//TODO tacogips implement
   //rpc DeletionEntity(erd.Empty) returns (stream ObjectID);

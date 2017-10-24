@@ -6,7 +6,6 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "erd.proto";
-import "event.proto";
 
 option go_package                      = "gen";
 option (gogoproto.marshaler_all)       = true;
@@ -16,11 +15,11 @@ option (gogoproto.goproto_getters_all) = false;
 
 // version_id will be used to detect conflict action.
 message Entity {
-  erd.ObjectID object_id        = 1;
-  erd.Coordinate cordinate      = 2; // position of top-left
-  erd.Size size                 = 3;
-  repeated EntityColumn columns = 4;
-  int64 z_index                 = 5; // depth //TODO
+  string object_id         = 1;
+  erd.Coordinate cordinate = 2; // position of top-left
+  erd.Size size            = 3;
+  repeated Column columns  = 4;
+  int64 z_index            = 5; // depth //TODO
 }
 
 // TODO tacogips add other types
@@ -39,8 +38,8 @@ enum ColumnType {
   TIMESTAMP = 11;
 }
 
-message EntityColumn {
-  erd.ObjectID object_id       = 1;
+message Column {
+  string object_id             = 1;
   int32 idx                    = 2;
   int32 name                   = 3;
   ColumnType type              = 4;
@@ -54,7 +53,7 @@ message EntityColumnAttributes {
 }
 
 message EnumColumnAttribute {
-  repeated string vals = 1;
+  repeated string values = 1;
   string default_value = 2;
 }
 
@@ -70,14 +69,38 @@ message NumberColumnAttribute {
   float default_value = 4;
 }
 
-message EntityActivity {
-  erd.Activity activity = 1;
-  Entity entity         = 2;
+// relation between enitties
+message OneToManyRelation {
+  Column one                  = 1;
+  Column many                 = 2;
+  RelationAttribute attribute = 3;
+}
+
+message RelationAttribute {
+  repeated erd.Coordinate bent_points = 1; // sorted from start_point to end_end
+}
+
+message ObjectPosition {
+  string object_id     = 1;
+  erd.Coordinate coord = 2;
+  erd.Size size        = 3;
+}
+
+message ObjectMove {
+  string object_id    = 1;
+  erd.Coordinate from = 2;
+  erd.Coordinate to   = 3;
+}
+
+message Activity {
+	string id  = 1;
 }
 
 // EntityService cantains actions affects entity
 service EntityService {
-  rpc CreateEntity(stream event.EventCreateEntity) returns (stream EntityActivity);
-  rpc MoveEntity(stream event.EventMoveEntity) returns (stream EntityActivity);
+  rpc CreateEntity(ObjectPosition) returns (Activity);
+  rpc MoveEntity(ObjectMove)  returns (Activity);
 }
 
+service RelationService {
+}
