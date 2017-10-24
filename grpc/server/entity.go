@@ -29,12 +29,8 @@ type EntityServer struct {
 //	return nil
 
 // CreateNewEntity
-func (server EntityServer) CreateEntity(c context.Context, position *gen.ObjectPosition) (*gen.Activity, error) {
-
-	context.WithValue()
-	graph.CreateNewEntity()
-	return nil, nil
-
+func (server EntityServer) CreateEntity(_ context.Context, position *gen.ObjectPosition) (*gen.Activity, error) {
+	graph.CreateEntity(server.AppCtx, *objPosition)
 }
 
 func NewEntityServer(ctx context.Context) *EntityServer {
