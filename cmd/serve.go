@@ -19,6 +19,8 @@ func main() {
 
 	c := setupCtx()
 
+	c, cancelContext := context.WithCancel(c)
+
 	//  setup grpc server
 	grpcServer, err := chaingrpc.Setup(c)
 	if err != nil {
@@ -35,20 +37,20 @@ func main() {
 		grpcServer.Serve(listener)
 	}()
 
-	waitShutdown := make(chan struct{})
+	waitChildrenDone := make(chan struct{})
 	signals := make(chan os.Signal, 1)
 	go func() {
 		for {
 			select {
-			case <-ctx.Done:
-				waitShutdown <- struct{}{}
+			case <-c.Done:
+				waitChildrenDone <- struct{}{}
 			case <-sigs:
 				cancelContext()
 			}
 		}
 	}()
 
-	<-waitShutdown
+	<-waitChildrenDone
 }
 
 func setupCtx() context.Context {

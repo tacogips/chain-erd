@@ -7,7 +7,6 @@ import (
 	"github.com/ajainc/chain/grpc/gen"
 	"github.com/cayleygraph/cayley"
 	"github.com/cayleygraph/cayley/graph"
-	"github.com/cayleygraph/cayley/graph/path"
 	"github.com/cayleygraph/cayley/quad"
 )
 
@@ -16,7 +15,7 @@ func CreateEntity(c context.Context, objPosition *gen.ObjectPosition) (*gen.Acti
 	gdb := graphdb.FromContext(c)
 
 	err := withTx(gdb, func(tx *graph.Transaction) error {
-		err := setEntityCoord(c, gdb, tx, objPosition.ObjectId, objPosition.Coord)
+		err := setObjectCoord(c, gdb, tx, objPosition.ObjectId, objPosition.Coord)
 		if err != nil {
 			return err
 		}
@@ -33,27 +32,22 @@ func CreateEntity(c context.Context, objPosition *gen.ObjectPosition) (*gen.Acti
 	return nil, err
 }
 
-func setObjectCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, coordinate *gen.Coordinate) error {
+func setObjectCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, coord *gen.Coordinate) error {
 
-	p := cayley.StartPath(gdb, quad.StringToValue(objectID))
+	px := cayley.StartPath(gdb, quad.StringToValue(objectID)).Out(PredCoordX)
+	py := cayley.StartPath(gdb, quad.StringToValue(objectID)).Out(PredCoordY)
 
-	path.NewPath()
-
-	//.Out(PredCoordX)
+	p := px.Or(py)
 
 	it, _ := p.BuildIterator().Optimize()
-	it, _ := store.OptimizeIterator(it)
+	it, _ = gdb.OptimizeIterator(it)
 
-	p.Iterate(nil).EachValue(nil, func(v quad.Value) {
-		//TODO tacogips remove
-	})
-
-	err = tx.AddQuad(quad.Make(entityID, PredCoord, newCoordID, ""))
-	if err != nil {
-		return err
+	for it.Next() {
+		token := it.Result()
+		tx.RemoveQuad()
 	}
 
-	//TODO tacogips delete replaced coordinate if coordinate was updated
+	setCoord(c, tx, objectID, coord)
 	return nil
 }
 
@@ -63,9 +57,9 @@ func setCoord(c context.Context, tx *graph.Transaction, objectID string, coord *
 	return nil
 }
 
-func setSize(c context.Context, tx *graph.Transaction, objectID string, coord *gen.Size) error {
-	tx.AddQuad(quad.Make(objectID, PredSizeWidth, coord.X, ""))
-	tx.AddQuad(quad.Make(objectID, PredSizeHeight, coord.Y, ""))
+func setSize(c context.Context, tx *graph.Transaction, objectID string, size *gen.Size) error {
+	tx.AddQuad(quad.Make(objectID, PredSizeWidth, size.Width, ""))
+	tx.AddQuad(quad.Make(objectID, PredSizeHeight, size.Height, ""))
 	return nil
 
 }
