@@ -15,12 +15,18 @@ option (gogoproto.sizer_all)           = true;
 option (gogoproto.unmarshaler_all)     = true;
 option (gogoproto.goproto_getters_all) = false;
 
+message StreamPayload {
+  enum Event {
+    NEW    = 0;
+    MOD    = 1;
+    DELETE = 2;
+  }
 
-service StreamService {
-  rpc Entity(erd.Empty) returns (stream entity.Entity);
-  rpc Relation(erd.Empty) returns (stream entity.OneToManyRelation);
-
-	//TODO tacogips implement
-  //rpc DeletionEntity(erd.Empty) returns (stream ObjectID);
-  //rpc DeletionRelation(erd.Empty) returns (stream ObjectID);
+  Event event = 1;
+  oneof object {
+    entity.Entity entity                          = 2;
+    entity.OneToManyRelation one_to_many_relation = 3;
+  }
 }
+
+service StreamService { rpc Receive(erd.Empty) returns (stream StreamPayload); }

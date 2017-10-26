@@ -15,10 +15,165 @@ import (
 	grpc "google.golang.org/grpc"
 )
 
+import io "io"
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+type StreamPayload_Event int32
+
+const (
+	StreamPayload_NEW    StreamPayload_Event = 0
+	StreamPayload_MOD    StreamPayload_Event = 1
+	StreamPayload_DELETE StreamPayload_Event = 2
+)
+
+var StreamPayload_Event_name = map[int32]string{
+	0: "NEW",
+	1: "MOD",
+	2: "DELETE",
+}
+var StreamPayload_Event_value = map[string]int32{
+	"NEW":    0,
+	"MOD":    1,
+	"DELETE": 2,
+}
+
+func (x StreamPayload_Event) String() string {
+	return proto.EnumName(StreamPayload_Event_name, int32(x))
+}
+func (StreamPayload_Event) EnumDescriptor() ([]byte, []int) { return fileDescriptorStream, []int{0, 0} }
+
+type StreamPayload struct {
+	Event StreamPayload_Event `protobuf:"varint,1,opt,name=event,proto3,enum=stream.StreamPayload_Event" json:"event,omitempty"`
+	// Types that are valid to be assigned to Object:
+	//	*StreamPayload_Entity
+	//	*StreamPayload_OneToManyRelation
+	Object isStreamPayload_Object `protobuf_oneof:"object"`
+}
+
+func (m *StreamPayload) Reset()                    { *m = StreamPayload{} }
+func (m *StreamPayload) String() string            { return proto.CompactTextString(m) }
+func (*StreamPayload) ProtoMessage()               {}
+func (*StreamPayload) Descriptor() ([]byte, []int) { return fileDescriptorStream, []int{0} }
+
+type isStreamPayload_Object interface {
+	isStreamPayload_Object()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type StreamPayload_Entity struct {
+	Entity *Entity `protobuf:"bytes,2,opt,name=entity,oneof"`
+}
+type StreamPayload_OneToManyRelation struct {
+	OneToManyRelation *OneToManyRelation `protobuf:"bytes,3,opt,name=one_to_many_relation,json=oneToManyRelation,oneof"`
+}
+
+func (*StreamPayload_Entity) isStreamPayload_Object()            {}
+func (*StreamPayload_OneToManyRelation) isStreamPayload_Object() {}
+
+func (m *StreamPayload) GetObject() isStreamPayload_Object {
+	if m != nil {
+		return m.Object
+	}
+	return nil
+}
+
+func (m *StreamPayload) GetEntity() *Entity {
+	if x, ok := m.GetObject().(*StreamPayload_Entity); ok {
+		return x.Entity
+	}
+	return nil
+}
+
+func (m *StreamPayload) GetOneToManyRelation() *OneToManyRelation {
+	if x, ok := m.GetObject().(*StreamPayload_OneToManyRelation); ok {
+		return x.OneToManyRelation
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*StreamPayload) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _StreamPayload_OneofMarshaler, _StreamPayload_OneofUnmarshaler, _StreamPayload_OneofSizer, []interface{}{
+		(*StreamPayload_Entity)(nil),
+		(*StreamPayload_OneToManyRelation)(nil),
+	}
+}
+
+func _StreamPayload_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*StreamPayload)
+	// object
+	switch x := m.Object.(type) {
+	case *StreamPayload_Entity:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Entity); err != nil {
+			return err
+		}
+	case *StreamPayload_OneToManyRelation:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.OneToManyRelation); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("StreamPayload.Object has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _StreamPayload_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*StreamPayload)
+	switch tag {
+	case 2: // object.entity
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(Entity)
+		err := b.DecodeMessage(msg)
+		m.Object = &StreamPayload_Entity{msg}
+		return true, err
+	case 3: // object.one_to_many_relation
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(OneToManyRelation)
+		err := b.DecodeMessage(msg)
+		m.Object = &StreamPayload_OneToManyRelation{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _StreamPayload_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*StreamPayload)
+	// object
+	switch x := m.Object.(type) {
+	case *StreamPayload_Entity:
+		s := proto.Size(x.Entity)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *StreamPayload_OneToManyRelation:
+		s := proto.Size(x.OneToManyRelation)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+func init() {
+	proto.RegisterType((*StreamPayload)(nil), "stream.StreamPayload")
+	proto.RegisterEnum("stream.StreamPayload_Event", StreamPayload_Event_name, StreamPayload_Event_value)
+}
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
@@ -31,8 +186,7 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for StreamService service
 
 type StreamServiceClient interface {
-	Entity(ctx context.Context, in *Empty, opts ...grpc.CallOption) (StreamService_EntityClient, error)
-	Relation(ctx context.Context, in *Empty, opts ...grpc.CallOption) (StreamService_RelationClient, error)
+	Receive(ctx context.Context, in *Empty, opts ...grpc.CallOption) (StreamService_ReceiveClient, error)
 }
 
 type streamServiceClient struct {
@@ -43,12 +197,12 @@ func NewStreamServiceClient(cc *grpc.ClientConn) StreamServiceClient {
 	return &streamServiceClient{cc}
 }
 
-func (c *streamServiceClient) Entity(ctx context.Context, in *Empty, opts ...grpc.CallOption) (StreamService_EntityClient, error) {
-	stream, err := grpc.NewClientStream(ctx, &_StreamService_serviceDesc.Streams[0], c.cc, "/stream.StreamService/Entity", opts...)
+func (c *streamServiceClient) Receive(ctx context.Context, in *Empty, opts ...grpc.CallOption) (StreamService_ReceiveClient, error) {
+	stream, err := grpc.NewClientStream(ctx, &_StreamService_serviceDesc.Streams[0], c.cc, "/stream.StreamService/Receive", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &streamServiceEntityClient{stream}
+	x := &streamServiceReceiveClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -58,49 +212,17 @@ func (c *streamServiceClient) Entity(ctx context.Context, in *Empty, opts ...grp
 	return x, nil
 }
 
-type StreamService_EntityClient interface {
-	Recv() (*Entity, error)
+type StreamService_ReceiveClient interface {
+	Recv() (*StreamPayload, error)
 	grpc.ClientStream
 }
 
-type streamServiceEntityClient struct {
+type streamServiceReceiveClient struct {
 	grpc.ClientStream
 }
 
-func (x *streamServiceEntityClient) Recv() (*Entity, error) {
-	m := new(Entity)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *streamServiceClient) Relation(ctx context.Context, in *Empty, opts ...grpc.CallOption) (StreamService_RelationClient, error) {
-	stream, err := grpc.NewClientStream(ctx, &_StreamService_serviceDesc.Streams[1], c.cc, "/stream.StreamService/Relation", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &streamServiceRelationClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type StreamService_RelationClient interface {
-	Recv() (*OneToManyRelation, error)
-	grpc.ClientStream
-}
-
-type streamServiceRelationClient struct {
-	grpc.ClientStream
-}
-
-func (x *streamServiceRelationClient) Recv() (*OneToManyRelation, error) {
-	m := new(OneToManyRelation)
+func (x *streamServiceReceiveClient) Recv() (*StreamPayload, error) {
+	m := new(StreamPayload)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -110,53 +232,31 @@ func (x *streamServiceRelationClient) Recv() (*OneToManyRelation, error) {
 // Server API for StreamService service
 
 type StreamServiceServer interface {
-	Entity(*Empty, StreamService_EntityServer) error
-	Relation(*Empty, StreamService_RelationServer) error
+	Receive(*Empty, StreamService_ReceiveServer) error
 }
 
 func RegisterStreamServiceServer(s *grpc.Server, srv StreamServiceServer) {
 	s.RegisterService(&_StreamService_serviceDesc, srv)
 }
 
-func _StreamService_Entity_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _StreamService_Receive_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(Empty)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(StreamServiceServer).Entity(m, &streamServiceEntityServer{stream})
+	return srv.(StreamServiceServer).Receive(m, &streamServiceReceiveServer{stream})
 }
 
-type StreamService_EntityServer interface {
-	Send(*Entity) error
+type StreamService_ReceiveServer interface {
+	Send(*StreamPayload) error
 	grpc.ServerStream
 }
 
-type streamServiceEntityServer struct {
+type streamServiceReceiveServer struct {
 	grpc.ServerStream
 }
 
-func (x *streamServiceEntityServer) Send(m *Entity) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _StreamService_Relation_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(Empty)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(StreamServiceServer).Relation(m, &streamServiceRelationServer{stream})
-}
-
-type StreamService_RelationServer interface {
-	Send(*OneToManyRelation) error
-	grpc.ServerStream
-}
-
-type streamServiceRelationServer struct {
-	grpc.ServerStream
-}
-
-func (x *streamServiceRelationServer) Send(m *OneToManyRelation) error {
+func (x *streamServiceReceiveServer) Send(m *StreamPayload) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -166,35 +266,405 @@ var _StreamService_serviceDesc = grpc.ServiceDesc{
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "Entity",
-			Handler:       _StreamService_Entity_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "Relation",
-			Handler:       _StreamService_Relation_Handler,
+			StreamName:    "Receive",
+			Handler:       _StreamService_Receive_Handler,
 			ServerStreams: true,
 		},
 	},
 	Metadata: "stream.proto",
 }
 
+func (m *StreamPayload) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *StreamPayload) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Event != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintStream(dAtA, i, uint64(m.Event))
+	}
+	if m.Object != nil {
+		nn1, err := m.Object.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn1
+	}
+	return i, nil
+}
+
+func (m *StreamPayload_Entity) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Entity != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintStream(dAtA, i, uint64(m.Entity.Size()))
+		n2, err := m.Entity.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	return i, nil
+}
+func (m *StreamPayload_OneToManyRelation) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.OneToManyRelation != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintStream(dAtA, i, uint64(m.OneToManyRelation.Size()))
+		n3, err := m.OneToManyRelation.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	return i, nil
+}
+func encodeFixed64Stream(dAtA []byte, offset int, v uint64) int {
+	dAtA[offset] = uint8(v)
+	dAtA[offset+1] = uint8(v >> 8)
+	dAtA[offset+2] = uint8(v >> 16)
+	dAtA[offset+3] = uint8(v >> 24)
+	dAtA[offset+4] = uint8(v >> 32)
+	dAtA[offset+5] = uint8(v >> 40)
+	dAtA[offset+6] = uint8(v >> 48)
+	dAtA[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Stream(dAtA []byte, offset int, v uint32) int {
+	dAtA[offset] = uint8(v)
+	dAtA[offset+1] = uint8(v >> 8)
+	dAtA[offset+2] = uint8(v >> 16)
+	dAtA[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintStream(dAtA []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		dAtA[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	dAtA[offset] = uint8(v)
+	return offset + 1
+}
+func (m *StreamPayload) Size() (n int) {
+	var l int
+	_ = l
+	if m.Event != 0 {
+		n += 1 + sovStream(uint64(m.Event))
+	}
+	if m.Object != nil {
+		n += m.Object.Size()
+	}
+	return n
+}
+
+func (m *StreamPayload_Entity) Size() (n int) {
+	var l int
+	_ = l
+	if m.Entity != nil {
+		l = m.Entity.Size()
+		n += 1 + l + sovStream(uint64(l))
+	}
+	return n
+}
+func (m *StreamPayload_OneToManyRelation) Size() (n int) {
+	var l int
+	_ = l
+	if m.OneToManyRelation != nil {
+		l = m.OneToManyRelation.Size()
+		n += 1 + l + sovStream(uint64(l))
+	}
+	return n
+}
+
+func sovStream(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozStream(x uint64) (n int) {
+	return sovStream(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *StreamPayload) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowStream
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: StreamPayload: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: StreamPayload: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Event", wireType)
+			}
+			m.Event = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStream
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Event |= (StreamPayload_Event(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Entity", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStream
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthStream
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Entity{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Object = &StreamPayload_Entity{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OneToManyRelation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowStream
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthStream
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &OneToManyRelation{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Object = &StreamPayload_OneToManyRelation{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipStream(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthStream
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipStream(dAtA []byte) (n int, err error) {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowStream
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowStream
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if dAtA[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowStream
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthStream
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowStream
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipStream(dAtA[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthStream = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowStream   = fmt.Errorf("proto: integer overflow")
+)
+
 func init() { proto.RegisterFile("stream.proto", fileDescriptorStream) }
 
 var fileDescriptorStream = []byte{
-	// 217 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x29, 0x2e, 0x29, 0x4a,
-	0x4d, 0xcc, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x83, 0xf0, 0xa4, 0x74, 0xd3, 0x33,
-	0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0xd3, 0xf3, 0xd3, 0xf3, 0xf5, 0xc1, 0xd2,
-	0x49, 0xa5, 0x69, 0x60, 0x1e, 0x98, 0x03, 0x66, 0x41, 0xb4, 0x49, 0xc9, 0xa5, 0xe7, 0xe7, 0xa7,
-	0xe7, 0xa4, 0x22, 0x54, 0xa5, 0x94, 0x16, 0x25, 0x96, 0x64, 0xe6, 0xe7, 0x41, 0xe5, 0xe5, 0xd1,
-	0xe5, 0x4b, 0x32, 0x73, 0x53, 0x8b, 0x4b, 0x12, 0x73, 0x0b, 0xa0, 0x0a, 0x38, 0x53, 0x8b, 0x52,
-	0xa0, 0x4c, 0x9e, 0xd4, 0xbc, 0x92, 0xcc, 0x92, 0x4a, 0x08, 0xcf, 0x28, 0x87, 0x8b, 0x37, 0x18,
-	0xec, 0xa4, 0xe0, 0xd4, 0xa2, 0xb2, 0xcc, 0xe4, 0x54, 0x21, 0x35, 0x2e, 0x36, 0x57, 0xb0, 0x02,
-	0x21, 0x2e, 0x3d, 0x90, 0x26, 0xd7, 0xdc, 0x82, 0x92, 0x4a, 0x29, 0x3e, 0x3d, 0xa8, 0x2e, 0x88,
-	0x9c, 0x01, 0xa3, 0x90, 0x31, 0x17, 0x47, 0x50, 0x6a, 0x0e, 0xd8, 0x11, 0x28, 0x2a, 0x25, 0x61,
-	0x2a, 0xfd, 0xf3, 0x52, 0x43, 0xf2, 0x7d, 0x13, 0xf3, 0x2a, 0x61, 0xca, 0x0c, 0x18, 0x9d, 0x44,
-	0x4f, 0x3c, 0x94, 0x63, 0x38, 0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4,
-	0x18, 0xa3, 0x98, 0xd3, 0x53, 0xf3, 0x92, 0xd8, 0xc0, 0x6e, 0x31, 0x06, 0x04, 0x00, 0x00, 0xff,
-	0xff, 0x0b, 0x1d, 0x90, 0xa4, 0x2c, 0x01, 0x00, 0x00,
+	// 337 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0xd1, 0x4a, 0x02, 0x41,
+	0x14, 0x86, 0x77, 0x14, 0xd7, 0x9a, 0x4c, 0x6c, 0x48, 0x30, 0x83, 0x4d, 0x84, 0xc0, 0x9b, 0xd6,
+	0xb2, 0x07, 0x08, 0xc4, 0x01, 0x2f, 0x34, 0x63, 0x15, 0x82, 0x6e, 0x64, 0x76, 0x3d, 0x6d, 0x1b,
+	0xee, 0x1c, 0x59, 0x47, 0x61, 0xdf, 0xd0, 0xcb, 0x1e, 0xa1, 0xbc, 0xed, 0x25, 0xc2, 0xd9, 0x91,
+	0x48, 0xba, 0x9a, 0xf3, 0xcf, 0xff, 0x9d, 0x99, 0xf3, 0x1f, 0x5a, 0x5a, 0xaa, 0x04, 0x44, 0xec,
+	0x2e, 0x12, 0x54, 0xc8, 0xec, 0x4c, 0xd5, 0x6f, 0xc2, 0x48, 0xbd, 0xad, 0x7c, 0x37, 0xc0, 0xb8,
+	0x1d, 0x62, 0x88, 0x6d, 0x6d, 0xfb, 0xab, 0x57, 0xad, 0xb4, 0xd0, 0x55, 0xd6, 0x56, 0x77, 0x42,
+	0xc4, 0x70, 0x0e, 0xbf, 0xd4, 0x6c, 0x95, 0x08, 0x15, 0xa1, 0x34, 0xfe, 0xd5, 0xa1, 0xaf, 0xa2,
+	0x18, 0x96, 0x4a, 0xc4, 0x0b, 0x03, 0x1c, 0x43, 0x32, 0x33, 0x65, 0x09, 0xa4, 0x8a, 0x54, 0x9a,
+	0xa9, 0xe6, 0x37, 0xa1, 0xa7, 0x63, 0x3d, 0xd3, 0x93, 0x48, 0xe7, 0x28, 0x66, 0xec, 0x8e, 0x16,
+	0x60, 0x0d, 0x52, 0xd5, 0x48, 0x83, 0xb4, 0xca, 0x9d, 0x4b, 0xd7, 0x04, 0xf8, 0x43, 0xb9, 0x7c,
+	0x87, 0x78, 0x19, 0xc9, 0x5a, 0xd4, 0xce, 0x1e, 0xad, 0xe5, 0x1a, 0xa4, 0x75, 0xd2, 0x29, 0xbb,
+	0xe6, 0x0f, 0xae, 0x8f, 0xbe, 0xe5, 0x19, 0x9f, 0x0d, 0xe8, 0x39, 0x4a, 0x98, 0x2a, 0x9c, 0xc6,
+	0x42, 0xa6, 0xd3, 0x04, 0xe6, 0x3a, 0x46, 0x2d, 0xaf, 0xfb, 0x2e, 0xf6, 0x7d, 0x23, 0x09, 0x13,
+	0x1c, 0x0a, 0x99, 0x7a, 0x06, 0xe8, 0x5b, 0xde, 0x19, 0x1e, 0x5e, 0x36, 0xaf, 0x69, 0x41, 0xcf,
+	0xc1, 0x8a, 0x34, 0xff, 0xc8, 0x9f, 0x2b, 0xd6, 0xae, 0x18, 0x8e, 0x7a, 0x15, 0xc2, 0x28, 0xb5,
+	0x7b, 0x7c, 0xc0, 0x27, 0xbc, 0x92, 0xeb, 0x1e, 0x51, 0x1b, 0xfd, 0x77, 0x08, 0x54, 0xe7, 0x61,
+	0x1f, 0x76, 0x0c, 0xc9, 0x3a, 0x0a, 0x80, 0xb9, 0xb4, 0xe8, 0x41, 0x00, 0xd1, 0x1a, 0x18, 0x75,
+	0x77, 0x3b, 0xe2, 0xf1, 0x42, 0xa5, 0xf5, 0xea, 0xbf, 0xa1, 0x6f, 0x49, 0xb7, 0xba, 0xf9, 0x72,
+	0xac, 0xcd, 0xd6, 0x21, 0x1f, 0x5b, 0x87, 0x7c, 0x6e, 0x1d, 0xf2, 0x92, 0x0f, 0x41, 0xfa, 0xb6,
+	0x5e, 0xe6, 0xfd, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x80, 0x3c, 0xf4, 0x31, 0xed, 0x01, 0x00,
+	0x00,
 }

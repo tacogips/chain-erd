@@ -2,21 +2,28 @@ package graph
 
 type Predicate string
 
+func (p Predicate) String() string {
+	return string(p)
+}
+
 const (
-	PredColumn Predicate = "column"
-	PredName             = "name"
+	PredIs Predicate = "<is>"
+
+	PredColumn Predicate = "<column>"
+	PredName             = "<name>"
 
 	// relation
-	PredOneToMany = "one_to_many"
+	PredRelOne  = "<rel_one>"
+	PredRelMany = "<rel_many>"
 
-	PredSizeWidth  = "size_width"
-	PredSizeHeight = "size_height"
+	PredSizeWidth  = "<size_width>"
+	PredSizeHeight = "<size_height>"
 
-	PredCoordX = "coord_x"
-	PredCoordY = "coord_y"
+	PredCoordX = "<coord_x>"
+	PredCoordY = "<coord_y>"
 
 	// stands for order of something.
 	// e.g.
 	//   column_1 come_before column_2
-	PredComeBefore = "come_before"
+	PredComeBefore = "<come_before>"
 )

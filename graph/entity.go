@@ -11,11 +11,11 @@ import (
 )
 
 // RegisterNewEntity register new entity
-func CreateEntity(c context.Context, objPosition *gen.ObjectPosition) (*gen.Activity, error) {
+func CreateEntity(c context.Context, objCoordSize *gen.ObjectCoordSize) (*gen.Activity, error) {
 	gdb := graphdb.FromContext(c)
 
 	err := withTx(gdb, func(tx *graph.Transaction) error {
-		err := setObjectCoord(c, gdb, tx, objPosition.ObjectId, objPosition.Coord)
+		err := setObjectCoord(c, gdb, tx, objCoordSize.ObjectId, objCoordSize.Coord)
 		if err != nil {
 			return err
 		}
@@ -34,30 +34,30 @@ func CreateEntity(c context.Context, objPosition *gen.ObjectPosition) (*gen.Acti
 
 func setObjectCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, coord *gen.Coordinate) error {
 
-	px := cayley.StartPath(gdb, quad.StringToValue(objectID)).Out(PredCoordX)
-	py := cayley.StartPath(gdb, quad.StringToValue(objectID)).Out(PredCoordY)
+	//TODO(tacogips) fix naive implement
+	removePredicateOfObject(gdb, tx, objectID, PredCoordX, "")
+	removePredicateOfObject(gdb, tx, objectID, PredCoordY, "")
 
-	p := px.Or(py)
-
-	it, _ := p.BuildIterator().Optimize()
-	it, _ = gdb.OptimizeIterator(it)
-
-	for it.Next() {
-		token := it.Result()
-		tx.RemoveQuad()
-	}
-
-	setCoord(c, tx, objectID, coord)
-	return nil
-}
-
-func setCoord(c context.Context, tx *graph.Transaction, objectID string, coord *gen.Coordinate) error {
 	tx.AddQuad(quad.Make(objectID, PredCoordX, coord.X, ""))
 	tx.AddQuad(quad.Make(objectID, PredCoordY, coord.Y, ""))
+
 	return nil
 }
 
-func setSize(c context.Context, tx *graph.Transaction, objectID string, size *gen.Size) error {
+func removePredicateOfObject(gdb *cayley.Handle, tx *graph.Transaction, objectID string, predicate Predicate, label string) error {
+	return cayley.StartPath(gdb, quad.StringToValue(objectID)).
+		Out(predicate).
+		Iterate(nil).
+		Each(func(v graph.Value) {
+			tx.RemoveQuad(quad.Make(objectID, predicate, v, label))
+		})
+}
+
+func setSize(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, size *gen.Size) error {
+	//TODO(tacogips) fix naive implement
+	removePredicateOfObject(gdb, tx, objectID, PredSizeWidth, "")
+	removePredicateOfObject(gdb, tx, objectID, PredSizeHeight, "")
+
 	tx.AddQuad(quad.Make(objectID, PredSizeWidth, size.Width, ""))
 	tx.AddQuad(quad.Make(objectID, PredSizeHeight, size.Height, ""))
 	return nil

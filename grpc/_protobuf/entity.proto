@@ -43,6 +43,7 @@ message Column {
   int32 name                   = 2;
   ColumnType type              = 3;
   EntityColumnAttributes attrs = 4;
+  string depends_entity_id     = 5;
 }
 
 message EntityColumnAttributes {
@@ -53,7 +54,7 @@ message EntityColumnAttributes {
 
 message EnumColumnAttribute {
   repeated string values = 1;
-  string default_value = 2;
+  string default_value   = 2;
 }
 
 message StringColumnAttribute {
@@ -91,15 +92,12 @@ message ObjectMove {
   erd.Coordinate to   = 3;
 }
 
-message Activity {
-	string id  = 1;
-}
+message Activity { string id = 1; }
 
 // EntityService cantains actions affects entity
 service EntityService {
   rpc CreateEntity(ObjectCoordSize) returns (Activity);
-  rpc MoveEntity(ObjectMove)  returns (Activity);
+  rpc MoveEntity(ObjectMove) returns (Activity);
 }
 
-service RelationService {
-}
+service RelationService {}
