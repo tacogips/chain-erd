@@ -37,3 +37,7 @@
 [[constraint]]
   name = "github.com/cayleygraph/cayley"
   version = "0.6.1"
+
+[[constraint]]
+  name = "github.com/HouzuoGuo/tiedot"
+  version = "3.4.0"

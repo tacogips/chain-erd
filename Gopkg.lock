@@ -8,10 +8,22 @@
   revision = "e4ec0ab5053ee441dab6c55d0c3633f275269f72"
 
 [[projects]]
+  name = "github.com/HouzuoGuo/tiedot"
+  packages = [".","data","db","dberr","gommap","httpapi","tdlog"]
+  revision = "96fa90b5e4620f677d2737bc5358329040942adb"
+  version = "3.4"
+
+[[projects]]
   name = "github.com/cayleygraph/cayley"
   packages = [".","clog","graph","graph/iterator","graph/memstore","graph/memstore/b","graph/path","quad","voc","voc/schema","writer"]
   revision = "c33467000f64158c88c3031d221e5d21b504aa66"
   version = "v0.6.1"
+
+[[projects]]
+  name = "github.com/dgrijalva/jwt-go"
+  packages = [".","request"]
+  revision = "dbeaa9332f19a944acb5736b4456cfcc02140e29"
+  version = "v3.1.0"
 
 [[projects]]
   name = "github.com/go-sql-driver/mysql"
@@ -76,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "71f4ffe069a32569f332c21781787cbb5262a58a240781ee6b74e1db86cd96b6"
+  inputs-digest = "d6fc225c3948ecf013bd5a5fd4cff35af8076105d1ac21b772804bda5de9dd76"
   solver-name = "gps-cdcl"
   solver-version = 1
