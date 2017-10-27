@@ -6,8 +6,9 @@ func (p Predicate) String() string {
 	return string(p)
 }
 
+// Predicates
 const (
-	PredIs Predicate = "<is>"
+	PredIs string = "<is>"
 
 	PredColumn Predicate = "<column>"
 	PredName             = "<name>"

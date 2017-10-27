@@ -12,14 +12,15 @@ option (gogoproto.sizer_all)           = true;
 option (gogoproto.unmarshaler_all)     = true;
 option (gogoproto.goproto_getters_all) = false;
 
-message Coordinate {
-  float x = 1;
-  float y = 2;
+message Coord {
+  double x = 1;
+  double y = 2;
 }
 
-message Size {
-  float width  = 1;
-  float height = 2;
+//
+message WH {
+  double width  = 1;
+  double height = 2;
 }
 
 enum Order {

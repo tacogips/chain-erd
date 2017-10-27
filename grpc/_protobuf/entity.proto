@@ -15,11 +15,11 @@ option (gogoproto.goproto_getters_all) = false;
 
 // version_id will be used to detect conflict action.
 message Entity {
-  string object_id         = 1;
-  erd.Coordinate cordinate = 2; // position of top-left
-  erd.Size size            = 3;
-  repeated Column columns  = 4;
-  int64 z_index            = 5; // depth //TODO
+  string object_id        = 1;
+  erd.Coord coord         = 2; // position of top-left
+  erd.WH wh               = 3;
+  repeated Column columns = 4;
+  int64 z_index           = 5; // depth //TODO
 }
 
 // TODO tacogips add other types
@@ -63,40 +63,41 @@ message StringColumnAttribute {
 }
 
 message NumberColumnAttribute {
-  int32 length        = 1;
-  int32 decimal       = 2;
-  bool is_unsigned    = 3;
-  float default_value = 4;
+  int32 length         = 1;
+  int32 decimal        = 2;
+  bool is_unsigned     = 3;
+  double default_value = 4;
 }
 
 // relation between enitties
 message OneToManyRelation {
-  Column one                  = 1;
-  Column many                 = 2;
-  RelationAttribute attribute = 3;
+  string object_id            = 1;
+  Column one                  = 2;
+  Column many                 = 3;
+  RelationAttribute attribute = 4;
 }
 
 message RelationAttribute {
-  repeated erd.Coordinate bent_points = 1; // sorted from start_point to end_end
+  repeated erd.Coord bent_points = 1; // sorted from start_point to end_end
 }
 
-message ObjectCoordSize {
-  string object_id     = 1;
-  erd.Coordinate coord = 2;
-  erd.Size size        = 3;
+message ObjectCoordWH {
+  string object_id = 1;
+  erd.Coord coord  = 2;
+  erd.WH wh        = 3;
 }
 
 message ObjectMove {
-  string object_id    = 1;
-  erd.Coordinate from = 2;
-  erd.Coordinate to   = 3;
+  string object_id = 1;
+  erd.Coord from   = 2;
+  erd.Coord to     = 3;
 }
 
 message Activity { string id = 1; }
 
 // EntityService cantains actions affects entity
 service EntityService {
-  rpc CreateEntity(ObjectCoordSize) returns (Activity);
+  rpc CreateEntity(ObjectCoordWH) returns (Activity);
   rpc MoveEntity(ObjectMove) returns (Activity);
 }
 

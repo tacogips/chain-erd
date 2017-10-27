@@ -11,11 +11,16 @@ import (
 )
 
 // RegisterNewEntity register new entity
-func CreateEntity(c context.Context, objCoordSize *gen.ObjectCoordSize) (*gen.Activity, error) {
+func CreateEntity(c context.Context, objCoordWH *gen.ObjectCoordWH) (*gen.Activity, error) {
 	gdb := graphdb.FromContext(c)
 
 	err := withTx(gdb, func(tx *graph.Transaction) error {
-		err := setObjectCoord(c, gdb, tx, objCoordSize.ObjectId, objCoordSize.Coord)
+		err := setObjectCoord(c, gdb, tx, objCoordWH.ObjectId, objCoordWH.Coord)
+		if err != nil {
+			return err
+		}
+
+		err = setObjectWidthHeight(c, gdb, tx, objCoordWH.ObjectId, objCoordWH.Wh)
 		if err != nil {
 			return err
 		}
@@ -32,7 +37,7 @@ func CreateEntity(c context.Context, objCoordSize *gen.ObjectCoordSize) (*gen.Ac
 	return nil, err
 }
 
-func setObjectCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, coord *gen.Coordinate) error {
+func setObjectCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, coord *gen.Coord) error {
 
 	//TODO(tacogips) fix naive implement
 	removePredicateOfObject(gdb, tx, objectID, PredCoordX, "")
@@ -44,7 +49,7 @@ func setObjectCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction
 	return nil
 }
 
-func removePredicateOfObject(gdb *cayley.Handle, tx *graph.Transaction, objectID string, predicate Predicate, label string) error {
+func removePredicateOfObject(gdb *cayley.Handle, tx *graph.Transaction, objectID string, predicate string, label string) error {
 	return cayley.StartPath(gdb, quad.StringToValue(objectID)).
 		Out(predicate).
 		Iterate(nil).
@@ -53,13 +58,23 @@ func removePredicateOfObject(gdb *cayley.Handle, tx *graph.Transaction, objectID
 		})
 }
 
-func setSize(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, size *gen.Size) error {
+func setObjectWidthHeight(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, wh *gen.WH) error {
 	//TODO(tacogips) fix naive implement
 	removePredicateOfObject(gdb, tx, objectID, PredSizeWidth, "")
 	removePredicateOfObject(gdb, tx, objectID, PredSizeHeight, "")
 
-	tx.AddQuad(quad.Make(objectID, PredSizeWidth, size.Width, ""))
-	tx.AddQuad(quad.Make(objectID, PredSizeHeight, size.Height, ""))
+	tx.AddQuad(quad.Make(objectID, PredSizeWidth, wh.Width, ""))
+	tx.AddQuad(quad.Make(objectID, PredSizeHeight, wh.Height, ""))
+
 	return nil
+}
+
+func GetAllEntities() []gen.Entity {
 
 }
+
+//func GetEntity(objectID string) gen.Entity {
+//
+//	gen.Entity
+//
+//}
