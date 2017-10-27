@@ -9,21 +9,15 @@
 
 [[projects]]
   name = "github.com/HouzuoGuo/tiedot"
-  packages = [".","data","db","dberr","gommap","httpapi","tdlog"]
+  packages = ["data","db","dberr","gommap","tdlog"]
   revision = "96fa90b5e4620f677d2737bc5358329040942adb"
   version = "3.4"
 
 [[projects]]
-  name = "github.com/cayleygraph/cayley"
-  packages = [".","clog","graph","graph/iterator","graph/memstore","graph/memstore/b","graph/path","quad","voc","voc/schema","writer"]
-  revision = "c33467000f64158c88c3031d221e5d21b504aa66"
-  version = "v0.6.1"
-
-[[projects]]
-  name = "github.com/dgrijalva/jwt-go"
-  packages = [".","request"]
-  revision = "dbeaa9332f19a944acb5736b4456cfcc02140e29"
-  version = "v3.1.0"
+  name = "github.com/fatih/structs"
+  packages = ["."]
+  revision = "a720dfa8df582c51dee1b36feabb906bde1588bd"
+  version = "v1.0"
 
 [[projects]]
   name = "github.com/go-sql-driver/mysql"
@@ -48,18 +42,6 @@
   packages = ["."]
   revision = "5160b48509cf5c877bc22c11c373f8c7738cdb38"
   version = "v1.3.0"
-
-[[projects]]
-  name = "github.com/pborman/uuid"
-  packages = ["."]
-  revision = "e790cca94e6cc75c7064b1332e63811d4aae1a53"
-  version = "v1.1"
-
-[[projects]]
-  name = "github.com/satori/go.uuid"
-  packages = ["."]
-  revision = "879c5887cd475cd7864858769793b2ceb0d44feb"
-  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
@@ -88,6 +70,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d6fc225c3948ecf013bd5a5fd4cff35af8076105d1ac21b772804bda5de9dd76"
+  inputs-digest = "b4d291e5418db7b93bac48c9a355aaf0b15c2a3a0fa866992aab3d9d07e7a175"
   solver-name = "gps-cdcl"
   solver-version = 1

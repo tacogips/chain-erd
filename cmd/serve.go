@@ -7,8 +7,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/ajainc/chain/ctx/activitystore"
-	"github.com/ajainc/chain/ctx/graphdb"
+	"github.com/ajainc/chain/ctx/docdb"
 	"github.com/ajainc/chain/ctx/idgen"
 	chaingrpc "github.com/ajainc/chain/grpc"
 )
@@ -57,14 +56,11 @@ func setupCtx() context.Context {
 
 	c := context.BackGround()
 
-	// graphdb
-	c, err = graphdb.WithContext(c)
+	// docdb
+	c, err = docdb.WithContext(c)
 	if err != nil {
 		panic(err)
 	}
-
-	// activity store
-	c := activitystore.WithContext(c)
 
 	//  clock
 	c, err = clock.WithContext(c, clock.New())

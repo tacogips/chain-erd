@@ -31,11 +31,11 @@ message Empty {}
 
 // version_id will be used to detect conflict action.
 message Entity {
-  string object_id         = 1;
+  string object_id         = 1 [ (gogoproto.customname) = "ObjectID" ];
   Coord coord              = 2; // position of top-left
   WidthHeight width_height = 3;
   repeated Column columns  = 4;
-  int64 z_index            = 5; // depth //TODO
+  int32 z_index            = 5; // depth //TODO
 }
 
 // TODO tacogips add other types
@@ -87,7 +87,7 @@ message NumberColumnAttribute {
 
 // relation between enitties
 message Rel {
-  string object_id            = 1;
+  string object_id            = 1 [ (gogoproto.customname) = "ObjectID" ];
   RelPoint point1             = 2;
   RelPoint point2             = 3;
   RelationAttribute attribute = 4;
@@ -107,7 +107,7 @@ message RelationAttribute {
 }
 
 message Move {
-  string object_id = 1;
+  string object_id = 1 [ (gogoproto.customname) = "ObjectID" ];
   Coord from       = 2;
   Coord to         = 3;
 }
@@ -117,13 +117,8 @@ message Activity {
   string description = 2;
 }
 
-message CoordWidthHeight {
-  Coord coord              = 1;
-  WidthHeight width_height = 2;
-}
-
 service EntityService {
-  rpc CreateEntity(CoordWidthHeight) returns (Activity);
+  rpc CreateEntity(Entity) returns (Activity);
   rpc MoveEntity(Move) returns (Activity);
 }
 

@@ -1,4 +1,4 @@
-package db
+package docdb
 
 // Collection name
 const (
@@ -6,3 +6,9 @@ const (
 	COLL_REL      = "rel"
 	COLL_ACTIVITY = "activity"
 )
+
+var allColls = []string{
+	COLL_ENTITY,
+	COLL_REL,
+	COLL_ACTIVITY,
+}
