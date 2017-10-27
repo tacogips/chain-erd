@@ -31,7 +31,7 @@ message Empty {}
 
 // version_id will be used to detect conflict action.
 message Entity {
-  int32 object_id          = 1;
+  string object_id         = 1;
   Coord coord              = 2; // position of top-left
   WidthHeight width_height = 3;
   repeated Column columns  = 4;
@@ -87,7 +87,7 @@ message NumberColumnAttribute {
 
 // relation between enitties
 message Rel {
-  int32 object_id             = 1;
+  string object_id            = 1;
   RelPoint point1             = 2;
   RelPoint point2             = 3;
   RelationAttribute attribute = 4;
@@ -107,12 +107,17 @@ message RelationAttribute {
 }
 
 message Move {
-  int32 object_id = 1;
-  Coord from      = 2;
-  Coord to        = 3;
+  string object_id = 1;
+  Coord from       = 2;
+  Coord to         = 3;
 }
 
-message CoordWidthHeight{
+message Activity {
+  int32 id           = 1;
+  string description = 2;
+}
+
+message CoordWidthHeight {
   Coord coord              = 1;
   WidthHeight width_height = 2;
 }
@@ -126,4 +131,3 @@ service ActivityService {
   rpc Redo(Activity) returns (Activity);
   rpc Undo(Activity) returns (Activity);
 }
-
