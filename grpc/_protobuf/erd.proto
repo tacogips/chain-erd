@@ -17,8 +17,7 @@ message Coord {
   double y = 2;
 }
 
-//
-message WH {
+message WidthHeight {
   double width  = 1;
   double height = 2;
 }
@@ -29,4 +28,108 @@ enum Order {
 }
 
 message Empty {}
+
+// version_id will be used to detect conflict action.
+message Entity {
+  int32 object_id          = 1;
+  Coord coord              = 2; // position of top-left
+  WidthHeight width_height = 3;
+  repeated Column columns  = 4;
+  int64 z_index            = 5; // depth //TODO
+}
+
+// TODO tacogips add other types
+enum ColumnType {
+  BIT       = 0;
+  TINYINT   = 1;
+  BOOL      = 2;
+  SMALLINT  = 3;
+  MIDIUM    = 4;
+  INT       = 5;
+  INTEGER   = 6;
+  VARCHAR   = 7;
+  CHAR      = 8;
+  DATE      = 9;
+  DATETIME  = 10;
+  TIMESTAMP = 11;
+}
+
+message Column {
+  int32 name                   = 1;
+  ColumnType type              = 2;
+  EntityColumnAttributes attrs = 3;
+}
+
+message EntityColumnAttributes {
+  EnumColumnAttribute attr_enum     = 1 [ (gogoproto.nullable) = true ];
+  NumberColumnAttribute attr_number = 2 [ (gogoproto.nullable) = true ];
+  StringColumnAttribute attr_string = 3 [ (gogoproto.nullable) = true ];
+  bool is_fk                        = 4;
+  bool is_pk                        = 5;
+}
+
+message EnumColumnAttribute {
+  repeated string values = 1;
+  string default_value   = 2;
+}
+
+message StringColumnAttribute {
+  int32 length         = 1;
+  string default_value = 2;
+}
+
+message NumberColumnAttribute {
+  int32 length         = 1;
+  int32 decimal        = 2;
+  bool is_unsigned     = 3;
+  double default_value = 4;
+}
+
+// relation between enitties
+message Rel {
+  int32 object_id             = 1;
+  RelPoint point1             = 2;
+  RelPoint point2             = 3;
+  RelationAttribute attribute = 4;
+}
+
+message RelPoint {
+  int32 entity_object_id = 1;
+  string column_name     = 2;
+  enum Assoc {
+    One  = 0;
+    Many = 1;
+  }
+}
+
+message RelationAttribute {
+  repeated Coord bent_points = 1; // sorted from start_point to end_end
+}
+
+message Move {
+  int32 object_id = 1;
+  Coord from      = 2;
+  Coord to        = 3;
+}
+
+message Activity {
+  int32 id           = 1;
+  string description = 2;
+}
+
+message CoordWidthHeight{
+  Coord coord              = 1;
+  WidthHeight width_height = 2;
+
+}
+
+service EntityService {
+  rpc CreateEntity(CoordWidthHeight) returns (Activity);
+  rpc MoveEntity(Move) returns (Activity);
+}
+
+service ActivityService {
+  rpc Redo(Activity) returns (Activity);
+  rpc Undo(Activity) returns (Activity);
+}
 

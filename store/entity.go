@@ -1,9 +1,9 @@
-package graph
+package store
 
 import (
 	"context"
 
-	"github.com/ajainc/chain/ctx/graphdb"
+	"github.com/ajainc/chain/ctx/db"
 	"github.com/ajainc/chain/grpc/gen"
 	"github.com/cayleygraph/cayley"
 	"github.com/cayleygraph/cayley/graph"
@@ -12,32 +12,24 @@ import (
 
 // RegisterNewEntity register new entity
 func CreateEntity(c context.Context, objCoordWH *gen.ObjectCoordWH) (*gen.Activity, error) {
-	gdb := graphdb.FromContext(c)
+	gdb := db.FromContext(c)
 
-	err := withTx(gdb, func(tx *graph.Transaction) error {
-		err := setObjectCoord(c, gdb, tx, objCoordWH.ObjectId, objCoordWH.Coord)
-		if err != nil {
-			return err
-		}
-
-		err = setObjectWidthHeight(c, gdb, tx, objCoordWH.ObjectId, objCoordWH.Wh)
-		if err != nil {
-			return err
-		}
-
-		//TODO tacogips also set size
-
-		return nil
-	})
-
+	err := setObjectCoord(c, gdb, tx, objCoordWH.ObjectId, objCoordWH.Coord)
 	if err != nil {
-		return nil, err
+		return err
 	}
+
+	err = setObjectWidthHeight(c, gdb, tx, objCoordWH.ObjectId, objCoordWH.Wh)
+	if err != nil {
+		return err
+	}
+
+	//TODO tacogips also set size
 
 	return nil, err
 }
 
-func setObjectCoord(c context.Context, gdb *cayley.Handle, tx *graph.Transaction, objectID string, coord *gen.Coord) error {
+func setObjectCoord(c context.Context, gdb *cayley.Handle, objectID string, coord *gen.Coord) error {
 
 	//TODO(tacogips) fix naive implement
 	removePredicateOfObject(gdb, tx, objectID, PredCoordX, "")
@@ -69,9 +61,9 @@ func setObjectWidthHeight(c context.Context, gdb *cayley.Handle, tx *graph.Trans
 	return nil
 }
 
-func GetAllEntities() []gen.Entity {
-
-}
+//func GetAllEntities() []gen.Entity {
+//
+//}
 
 //func GetEntity(objectID string) gen.Entity {
 //

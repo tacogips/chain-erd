@@ -7,7 +7,6 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "erd.proto";
-import "entity.proto";
 
 option go_package                      = "gen";
 option (gogoproto.marshaler_all)       = true;
@@ -24,8 +23,8 @@ message StreamPayload {
 
   Event event = 1;
   oneof object {
-    entity.Entity entity                          = 2;
-    entity.OneToManyRelation one_to_many_relation = 3;
+    erd.Entity entity = 2;
+    erd.Rel rel       = 3;
   }
 }
 
