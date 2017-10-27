@@ -112,15 +112,9 @@ message Move {
   Coord to        = 3;
 }
 
-message Activity {
-  int32 id           = 1;
-  string description = 2;
-}
-
 message CoordWidthHeight{
   Coord coord              = 1;
   WidthHeight width_height = 2;
-
 }
 
 service EntityService {
