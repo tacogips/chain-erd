@@ -14,23 +14,35 @@ type CreateEntity struct {
 	Entity gen.Entity
 }
 
+func (ev CreateEntity) Description() string {
+	return "Create Entity"
+}
+
 func (ev CreateEntity) Do(c context.Context) error {
 	coll := docdb.COLL_ENTITY
 
 	db := docdb.FromContext(c)
 
-	if dblogic.ObjectIDExists(db, coll, ev.Entity.ObjectId) {
-		return fmt.Errorf("entity  [%s] already exists", ev.Entity.ObjectId)
+	if dblogic.ObjectIDExists(db, coll, ev.Entity.ObjectID) {
+		return fmt.Errorf("entity  [%s] already exists", ev.Entity.ObjectID)
 	}
 
 	entities := db.Use(coll)
-	entities.Insert(structs.Map(ev.Entity))
+	_, err := entities.Insert(structs.Map(ev.Entity))
 
-	return nil
+	return err
 }
 
 func (ev CreateEntity) Undo(c context.Context) error {
+	coll := docdb.COLL_ENTITY
+
 	db := docdb.FromContext(c)
 
-	return nil
+	id, _, err := dblogic.GetByObjectID(db, coll, ev.Entity.ObjectID)
+	if err != nil {
+		return err
+	}
+	entities := db.Use(coll)
+	return entities.Delete(id)
+
 }
