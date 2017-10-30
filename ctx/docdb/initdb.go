@@ -3,7 +3,6 @@ package docdb
 import "github.com/HouzuoGuo/tiedot/db"
 
 func initDB(db *db.DB) error {
-
 	for _, collName := range allColls {
 		if err := db.Create(collName); err != nil {
 			return err
