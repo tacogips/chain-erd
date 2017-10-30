@@ -12,3 +12,7 @@ var allColls = []string{
 	COLL_REL,
 	COLL_ACTIVITY,
 }
+
+const (
+	OBJECT_ID = "ObjectID"
+)

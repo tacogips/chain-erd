@@ -18,8 +18,8 @@ message Coord {
 }
 
 message WidthHeight {
-  double width  = 1;
-  double height = 2;
+  double w = 1;
+  double h = 2;
 }
 
 enum Order {

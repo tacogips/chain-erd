@@ -12,13 +12,13 @@ func initDB(db *db.DB) error {
 	// init entity coll
 	{
 		coll := db.Use(COLL_ENTITY)
-		coll.Index([]string{"object_id"})
+		coll.Index([]string{OBJECT_ID})
 	}
 
 	// init entity coll
 	{
 		coll := db.Use(COLL_REL)
-		coll.Index([]string{"object_id"})
+		coll.Index([]string{OBJECT_ID})
 	}
 
 	// init entity coll
