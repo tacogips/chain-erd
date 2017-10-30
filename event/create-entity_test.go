@@ -7,7 +7,6 @@ import (
 	"github.com/HouzuoGuo/tiedot/db"
 	"github.com/ajainc/chain/ctx/docdb"
 	"github.com/ajainc/chain/ctx/docdb/dbtestutil"
-	"github.com/ajainc/chain/ctx/docdb/dbutil"
 	"github.com/ajainc/chain/grpc/gen"
 	"github.com/stretchr/testify/assert"
 )
@@ -84,11 +83,11 @@ func TestCreateEntity(t *testing.T) {
 					continue
 				}
 
-				_, result, err := dbutil.GetByObjectID(d, docdb.COLL_ENTITY, ev.Entity.ObjectID)
+				_, result, err := docdb.GetByObjectID(d, docdb.COLL_ENTITY, ev.Entity.ObjectID)
 				errCheckIfNeed(data, err)
 
 				var actual gen.Entity
-				err = dbutil.UnmarshalEntity(result, &actual)
+				err = docdb.UnmarshalEntity(result, &actual)
 				errCheckIfNeed(data, err)
 
 				assert.Equal(t, data.expected[idx], actual)

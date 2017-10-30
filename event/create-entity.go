@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/ajainc/chain/ctx/docdb"
-	"github.com/ajainc/chain/ctx/docdb/dbutil"
 	"github.com/ajainc/chain/grpc/gen"
 )
 
@@ -23,12 +22,12 @@ func (ev CeateEntityEv) Do(c context.Context) error {
 	db := docdb.FromContext(c)
 
 	coll := docdb.COLL_ENTITY
-	if dbutil.ObjectIDExists(db, coll, ev.Entity.ObjectID) {
+	if docdb.ObjectIDExists(db, coll, ev.Entity.ObjectID) {
 		return fmt.Errorf("entity object <%s> already exists", ev.Entity.ObjectID)
 	}
 
 	entities := db.Use(coll)
-	_, err := entities.Insert(dbutil.MarshalEntity(ev.Entity))
+	_, err := entities.Insert(docdb.MarshalEntity(ev.Entity))
 
 	return err
 }
@@ -38,7 +37,7 @@ func (ev CeateEntityEv) Undo(c context.Context) error {
 
 	db := docdb.FromContext(c)
 
-	id, _, err := dbutil.GetByObjectID(db, coll, ev.Entity.ObjectID)
+	id, _, err := docdb.GetByObjectID(db, coll, ev.Entity.ObjectID)
 	if err != nil {
 		return err
 	}
