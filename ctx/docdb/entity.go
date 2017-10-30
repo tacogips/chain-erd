@@ -1,13 +1,12 @@
-package dbutil
+package docdb
 
 import (
 	"github.com/HouzuoGuo/tiedot/db"
-	"github.com/ajainc/chain/ctx/docdb"
 )
 
 // FetchAllEntities returns all enitities  //TODO(tacogips)
 func FetchAllEntities(d *db.DB) ([][]byte, error) {
-	entities := d.Use(docdb.COLL_ENTITY)
+	entities := d.Use(COLL_ENTITY)
 
 	var result [][]byte
 

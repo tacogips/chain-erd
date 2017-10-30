@@ -1,10 +1,9 @@
-package dbutil
+package docdb
 
 import (
 	"errors"
 
 	"github.com/HouzuoGuo/tiedot/db"
-	"github.com/ajainc/chain/ctx/docdb"
 )
 
 // GetByObjectID
@@ -15,7 +14,7 @@ func GetByObjectID(d *db.DB, collName string, objectID string) (int, map[string]
 	coll := d.Use(collName)
 	query := map[string]interface{}{
 		"eq":    objectID,
-		"in":    []interface{}{docdb.OBJECT_ID},
+		"in":    []interface{}{OBJECT_ID},
 		"limit": 1,
 	}
 

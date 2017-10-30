@@ -1,4 +1,4 @@
-package dbutil
+package docdb
 
 import (
 	"github.com/ajainc/chain/grpc/gen"
