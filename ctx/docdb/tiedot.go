@@ -37,12 +37,14 @@ func WithContext(c context.Context, conf Config) (context.Context, error) {
 
 func WithContextWithName(c context.Context, conf Config, tempDirPrefix string, dbName string, doInit bool) (context.Context, error) {
 	dbDirPath := conf.DBDirPath
+
 	if len(dbDirPath) == 0 {
 		var err error
-		dbDirPath, err = ioutil.TempDir(tempDirPrefix, dbName)
+		dbDirPath, err = ioutil.TempDir("", tempDirPrefix)
 		if err != nil {
 			return c, err
 		}
+
 	}
 
 	if fi, err := os.Stat(dbDirPath); os.IsNotExist(err) {
