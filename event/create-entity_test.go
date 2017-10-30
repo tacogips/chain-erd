@@ -90,14 +90,13 @@ func TestCreateEntity(t *testing.T) {
 				err = dbutil.UnmarshalEntity(result, &actual)
 				errCheckIfNeed(data, err)
 
-				assert.Equal(t, data.expected[idx], result)
+				assert.Equal(t, data.expected[idx], actual)
 
 				errCheckIfNeed(data, err)
 
 				if doRedoCheck {
 					data.redoCheck("redocheck", idx, d, ev)
 				}
-
 			}
 
 			if doErrCheck && !didErrCheck {
@@ -105,5 +104,4 @@ func TestCreateEntity(t *testing.T) {
 			}
 		}()
 	}
-
 }
