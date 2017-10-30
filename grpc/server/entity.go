@@ -4,18 +4,20 @@ import (
 	"context"
 
 	"github.com/ajainc/chain/grpc/gen"
+	"github.com/ajainc/chain/store"
 )
 
 type EntityServer struct {
-	Ctx context.Context
+	AppCtx context.Context
 }
 
-func (server EntityServer) CreateNewEntity(service gen.EntityService_CreateNewEntityServer) error {
-	return nil
+// CreateEntity
+func (server EntityServer) CreateEntity(_ context.Context, position *gen.CoordWidthHeight) (*gen.Activity, error) {
+	store.CreateEntity(server.AppCtx, objPosition)
 }
 
 func NewEntityServer(ctx context.Context) *EntityServer {
 	return &EntityServer{
-		Ctx: ctx,
+		AppCtx: ctx,
 	}
 }
