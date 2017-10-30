@@ -36,7 +36,7 @@ func TestCreateEntity(t *testing.T) {
 				W: 1000.1,
 				H: 800.2,
 			},
-			Columns: nil,
+			Columns: []*gen.Column{},
 			ZIndex:  0,
 		}
 		expected := input
@@ -85,14 +85,13 @@ func TestCreateEntity(t *testing.T) {
 				}
 
 				_, result, err := dbutil.GetByObjectID(d, docdb.COLL_ENTITY, ev.Entity.ObjectID)
+				errCheckIfNeed(data, err)
 
 				var actual gen.Entity
 				err = dbutil.UnmarshalEntity(result, &actual)
 				errCheckIfNeed(data, err)
 
 				assert.Equal(t, data.expected[idx], actual)
-
-				errCheckIfNeed(data, err)
 
 				if doRedoCheck {
 					data.redoCheck("redocheck", idx, d, ev)
