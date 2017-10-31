@@ -1,3 +1,6 @@
+
+## ** State Of This repository is 0.0.1 Pre-alpha **
+
 # chain
 
 ER Diagram drawing tool for everyone
