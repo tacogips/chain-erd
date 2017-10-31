@@ -9,6 +9,12 @@ import (
 )
 
 // CeateEntityEv stands for Creating New Entity at specified coordinates
+func NewCeateEntityEvent(entity *gen.Entity) *CeateEntityEv {
+	return &CeateEntityEv{
+		Entity: *entity,
+	}
+}
+
 type CeateEntityEv struct {
 	Entity gen.Entity
 }
@@ -17,7 +23,7 @@ func (ev CeateEntityEv) Description() string {
 	return "Create Entity"
 }
 
-func (ev CeateEntityEv) Do(c context.Context) error {
+func (ev CeateEntityEv) Exec(c context.Context) error {
 
 	db := docdb.FromContext(c)
 

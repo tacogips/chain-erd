@@ -6,9 +6,9 @@ import (
 	"log"
 	"net"
 	"os"
+	"os/signal"
 
 	"github.com/ajainc/chain/ctx/docdb"
-	"github.com/ajainc/chain/ctx/idgen"
 	chaingrpc "github.com/ajainc/chain/grpc"
 )
 
@@ -37,7 +37,10 @@ func main() {
 	}()
 
 	waitChildrenDone := make(chan struct{})
-	signals := make(chan os.Signal, 1)
+	sigs := make(chan os.Signal, 1)
+
+	signal.Notify(sigs, syscall.SITINT, syscall.SIGTERM)
+
 	go func() {
 		for {
 			select {
@@ -67,9 +70,6 @@ func setupCtx() context.Context {
 	if err != nil {
 		panic(err)
 	}
-
-	// id generator
-	c := idgen.WithContext(c)
 
 	return c
 }

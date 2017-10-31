@@ -4,7 +4,7 @@ import (
 	"github.com/HouzuoGuo/tiedot/db"
 )
 
-// FetchAllEntities returns all enitities  //TODO(tacogips)
+// FetchAllEntities returns all enitities  //TODO(tacogips) return gen.Entity instead of []byte
 func FetchAllEntities(d *db.DB) ([][]byte, error) {
 	entities := d.Use(COLL_ENTITY)
 

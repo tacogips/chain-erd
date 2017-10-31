@@ -4,6 +4,6 @@ import "context"
 
 type Event interface {
 	Description() string
-	Do(context.Context) error
-	Redo(context.Context) error
+	Exec(context.Context) error
+	Undo(context.Context) error
 }
