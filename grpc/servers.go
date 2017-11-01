@@ -11,15 +11,15 @@ import (
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
-func registerServices(ctx context.Context, grpcServer *grpc.Server) error {
-	gen.RegisterEntityServiceServer(grpcServer, *server.NewEntityServer(ctx))
+func registerServices(c context.Context, grpcServer *grpc.Server) error {
+	gen.RegisterEntityServiceServer(grpcServer, *server.NewEntityServer(c))
 	healthpb.RegisterHealthServer(grpcServer, health.NewServer())
 
 	return nil
 }
 
-func Setup(ctx context.Context, opts ...grpc.ServerOption) (*grpc.Server, error) {
+func Setup(c context.Context, opts ...grpc.ServerOption) (*grpc.Server, error) {
 	s := grpc.NewServer(opts...)
-	err := registerServices(ctx, s)
+	err := registerServices(c, s)
 	return s, err
 }

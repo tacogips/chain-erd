@@ -5,6 +5,8 @@ import (
 
 	"github.com/ajainc/chain/event"
 	"github.com/ajainc/chain/grpc/gen"
+
+	go16ctx "golang.org/x/net/context"
 )
 
 type EntityServer struct {
@@ -16,7 +18,7 @@ type EntityServer struct {
 //	store.CreateEntity(server.AppCtx, objPosition)
 //}
 
-func (server EntityServer) CreateEntity(_ context.Context, in *gen.Entity) (*gen.Activity, error) {
+func (server EntityServer) CreateEntity(_ go16ctx.Context, in *gen.Entity) (*gen.Activity, error) {
 	ev := event.NewCeateEntityEvent(in)
 	activity, err := event.Exec(server.AppCtx, ev)
 	if err != nil {
@@ -25,11 +27,12 @@ func (server EntityServer) CreateEntity(_ context.Context, in *gen.Entity) (*gen
 	return activity.ToGRPCActivity(), nil
 }
 
-func (server EntityServer) MoveEntity(ctx context.Context, in *gen.Move) (*gen.Activity, error) {
+func (server EntityServer) MoveEntity(ctx go16ctx.Context, in *gen.Move) (*gen.Activity, error) {
 	// TODO(tacogis): implement
 	return nil, nil
 }
 
+//NewEntityServer create entityServer
 func NewEntityServer(ctx context.Context) *EntityServer {
 	return &EntityServer{
 		AppCtx: ctx,

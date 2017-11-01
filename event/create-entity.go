@@ -39,6 +39,7 @@ func (ev *CeateEntityEv) Exec(c context.Context) error {
 
 	return err
 }
+
 func (ev *CeateEntityEv) Validate(db *db.DB) error {
 	err := ev.Entity.Validate()
 	if err != nil {
