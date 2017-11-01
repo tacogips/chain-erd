@@ -16,6 +16,8 @@ type diedotKey int
 
 var key diedotKey = 1
 
+var closeFuncKey diedotKey = 2
+
 // FromContext
 func FromContext(c context.Context) *tdb.DB {
 	store, ok := c.Value(key).(*tdb.DB)
@@ -36,7 +38,7 @@ func WithContext(c context.Context, conf Config) (context.Context, error) {
 	return WithContextWithName(c, conf, "", "chaindb", true)
 }
 
-// WithContext setup tiedot database adn add it into context. DB waits <-context.Context.Done() to close database so the context cancelation function should be called on caller's responsibility
+// WithContext setup tiedot database adn add it into context. Eventualy Close(c context.Context) should be called on caller's responsibility
 func WithContextWithName(c context.Context, conf Config, tempDirPrefix string, dbName string, doInit bool) (context.Context, error) {
 	dbDirPath := conf.DBDirPath
 
@@ -63,29 +65,37 @@ func WithContextWithName(c context.Context, conf Config, tempDirPrefix string, d
 	if err != nil {
 		return c, err
 	}
+	logger.Debugf(c, "chain DB at <%s>", dbDirPath)
 
 	if doInit {
 		err := initDB(db)
+
 		if err != nil {
 			return c, err
 		}
+		logger.Debug(c, "init chain db")
 	}
 
 	c = context.WithValue(c, key, db)
 
 	closeFunc := func() error {
+		logger.Debug(c, "closing tiedot DB at <%s>", dbDirPath)
+
 		db.Close()
 		os.RemoveAll(dbDirPath)
-		logger.Debug(c, "tiedot closed")
 		return err
 	}
 
-	go func() {
-		select {
-		case <-c.Done():
-			closeFunc()
-		}
-	}()
+	c = context.WithValue(c, closeFuncKey, closeFunc)
 
 	return c, nil
+}
+func Close(c context.Context) error {
+
+	fn, ok := c.Value(key).(func() error)
+
+	if !ok {
+		panic(fmt.Errorf("no db closer func in context"))
+	}
+	return fn()
 }

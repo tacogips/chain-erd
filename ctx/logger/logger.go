@@ -62,6 +62,16 @@ func WithContext(c context.Context, config *LoggerConfig) (context.Context, erro
 	return c, nil
 }
 
+func Error(c context.Context, s ...interface{}) {
+	l := FromContext(c)
+	l.Error(s...)
+}
+
+func Errorf(c context.Context, f string, s ...interface{}) {
+	l := FromContext(c)
+	l.Errorf(f, s...)
+}
+
 func Info(c context.Context, s ...interface{}) {
 	l := FromContext(c)
 	l.Info(s...)

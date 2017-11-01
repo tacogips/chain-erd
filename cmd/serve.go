@@ -21,9 +21,7 @@ func main() {
 
 	port := "50051"
 
-	c := setupCtx()
-
-	c, cancelContext := context.WithCancel(c)
+	c, cancelContext := setupCtx()
 
 	//  setup grpc server
 	grpcServer, err := chaingrpc.Setup(c)
@@ -41,27 +39,34 @@ func main() {
 		grpcServer.Serve(listener)
 	}()
 
-	waitChildrenDone := make(chan struct{})
+	waitShutdownDone := make(chan struct{})
 	sigs := make(chan os.Signal, 1)
-
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
 		for {
 			select {
 			case <-c.Done():
-				waitChildrenDone <- struct{}{}
+				logger.Debugf(c, "shutdowning server")
+				err := docdb.Close(c)
+				if err != nil {
+					logger.Error(c, err)
+				}
+				waitShutdownDone <- struct{}{}
+				return
 			case <-sigs:
 				cancelContext()
 			}
 		}
 	}()
 
-	<-waitChildrenDone
+	<-waitShutdownDone
+	logger.Info(c, "bye")
 }
 
-func setupCtx() context.Context {
+func setupCtx() (context.Context, context.CancelFunc) {
 	c := context.Background()
+	c, cancel := context.WithCancel(c)
 
 	var err error
 	// logger
@@ -84,5 +89,5 @@ func setupCtx() context.Context {
 		panic(err)
 	}
 
-	return c
+	return c, cancel
 }
