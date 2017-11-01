@@ -39,6 +39,7 @@ func TestCreateEntity(t *testing.T) {
 			ZIndex:  0,
 		}
 		expected := input
+		expected.Name = "NewEntity"
 
 		d := crateEntityTestData{}
 		d.input = []CeateEntityEv{{Entity: input}}

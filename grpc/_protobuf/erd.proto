@@ -32,10 +32,11 @@ message Empty {}
 // version_id will be used to detect conflict action.
 message Entity {
   string object_id         = 1 [ (gogoproto.customname) = "ObjectID" ];
-  Coord coord              = 2; // position of top-left
-  WidthHeight width_height = 3;
-  repeated Column columns  = 4;
-  int32 z_index            = 5; // depth //TODO
+  string name              = 2;
+  Coord coord              = 3; // position of top-left
+  WidthHeight width_height = 4;
+  repeated Column columns  = 5;
+  int32 z_index            = 6; // depth //TODO
 }
 
 // TODO tacogips add other types
@@ -113,7 +114,7 @@ message Move {
 }
 
 message Activity {
-  int32 id           = 1;
+  string id           = 1 [ (gogoproto.customname) = "ID" ];
   string description = 2;
 }
 

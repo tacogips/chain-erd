@@ -1,6 +1,13 @@
 package gen
 
-//TODO tacogips add helper funcs
-func (e Entity) Validate() error {
+// FillWithDefault fill
+func (e *Entity) FillWithDefault() {
+	if e.Name == "" {
+		e.Name = "NewEntity"
+	}
+}
+
+// Validate
+func (e *Entity) Validate() error {
 	return nil
 }

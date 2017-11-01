@@ -5,7 +5,6 @@ import (
 
 	"github.com/ajainc/chain/event"
 	"github.com/ajainc/chain/grpc/gen"
-	"github.com/ajainc/chain/store"
 )
 
 type EntityServer struct {
@@ -18,10 +17,12 @@ type EntityServer struct {
 //}
 
 func (server EntityServer) CreateEntity(_ context.Context, in *gen.Entity) (*gen.Activity, error) {
-
-	ev := event.NewCeateEntityEvent(entity * gen.Entity)
-
-	store.CreateEntity(server.AppCtx, in)
+	ev := event.NewCeateEntityEvent(in)
+	activity, err := event.Exec(server.AppCtx, ev)
+	if err != nil {
+		return nil, err
+	}
+	return activity.ToGRPCActivity(), nil
 }
 
 func (server EntityServer) MoveEntity(ctx context.Context, in *gen.Move) (*gen.Activity, error) {

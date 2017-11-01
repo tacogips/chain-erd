@@ -1,8 +1,17 @@
 package event
 
+import "github.com/ajainc/chain/grpc/gen"
+
 type Activity struct {
 	ActivityID string
 	Event      Event
+}
+
+func (a *Activity) ToGRPCActivity() *gen.Activity {
+	return &gen.Activity{
+		ID:          a.ActivityID,
+		Description: a.Event.Description(),
+	}
 }
 
 // NewActivity createnewActivity
