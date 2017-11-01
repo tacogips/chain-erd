@@ -24,6 +24,8 @@ func FromContext(c context.Context) *tdb.DB {
 	return store
 }
 
+var DefaultConfig = Config{}
+
 type Config struct {
 	DBDirPath string `yaml:db_path:`
 	PersistDB bool   `yaml:persist_database:` // if true, database dir madeby tiedot will not be removed when shutdown.
