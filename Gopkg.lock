@@ -50,6 +50,12 @@
   revision = "130e6b02ab059e7b717a096f397c5b60111cae74"
 
 [[projects]]
+  name = "github.com/improbable-eng/grpc-web"
+  packages = ["go/grpcweb"]
+  revision = "7174732598544bdecfa12fb81ca2f1601cf1b587"
+  version = "0.3.0-beta"
+
+[[projects]]
   name = "github.com/mattn/go-sqlite3"
   packages = ["."]
   revision = "5160b48509cf5c877bc22c11c373f8c7738cdb38"
@@ -66,6 +72,12 @@
   packages = ["difflib"]
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
   version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/rs/cors"
+  packages = ["."]
+  revision = "7af7a1e09ba336d2ea14b1ce73bf693c6837dbf6"
+  version = "v1.2"
 
 [[projects]]
   name = "github.com/stretchr/testify"
@@ -112,6 +124,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "67da8bb301692d6300b509707c62c350b2a5596df49fb7fb8d88befcf91c016e"
+  inputs-digest = "93a4654731dfb6e1ba9c523d0a256bcad55572b506c32027b1d5ac7e1d3a9610"
   solver-name = "gps-cdcl"
   solver-version = 1

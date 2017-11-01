@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"net"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -19,24 +19,29 @@ import (
 //TODO (tacogips) implement commands with option
 func main() {
 
-	port := "50051"
+	port := 50051
 
 	c, cancelContext := setupCtx()
+	defer cancelContext()
 
 	//  setup grpc server
-	grpcServer, err := chaingrpc.Setup(c)
+	grpcwebServer, err := chaingrpc.Setup(c)
 	if err != nil {
 		panic(err)
 	}
 
-	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
-	if err != nil {
-		logger.Fatalf(c, "failed to start server: %#v", err)
+	handler := func(resp http.ResponseWriter, req *http.Request) {
+		grpcwebServer.ServeHttp(resp, req)
+	}
+
+	grpcHttpServer := http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
+		Handler: http.HandlerFunc(handler),
 	}
 
 	go func() {
-		logger.Infof(c, "server started. listening on %s", port)
-		grpcServer.Serve(listener)
+		logger.Infof(c, "server started. listening on :%d", port)
+		grpcHttpServer.ListenAndServe() // TODO(tacogips): use HTTP/2
 	}()
 
 	waitShutdownDone := make(chan struct{})
