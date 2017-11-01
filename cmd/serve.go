@@ -3,20 +3,22 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
 	clk "github.com/101loops/clock"
+	"github.com/Sirupsen/logrus"
 	"github.com/ajainc/chain/ctx/clock"
 	"github.com/ajainc/chain/ctx/docdb"
+	"github.com/ajainc/chain/ctx/logger"
 	chaingrpc "github.com/ajainc/chain/grpc"
 )
 
 //TODO (tacogips) implement commands with option
 func main() {
+
 	port := "50051"
 
 	c := setupCtx()
@@ -31,11 +33,11 @@ func main() {
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		logger.Fatalf(c, "failed to start server: %v", err)
 	}
 
 	go func() {
-		log.Printf("staring server. listening %s", port)
+		logger.Info(c, "failed to start server: %v", err)
 		grpcServer.Serve(listener)
 	}()
 
@@ -59,11 +61,19 @@ func main() {
 }
 
 func setupCtx() context.Context {
-
 	c := context.Background()
 
+	var err error
+	// logger
+	loggerConfig := logger.TTYLogger
+	loggerConfig.SetLevel(logrus.DebugLevel) // TODO(tacogips): always debug mode between pre-alpha
+	c, err = logger.WithContext(c, loggerConfig)
+	if err != nil {
+		panic(err)
+	}
+
 	// docdb
-	c, err := docdb.WithContext(c, docdb.Config{})
+	c, err = docdb.WithContext(c, docdb.Config{})
 	if err != nil {
 		panic(err)
 	}
