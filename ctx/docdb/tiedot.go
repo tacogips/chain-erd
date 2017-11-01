@@ -92,8 +92,7 @@ func WithContextWithName(c context.Context, conf Config, tempDirPrefix string, d
 }
 func Close(c context.Context) error {
 
-	fn, ok := c.Value(key).(func() error)
-
+	fn, ok := c.Value(closeFuncKey).(func() error)
 	if !ok {
 		panic(fmt.Errorf("no db closer func in context"))
 	}
