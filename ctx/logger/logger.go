@@ -57,6 +57,8 @@ func WithContext(c context.Context, config *LoggerConfig) (context.Context, erro
 	}
 	l.SetLevel(config.Level)
 
+	c = context.WithValue(c, key, l)
+
 	return c, nil
 }
 

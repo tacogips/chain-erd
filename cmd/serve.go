@@ -33,11 +33,11 @@ func main() {
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
-		logger.Fatalf(c, "failed to start server: %v", err)
+		logger.Fatalf(c, "failed to start server: %#v", err)
 	}
 
 	go func() {
-		logger.Info(c, "failed to start server: %v", err)
+		logger.Infof(c, "server started. listening on %s", port)
 		grpcServer.Serve(listener)
 	}()
 
