@@ -26,7 +26,7 @@ var TTYLogger = &LoggerConfig{
 	Type: "tty",
 }
 
-var NoLogger = &LoggerConfig{
+var DiscardLogger = &LoggerConfig{
 	Type: "/dev/null",
 }
 

@@ -28,13 +28,17 @@
         "webpack-dev-server": "^2.4.2"
     },
     "dependencies": {
+        "@types/google-protobuf": "^3.2.7",
         "axios": "^0.16.2",
         "classnames": "^2.2.5",
         "global": "^4.3.2",
+        "google-protobuf": "^3.4.0",
+        "grpc-web-client": "^0.3.1",
         "isomorphic-fetch": "^2.2.1",
-        "konva-react": "^0.1.0",
+        "konva": "^1.7.6",
         "react": "^15.6.1",
         "react-dom": "^15.5.4",
+        "react-konva": "^1.1.6",
         "react-redux": "^5.0.5",
         "react-tap-event-plugin": "^2.0.1",
         "redux": "^3.7.0",
