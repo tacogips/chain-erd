@@ -2,11 +2,16 @@
 # yarn lockfile v1
 
 
-"@types/react-dom@~15.5.6":
-  version "15.5.6"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.6.tgz#7794ff7822882b59b899c30294e1b1e62e97757e"
+"@types/node@*":
+  version "8.0.50"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.50.tgz#dc545448e128c88c4eec7cd64025fcc3b7604541"
+
+"@types/react-dom@^16.0.2":
+  version "16.0.2"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.2.tgz#2da9de21fd83f0140b64794ad9c47930230aedae"
   dependencies:
-    "@types/react" "^15"
+    "@types/node" "*"
+    "@types/react" "*"
 
 "@types/react-redux@^5.0.12":
   version "5.0.12"
@@ -15,13 +20,9 @@
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react@*":
+"@types/react@*", "@types/react@^16.0.21":
   version "16.0.21"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.21.tgz#1f4313594f784a477521a0795c46e7b832051ef3"
-
-"@types/react@^15", "@types/react@~15.6.1":
-  version "15.6.6"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.6.6.tgz#21c93d921d63e5c8478ad54b917f52c9abd547e2"
 
 abbrev@1:
   version "1.1.0"
@@ -949,14 +950,6 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.6.0:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.2.tgz#cf1ed15f12aad7f14ef5f2dfe05e6c42f91ef02a"
-  dependencies:
-    fbjs "^0.8.9"
-    loose-envify "^1.3.1"
-    object-assign "^4.1.1"
-
 cryptiles@2.x.x:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-2.0.5.tgz#3bdfecdc608147c1c67202fa291e7dca59eaa3b8"
@@ -1284,7 +1277,7 @@ faye-websocket@~0.11.0:
   dependencies:
     websocket-driver ">=0.5.1"
 
-fbjs@^0.8.14:
+fbjs@^0.8.14, fbjs@^0.8.16:
   version "0.8.16"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.16.tgz#5e67432f550dc41b572bf55847b8aca64e5337db"
   dependencies:
@@ -2384,6 +2377,14 @@ prop-types@^15.5.10:
     fbjs "^0.8.9"
     loose-envify "^1.3.1"
 
+prop-types@^15.6.0:
+  version "15.6.0"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.3.1"
+    object-assign "^4.1.1"
+
 proxy-addr@~1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-1.1.4.tgz#27e545f6960a44a627d9b44467e35c1b6b4ce2f3"
@@ -2459,23 +2460,30 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@~15.6.2:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.2.tgz#41cfadf693b757faf2708443a1d1fd5a02bef730"
+react-dom@16.1.0-beta:
+  version "16.1.0-beta"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.1.0-beta.tgz#15a1f9d021fc19d7dfa23e627f89994d7e7c7514"
   dependencies:
-    fbjs "^0.8.9"
+    fbjs "^0.8.16"
     loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
-
-react-konva@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-1.1.6.tgz#d721a0e85d37ff01a6a088ff64a10d181816206d"
-  dependencies:
-    create-react-class "^15.6.0"
-    fbjs "^0.8.14"
     object-assign "^4.1.1"
-    prop-types "^15.5.10"
+    prop-types "^15.6.0"
+
+react-konva@1.5.7-beta:
+  version "1.5.7-beta"
+  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-1.5.7-beta.tgz#e3f71bf2f7b04b2c1255d20b52a3628501688e2a"
+  dependencies:
+    fbjs "^0.8.14"
+    react-reconciler "^0.2.0"
+
+react-reconciler@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.2.0.tgz#59407c3e868211a7a6218070a55dfbc9c93b2243"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 react-redux@^5.0.6:
   version "5.0.6"
@@ -2494,15 +2502,14 @@ react-tap-event-plugin@^2.0.1:
   dependencies:
     fbjs "^0.8.6"
 
-react@~15.6.1:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.6.2.tgz#dba0434ab439cfe82f108f0f511663908179aa72"
+react@16.1.0-beta:
+  version "16.1.0-beta"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.1.0-beta.tgz#4cfbf9d98b3394bcadbdcf6fc7c7a2f5c5dc8203"
   dependencies:
-    create-react-class "^15.6.0"
-    fbjs "^0.8.9"
+    fbjs "^0.8.16"
     loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
