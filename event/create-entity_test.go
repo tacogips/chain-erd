@@ -39,6 +39,7 @@ func TestCreateEntity(t *testing.T) {
 			ZIndex:  0,
 		}
 		expected := input
+		expected.Name = "NewEntity"
 
 		d := crateEntityTestData{}
 		d.input = []CeateEntityEv{{Entity: input}}
@@ -75,7 +76,7 @@ func TestCreateEntity(t *testing.T) {
 			d := docdb.FromContext(c)
 
 			for idx, ev := range data.input {
-				err = ev.Do(c)
+				err = ev.Exec(c)
 
 				if err != nil {
 					// test error case if func for check is set

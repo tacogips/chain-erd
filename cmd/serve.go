@@ -3,73 +3,96 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
-	"net"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 
+	clk "github.com/101loops/clock"
+	"github.com/Sirupsen/logrus"
+	"github.com/ajainc/chain/ctx/clock"
 	"github.com/ajainc/chain/ctx/docdb"
-	"github.com/ajainc/chain/ctx/idgen"
+	"github.com/ajainc/chain/ctx/logger"
 	chaingrpc "github.com/ajainc/chain/grpc"
 )
 
 //TODO (tacogips) implement commands with option
 func main() {
-	port := "50051"
 
-	c := setupCtx()
+	port := 50051
 
-	c, cancelContext := context.WithCancel(c)
+	c, cancelContext := setupCtx()
+	defer cancelContext()
 
 	//  setup grpc server
-	grpcServer, err := chaingrpc.Setup(c)
+	grpcwebServer, err := chaingrpc.Setup(c)
 	if err != nil {
 		panic(err)
 	}
 
-	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+	handler := func(resp http.ResponseWriter, req *http.Request) {
+		grpcwebServer.ServeHttp(resp, req)
+	}
+
+	grpcHttpServer := http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
+		Handler: http.HandlerFunc(handler),
 	}
 
 	go func() {
-		log.Printf("staring server. listening %s", port)
-		grpcServer.Serve(listener)
+		logger.Infof(c, "server started. listening on :%d", port)
+		grpcHttpServer.ListenAndServe() // TODO(tacogips): use HTTP/2
 	}()
 
-	waitChildrenDone := make(chan struct{})
-	signals := make(chan os.Signal, 1)
+	waitShutdownDone := make(chan struct{})
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
 	go func() {
 		for {
 			select {
-			case <-c.Done:
-				waitChildrenDone <- struct{}{}
+			case <-c.Done():
+				logger.Debugf(c, "shutdowning server")
+				err := docdb.Close(c)
+				if err != nil {
+					logger.Error(c, err)
+				}
+				waitShutdownDone <- struct{}{}
+				return
 			case <-sigs:
 				cancelContext()
 			}
 		}
 	}()
 
-	<-waitChildrenDone
+	<-waitShutdownDone
+	logger.Info(c, "bye")
 }
 
-func setupCtx() context.Context {
+func setupCtx() (context.Context, context.CancelFunc) {
+	c := context.Background()
+	c, cancel := context.WithCancel(c)
 
-	c := context.BackGround()
+	var err error
+	// logger
+	loggerConfig := logger.TTYLogger
+	loggerConfig.SetLevel(logrus.DebugLevel) // TODO(tacogips): always debug mode between pre-alpha
+	c, err = logger.WithContext(c, loggerConfig)
+	if err != nil {
+		panic(err)
+	}
 
 	// docdb
-	c, err = docdb.WithContext(c)
+	c, err = docdb.WithContext(c, docdb.Config{})
 	if err != nil {
 		panic(err)
 	}
 
 	//  clock
-	c, err = clock.WithContext(c, clock.New())
+	c = clock.WithContext(c, clk.New())
 	if err != nil {
 		panic(err)
 	}
 
-	// id generator
-	c := idgen.WithContext(c)
-
-	return c
+	return c, cancel
 }

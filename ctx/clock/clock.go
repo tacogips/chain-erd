@@ -10,7 +10,7 @@ type key int
 
 var clockKey key = 1
 
-func NewContext(c context.Context, cl clk.Clock) context.Context {
+func WithContext(c context.Context, cl clk.Clock) context.Context {
 	c = context.WithValue(c, clockKey, cl)
 	return c
 }

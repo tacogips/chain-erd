@@ -2,6 +2,7 @@
 
 clean-proto:
 	rm  -rf grpc/gen/*.pb.go
+	rm  -rf _jsapp/src/grpc/*
 
 protoc:
 	protoc \
@@ -16,7 +17,16 @@ Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:./grpc/gen \
 	  grpc/_protobuf/*.proto
 
-cprotoc: clean-proto protoc
+tsprotoc:
+	protoc \
+	--plugin=protoc-gen-ts=./_jsapp/./node_modules/.bin/protoc-gen-ts \
+	--ts_out=service=true:_jsapp/src/grpc  \
+	-I grpc/_protobuf/ \
+  --proto_path=grpc/_protobuf \
+  --proto_path=./vendor \
+	grpc/_protobuf/*.proto
+
+cprotoc: clean-proto protoc tsprotoc
 
 doc:
 	 protoc \
@@ -24,3 +34,8 @@ doc:
     --proto_path=grpc/_protobuf \
 		./$${dir}/*.proto && cd - ; \
 
+dev-deps:
+	go get -u google.golang.org/grpc
+	go get -u github.com/golang/protobuf/proto
+	go get -u github.com/golang/protobuf/protoc-gen-go
+	go get -u github.com/gogo/protobuf/proto/...

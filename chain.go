@@ -18,7 +18,7 @@ type Chain struct {
 	Config ChainConfig
 }
 
-//Load graph file
+//Load from file
 func (chain *Chain) Load(r io.Reader) error {
 	//TODO tacogips impl
 	return nil
