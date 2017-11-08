@@ -19,7 +19,7 @@ const store = createStore(
 sagaMiddleware.run(rootSaga)
 
 
-class MyRect extends React.Component<{}, {}>{
+class MyRect extends React.Component<{}, any>{
     state = { color: 'green' };
 
     handleClick = () => {
@@ -44,13 +44,10 @@ class MyRect extends React.Component<{}, {}>{
     }
 }
 
-
-class App extends React.Component<{}, {}> {
+class App extends React.Component<{}, any> {
     render() {
         return (
             <Provider store={store}>
-                <LatestArticleList />
-
                 <Stage width={700} height={700}>
                     <Layer>
                         <MyRect />
@@ -60,7 +57,6 @@ class App extends React.Component<{}, {}> {
         )
     }
 }
-
 
 render(<App />, document.getElementById('app'))
 

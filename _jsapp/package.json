@@ -35,7 +35,6 @@
         "react-dom": "16.1.0-beta",
         "react-konva": "1.5.7-beta",
         "react-redux": "^5.0.6",
-        "react-tap-event-plugin": "^2.0.1",
         "redux": "^3.7.0",
         "redux-saga": "^0.15.6"
     }
