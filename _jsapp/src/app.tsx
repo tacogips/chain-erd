@@ -6,6 +6,7 @@ import createSagaMiddleware from 'redux-saga'
 import rootReducer from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
 import LatestArticleList from './containers/LatestAritlceList'
+import { Stage, Layer, Rect, Group } from 'react-konva'
 
 const initialState = {}
 const sagaMiddleware = createSagaMiddleware()
@@ -17,14 +18,49 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga)
 
+
+class MyRect extends React.Component<{}, {}>{
+    state = { color: 'green' };
+
+    handleClick = () => {
+        // window.Konva is a global variable for Konva framework namespace
+        ///this.setState({
+        ///  color: window.Konva.Util.getRandomColor()
+        ///});
+    }
+
+    render() {
+        return (
+            <Rect
+                x={10}
+                y={10}
+                width={50}
+                height={50}
+                fill={this.state.color}
+                shadowBlur={5}
+                onClick={this.handleClick}
+            />
+        );
+    }
+}
+
+
 class App extends React.Component<{}, {}> {
     render() {
         return (
             <Provider store={store}>
                 <LatestArticleList />
+
+                <Stage width={700} height={700}>
+                    <Layer>
+                        <MyRect />
+                    </Layer>
+                </Stage>
             </Provider>
         )
     }
 }
 
+
 render(<App />, document.getElementById('app'))
+
