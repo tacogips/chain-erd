@@ -31,7 +31,7 @@
         "classnames": "^2.2.5",
         "global": "^4.3.2",
         "isomorphic-fetch": "^2.2.1",
-        "konva": "^1.6.3",
+        "konva": "^1.7.6",
         "react": "16.1.0-beta",
         "react-dom": "16.1.0-beta",
         "react-konva": "1.5.7-beta",

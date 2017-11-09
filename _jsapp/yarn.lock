@@ -1877,7 +1877,7 @@ kind-of@^4.0.0:
   dependencies:
     is-buffer "^1.1.5"
 
-konva@^1.6.3:
+konva@^1.7.6:
   version "1.7.6"
   resolved "https://registry.yarnpkg.com/konva/-/konva-1.7.6.tgz#7aceef1058b04127077c8f44653556b35b1133e6"
 

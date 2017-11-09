@@ -23,6 +23,7 @@ export class Canvas extends React.Component<CanvasProps, CanvasState>{
             <Stage width={this.props.width} height={this.props.height}>
                 <Layer>
                     <Entity
+												id={"testaaa"}
                         x={10}
                         y={200}
                         width={100}
