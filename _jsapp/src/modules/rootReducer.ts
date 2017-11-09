@@ -1,12 +1,16 @@
 import { combineReducers } from 'redux'
 import {articleReducer as articles, ArticleState } from './articles'
 
+import { Entity, Rel } from 'grpc/erd_pb'
+
 export interface RootState{
-	articles:ArticleState
+	articles? : ArticleState
+	entities:Map<string,Entity>
 }
 
-const rootReducer = combineReducers<RootState>({
+export const rootReducer = combineReducers<RootState>({
     articles,
 })
 
 export default rootReducer
+

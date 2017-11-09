@@ -12,11 +12,11 @@
         "alwaysStrict": true,
         "outFile": "./dist/",
         "strict": true,
-				"noImplicitAny":true,
-				"noImplicitThis":true,
-				"alwaysStrict":true,
-				"strictNullChecks":false,
-				"strictFunctionTypes":true.
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "strictNullChecks": false,
+        "strictFunctionTypes": true,
         "removeComments": true,
         "baseUrl": ".",
         "paths": {

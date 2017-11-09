@@ -3,14 +3,17 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import rootReducer from './modules/rootReducer'
+import { rootReducer, RootState } from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
 import LatestArticleList from './containers/LatestAritlceList'
-import { Stage, Layer,  Group } from 'react-konva'
+import { Stage, Layer, Group } from 'react-konva'
 import { Canvas } from 'components/Canvas'
 import { Entity } from 'components/Entity'
 
-const initialState = {}
+const initialState: RootState = {
+    articles: null,
+    entities: null
+}
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
     rootReducer,
@@ -24,7 +27,7 @@ class App extends React.Component<{}, any> {
     render() {
         return (
             <Provider store={store}>
-								<Canvas width={700} height={700} />
+                <Canvas width={700} height={700} />
             </Provider>
         )
     }

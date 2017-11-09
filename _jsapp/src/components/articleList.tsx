@@ -22,8 +22,6 @@ export class ArticleList extends React.Component<ArticleListProps, {}> {
             return (<div>No data</div>)
         }
 
-			console.log(this.props.articles)
-
         return (
             <div>
                 <h2>articles</h2>
