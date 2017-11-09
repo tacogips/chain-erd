@@ -12,7 +12,8 @@ import { Entity } from 'components/Entity'
 
 const initialState: RootState = {
     articles: null,
-    entities: null
+    entities: null,
+    rels: null
 }
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
