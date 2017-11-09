@@ -35,6 +35,7 @@ export class Entity extends React.Component<EntityProps, {}>{
         document.body.style.cursor = 'normal';
     }
 
+
     handleClick = () => {
 				this.refRect.fill("red")
 				this.refRect.draw()
