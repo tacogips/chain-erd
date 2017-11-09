@@ -11,31 +11,26 @@ export interface EntityProps {
     width: number,
     height: number,
     color: string,
-		onDragEnd? : () => void
+    onDragEnd?: () => void
 }
 
 export class Entity extends React.Component<EntityProps, {}>{
+    private refRect: Rect
+
     constructor(props?: EntityProps, context?: any) {
         super(props, context)
     }
 
     changeSize() {
-        //const rect = (<Konva.Node>this.refs.rect);
+    }
 
-        //// to() is a method of `Konva.Node` instances
-        //rect.to({
-        //        scaleX: Math.random() + 0.8,
-        //    scaleY: Math.random() + 0.8,
-        //    duration: 0.2
-        //});
+    onMouseOver = () =>{
+        document.body.style.cursor = 'pointer';
     }
 
     handleClick = () => {
         console.log("14124")
-        // window.Konva is a global variable for Konva framework namespace
-        ///this.setState({
-        ///  color: window.Konva.Util.getRandomColor()
-        ///});
+				this.refRect.fill("red");
     }
 
     render() {
@@ -48,6 +43,8 @@ export class Entity extends React.Component<EntityProps, {}>{
                 fill={this.props.color}
                 shadowBlur={1}
                 draggable={true}
+                ref={(ref)=> this.refRect = ref}
+                onMouseOver={this.onMouseOver}
                 onClick={this.handleClick}
             />
         );
