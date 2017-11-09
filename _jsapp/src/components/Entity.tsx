@@ -3,18 +3,21 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import { Stage, Layer, Rect, Group  } from 'react-konva'
-
+import { Stage, Layer, Rect, Group, Circle } from 'react-konva'
 
 export interface EntityProps {
     x: number
     y: number
-	  width:number,
-	  height:number,
-		color: string
+    width: number,
+    height: number,
+    color: string,
+		onDragEnd? : () => void
 }
 
-export class Entity extends React.Component<EntityProps , {}>{
+export class Entity extends React.Component<EntityProps, {}>{
+    constructor(props?: EntityProps, context?: any) {
+        super(props, context)
+    }
 
     changeSize() {
         //const rect = (<Konva.Node>this.refs.rect);
@@ -28,6 +31,7 @@ export class Entity extends React.Component<EntityProps , {}>{
     }
 
     handleClick = () => {
+        console.log("14124")
         // window.Konva is a global variable for Konva framework namespace
         ///this.setState({
         ///  color: window.Konva.Util.getRandomColor()
@@ -43,6 +47,7 @@ export class Entity extends React.Component<EntityProps , {}>{
                 height={this.props.height}
                 fill={this.props.color}
                 shadowBlur={1}
+                draggable={true}
                 onClick={this.handleClick}
             />
         );
