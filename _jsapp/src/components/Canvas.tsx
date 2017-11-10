@@ -8,22 +8,33 @@ import { Entity } from './Entity'
 
 export interface CanvasProps {
     width: number,
-    height: number
+    height: number,
+    onClick?: () => void
 }
 
 export interface CanvasState { }
 
 export class Canvas extends React.Component<CanvasProps, CanvasState>{
+    stage: any
+
     constructor(props?: CanvasProps, context?: any) {
         super(props, context)
     }
 
+    onClick = (evt: any) => {
+        console.log(evt)
+    }
+
     render() {
         return (
-            <Stage width={this.props.width} height={this.props.height}>
-                <Layer>
+            <Stage
+                ref={(ref) => this.stage = ref}
+                width={this.props.width}
+                height={this.props.height}
+                onContentClick={this.onClick} >
+                <Layer >
                     <Entity
-												id={"testaaa"}
+                        id={"testaaa"}
                         x={10}
                         y={200}
                         width={100}

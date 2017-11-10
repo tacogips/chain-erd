@@ -8,3 +8,6 @@ export interface FSAction<Payload> extends Action {
     error?: boolean
     errorMessage?: string
 }
+
+
+export interface EmptyAction extends Action {}

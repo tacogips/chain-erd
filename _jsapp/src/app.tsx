@@ -9,12 +9,14 @@ import LatestArticleList from './containers/LatestAritlceList'
 import { Stage, Layer, Group } from 'react-konva'
 import { Canvas } from 'components/Canvas'
 import { Entity } from 'components/Entity'
+import { ToolPane } from 'components/ToolPane'
 
 const initialState: RootState = {
     articles: null,
     entities: null,
     rels: null
 }
+
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
     rootReducer,
@@ -28,7 +30,10 @@ class App extends React.Component<{}, any> {
     render() {
         return (
             <Provider store={store}>
-                <Canvas width={700} height={700} />
+                <div>
+                    <ToolPane />
+                    <Canvas width={700} height={700} />
+                </div>
             </Provider>
         )
     }
