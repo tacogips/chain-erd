@@ -3,12 +3,18 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import rootReducer from './modules/rootReducer'
+import { rootReducer, RootState } from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
 import LatestArticleList from './containers/LatestAritlceList'
-import { Stage, Layer, Rect, Group } from 'react-konva'
+import { Stage, Layer, Group } from 'react-konva'
+import { Canvas } from 'components/Canvas'
+import { Entity } from 'components/Entity'
 
-const initialState = {}
+const initialState: RootState = {
+    articles: null,
+    entities: null,
+    rels: null
+}
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
     rootReducer,
@@ -18,41 +24,11 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga)
 
-
-class MyRect extends React.Component<{}, any>{
-    state = { color: 'green' };
-
-    handleClick = () => {
-        // window.Konva is a global variable for Konva framework namespace
-        ///this.setState({
-        ///  color: window.Konva.Util.getRandomColor()
-        ///});
-    }
-
-    render() {
-        return (
-            <Rect
-                x={10}
-                y={10}
-                width={50}
-                height={50}
-                fill={this.state.color}
-                shadowBlur={5}
-                onClick={this.handleClick}
-            />
-        );
-    }
-}
-
 class App extends React.Component<{}, any> {
     render() {
         return (
             <Provider store={store}>
-                <Stage width={700} height={700}>
-                    <Layer>
-                        <MyRect />
-                    </Layer>
-                </Stage>
+                <Canvas width={700} height={700} />
             </Provider>
         )
     }

@@ -19,7 +19,7 @@ plugins=grpc:./grpc/gen \
 
 tsprotoc:
 	protoc \
-	--plugin=protoc-gen-ts=./_jsapp/./node_modules/.bin/protoc-gen-ts \
+	--plugin=protoc-gen-ts=./_jsapp/node_modules/.bin/protoc-gen-ts \
 	--ts_out=service=true:_jsapp/src/grpc  \
 	-I grpc/_protobuf/ \
   --proto_path=grpc/_protobuf \
@@ -34,7 +34,7 @@ doc:
     --proto_path=grpc/_protobuf \
 		./$${dir}/*.proto && cd - ; \
 
-dev-deps:
+install-dev-deps:
 	go get -u google.golang.org/grpc
 	go get -u github.com/golang/protobuf/proto
 	go get -u github.com/golang/protobuf/protoc-gen-go

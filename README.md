@@ -20,3 +20,4 @@ go get -u github.com/gogo/protobuf/proto/...
 
 ## TODOS
 - [ ] IRI compatible quads.
+- [ ] use react-motion for fluent moving instead of konva event handler
