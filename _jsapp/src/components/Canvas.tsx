@@ -18,7 +18,6 @@ export class Canvas extends React.Component<CanvasProps, CanvasState>{
         super(props, context)
     }
 
-
     render() {
         return (
             <Stage width={this.props.width} height={this.props.height}>
