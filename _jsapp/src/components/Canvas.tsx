@@ -15,7 +15,7 @@ export interface CanvasProps {
 export interface CanvasState { }
 
 export class Canvas extends React.Component<CanvasProps, CanvasState>{
-    stage: any
+    private stage: any
 
     constructor(props?: CanvasProps, context?: any) {
         super(props, context)

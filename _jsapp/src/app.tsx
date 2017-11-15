@@ -5,14 +5,12 @@ import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { rootReducer, RootState } from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
-import LatestArticleList from './containers/LatestAritlceList'
 import { Stage, Layer, Group } from 'react-konva'
 import { Canvas } from 'components/Canvas'
 import { Entity } from 'components/Entity'
-import { ToolPane } from 'components/ToolPane'
+import { ToolPane } from './containers/ToolPane'
 
 const initialState: RootState = {
-    articles: null,
     entities: null,
     rels: null
 }
