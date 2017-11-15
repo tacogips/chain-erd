@@ -23,7 +23,7 @@ export interface DeleteEntity extends FSAction<Entity> {
     payload: Entity
 }
 
-export type EntityAction = CreateNewEntity
+export type EntityAction = CreateNewEntity | DeleteEntity
 
 // === action creator =================
 export const actionCreators = {

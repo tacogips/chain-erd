@@ -25,7 +25,6 @@
         "react-konva": "^1.6.2",
         "source-map-loader": "^0.2.1",
         "ts-protoc-gen": "^0.4.0",
-        "typescript": "^2.6.1",
         "webpack": "^2.5.1",
         "webpack-dev-server": "^2.4.2"
     },
@@ -41,6 +40,7 @@
         "react-redux": "^5.0.6",
         "redux": "^3.7.0",
         "redux-saga": "^0.15.6",
+        "typescript": "^2.6.1",
         "typescript-formatter": "^7.0.0"
     }
 }

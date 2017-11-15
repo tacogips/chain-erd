@@ -17,6 +17,7 @@
         "alwaysStrict": true,
         "strictNullChecks": false,
         "strictFunctionTypes": true,
+        "noStrictGenericChecks": true,
         "removeComments": true,
         "baseUrl": ".",
         "paths": {
