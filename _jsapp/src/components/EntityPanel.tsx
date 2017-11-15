@@ -6,25 +6,25 @@ import createSagaMiddleware from 'redux-saga'
 import * as Konva from 'konva'
 import { Stage, Layer, Rect, Group, Circle } from 'react-konva'
 
-export interface EntityProps {
-    id: string
-    x: number
-    y: number
-    width: number
-    height: number
-    color?: string
+import { Entities } from 'modules/entity/reducer'
+
+import { Entity, Rel } from 'grpc/erd_pb'
+
+export interface EntityPanelProps {
+		entity : Entity
     onDragEnd?: () => void
 }
 
-export class Entity extends React.Component<EntityProps, {}>{
+export class EntityPanel extends React.Component<EntityPanelProps, {}>{
     //TODO(tacogips) if defined this type as "Reat", Konva.Rect methods will not found? check out after react 16.1 and its typedefinision released
     private refRect: any
 
-    constructor(props?: EntityProps, context?: any) {
+    constructor(props?: EntityPanelProps, context?: any) {
         super(props, context)
     }
 
     changeSize() {
+
     }
 
     onMouseOver = () => {
@@ -32,7 +32,7 @@ export class Entity extends React.Component<EntityProps, {}>{
     }
 
     onMouseOut = () => {
-        document.body.style.cursor = 'normal';
+        document.body.style.cursor = 'default';
     }
 
     handleClick = () => {
@@ -41,13 +41,15 @@ export class Entity extends React.Component<EntityProps, {}>{
     }
 
     render() {
+				const {entity} = this.props
         return (
             <Rect
-                x={this.props.x}
-                y={this.props.y}
-                width={this.props.width}
-                height={this.props.height}
-                fill={this.props.color}
+
+                x={entity.getCoord().getX()}
+                y={entity.getCoord().getY()}
+                width={entity.getWidthHeight().getW()}
+                height={entity.getWidthHeight().getH()}
+                fill={entity.getColor()}
                 shadowBlur={1}
                 draggable={true}
                 ref={(ref) => this.refRect = ref}

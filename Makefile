@@ -2,7 +2,7 @@
 
 clean-proto:
 	rm  -rf grpc/gen/*.pb.go
-	rm  -rf _jsapp/src/grpc/*
+	rm  -rf _jsapp/src/grpc/*.ts
 
 protoc:
 	protoc \
@@ -26,6 +26,7 @@ tsprotoc:
   --proto_path=./vendor \
 	grpc/_protobuf/*.proto
 
+
 cprotoc: clean-proto protoc tsprotoc
 
 doc:
@@ -37,5 +38,7 @@ doc:
 install-dev-deps:
 	go get -u google.golang.org/grpc
 	go get -u github.com/golang/protobuf/proto
-	go get -u github.com/golang/protobuf/protoc-gen-go
+	go get -u github.com/gogo/protobuf/jsonpb
+	go get -u github.com/gogo/protobuf/protoc-gen-gogo
+	go get -u github.com/gogo/protobuf/gogoproto
 	go get -u github.com/gogo/protobuf/proto/...
