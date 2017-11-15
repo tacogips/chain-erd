@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 
 export interface ToolPaneProps {
-		preparingCreateEntity? : boolean
+    preparingCreateEntity?: boolean
     pushEntityButton?: () => void
 }
 
@@ -15,25 +15,20 @@ export class ToolPane extends React.Component<ToolPaneProps, {}>{
         super(props, context)
     }
 
-		changePointer = () =>{
-
-			console.log(this.props.preparingCreateEntity)
-			if (this.props.preparingCreateEntity){
-        document.body.style.cursor = 'pointer';
-			}else{
-        document.body.style.cursor = 'normal';
-			}
-		}
+    changePointer = () => {
+        if (this.props.preparingCreateEntity) {
+            document.body.style.cursor = 'pointer';
+        } else {
+            document.body.style.cursor = 'default';
+        }
+    }
 
     render() {
-				this.changePointer ()
+        this.changePointer()
         return (
-           <div>
-						<button onClick={this.props.pushEntityButton}>entity</button>
-					</div>
+            <div>
+                <button onClick={this.props.pushEntityButton}>entity</button>
+            </div>
         );
     }
 }
-
-
-

@@ -25,6 +25,7 @@ export class Entity extends React.Component<EntityProps, {}>{
     }
 
     changeSize() {
+
     }
 
     onMouseOver = () => {
@@ -32,7 +33,7 @@ export class Entity extends React.Component<EntityProps, {}>{
     }
 
     onMouseOut = () => {
-        document.body.style.cursor = 'normal';
+        document.body.style.cursor = 'default';
     }
 
     handleClick = () => {

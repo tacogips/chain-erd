@@ -1,7 +1,5 @@
-
 import * as redux from 'redux'
 import { FSAction ,EmptyAction} from 'modules/base/fsa'
-import { Article } from 'modules/models/Article'
 import * as api from 'modules/api' //TODO 何故か modules/apiだとエラー
 import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects'
 

@@ -15,7 +15,7 @@ export const controlReducer: Reducer<ControlState> = (state: ControlState = init
         case actions.ControlActionTypes.PREPARE_NEW_ENTIY:
             return <ControlState>{
                 ...state,
-                creatingNewEntity: true
+                creatingNewEntity: !state.creatingNewEntity
             }
 
         case actions.ControlActionTypes.FINISH_CREATE_ENTITY:
