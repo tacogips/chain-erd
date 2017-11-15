@@ -31,7 +31,6 @@ export class Canvas extends React.Component<CanvasProps, CanvasState>{
                 ref={(ref) => this.stage = ref}
                 width={this.props.width}
                 height={this.props.height}
-							 	draggable = {true}
                 onContentClick={this.onClick} >
                 <Layer >
 

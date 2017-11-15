@@ -2817,21 +2817,21 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@16.1.0-beta:
-  version "16.1.0-beta"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.1.0-beta.tgz#15a1f9d021fc19d7dfa23e627f89994d7e7c7514"
+react-dom@16.1.0:
+  version "16.1.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.1.0.tgz#ab6fd2a285096f388aeba51919a573d06c9bdde4"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-konva@1.5.7-beta:
-  version "1.5.7-beta"
-  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-1.5.7-beta.tgz#e3f71bf2f7b04b2c1255d20b52a3628501688e2a"
+react-konva@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-1.6.2.tgz#03720beb9422717d00dee5942c87800c3ba1afde"
   dependencies:
     fbjs "^0.8.14"
-    react-reconciler "^0.2.0"
+    react-reconciler "^0.5.0"
 
 react-motion@^0.5.2:
   version "0.5.2"
@@ -2841,9 +2841,9 @@ react-motion@^0.5.2:
     prop-types "^15.5.8"
     raf "^3.1.0"
 
-react-reconciler@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.2.0.tgz#59407c3e868211a7a6218070a55dfbc9c93b2243"
+react-reconciler@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.5.0.tgz#4c4cdfa2ec8f4f35ebf6305ed65fcef9b3d5d6e7"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -2861,9 +2861,9 @@ react-redux@^5.0.6:
     loose-envify "^1.1.0"
     prop-types "^15.5.10"
 
-react@16.1.0-beta:
-  version "16.1.0-beta"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.1.0-beta.tgz#4cfbf9d98b3394bcadbdcf6fc7c7a2f5c5dc8203"
+react@16.1.0:
+  version "16.1.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.1.0.tgz#1c2bdac3c17fe7ee9282fa35aca6cc36387903e1"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
