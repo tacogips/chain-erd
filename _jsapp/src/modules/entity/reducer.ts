@@ -3,25 +3,28 @@ import { Reducer } from 'redux'
 
 import { Entity, Rel } from 'grpc/erd_pb'
 
-export interface EntityState {
-    entities: Map<string, Entity>
+
+export interface Entities {
+    [key: string]: Entity
 }
 
-interface Entitys{
-		[key:string] : Entity
+export interface EntityState {
+    entities: Entities
 }
+
 
 export const initialState: EntityState = {
-	entities: Entitys
+    entities: {}
 }
 
 export const entityReducer: Reducer<EntityState> = (state: EntityState = initialState, action: actions.EntityAction) => {
     switch (action.type) {
         case actions.EntityActionTypes.CREATE_NEW_ENTITY:
-						const entity = action.payload
+            const entity = action.payload
+            const objectId = entity.getObjectId()
             return <EntityState>{
                 ...state,
-								entities : {entities...,entity.getObjectId():entity }
+                entities: { ...state.entities, objectId: entity }
             }
 
         //case actions.EntityActionTypes.DELETE_ENTITY:

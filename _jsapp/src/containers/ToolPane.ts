@@ -1,4 +1,5 @@
-import { ToolPane as ToolPaneComp, ToolPaneProps } from 'components/ToolPane'
+import { ToolPane as ToolPaneComponent, ToolPaneProps } from 'components/ToolPane'
+
 import { RootState } from 'modules/rootReducer'
 import { actionCreators } from 'modules/control/actions'
 import { connect, Dispatch } from 'react-redux'
@@ -15,5 +16,5 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: ToolPanePro
     }
 })
 
-export const ToolPane = connect(mapStateToProps, mapDispatchToProps)(ToolPaneComp)
+export const ToolPane = connect(mapStateToProps, mapDispatchToProps)(ToolPaneComponent)
 

@@ -7,7 +7,6 @@ import { rootReducer, RootState } from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
 import { Stage, Layer, Group } from 'react-konva'
 import { Canvas } from 'components/Canvas'
-import { Entity } from 'components/Entity'
 import { ToolPane } from './containers/ToolPane'
 
 const initialState: RootState = {

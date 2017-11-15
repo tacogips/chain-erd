@@ -35,8 +35,9 @@ message Entity {
   string name              = 2;
   Coord coord              = 3; // position of top-left
   WidthHeight width_height = 4;
-  repeated Column columns  = 5;
-  int32 z_index            = 6; // depth //TODO
+  string color             = 5;
+  repeated Column columns  = 6;
+  int32 z_index            = 7; // depth //TODO
 }
 
 // TODO tacogips add other types
@@ -114,7 +115,7 @@ message Move {
 }
 
 message Activity {
-  string id           = 1 [ (gogoproto.customname) = "ID" ];
+  string id          = 1 [ (gogoproto.customname) = "ID" ];
   string description = 2;
 }
 

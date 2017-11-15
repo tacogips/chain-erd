@@ -4,11 +4,15 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Stage, Layer, Rect, Group } from 'react-konva'
-import { Entity } from './Entity'
+import { EntityPanel } from './EntityPanel'
+import { Entities } from 'modules/entity'
+import { Entity } from 'grpc/erd_pb'
 
 export interface CanvasProps {
     width: number,
     height: number,
+
+    entities?: Entities
     onClick?: () => void
 }
 
@@ -21,30 +25,31 @@ export class Canvas extends React.Component<CanvasProps, CanvasState>{
         super(props, context)
     }
 
-    onClick = (evt: any) => {
+    onClickEvent = (evt: any) => {
         console.log(evt)
     }
 
     render() {
+
+			//TODO(tacogips) Is there another way to iterate a interface?
+        const entities = Object.keys(this.props.entities).map((entityId: string) => {
+						const entity = this.props.entities[entityId]
+            return <EntityPanel entity={entity} />
+        })
+
         return (
             <Stage
                 ref={(ref) => this.stage = ref}
                 width={this.props.width}
                 height={this.props.height}
-                onContentClick={this.onClick} >
-
-                <Layer >
-                    <Entity
-                        id={"testaaa"}
-                        x={10}
-                        y={200}
-                        width={100}
-                        height={200}
-                        color="green" />
+                onContentClick={this.onClickEvent} >
+                <Layer>
+                    entities
                 </Layer>
             </Stage>
         );
     }
 }
+
 
 
