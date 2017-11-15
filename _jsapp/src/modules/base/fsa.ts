@@ -11,3 +11,6 @@ export interface FSAction<Payload> extends Action {
 
 
 export interface EmptyAction extends Action {}
+
+export interface FSActionTest<Entity>{
+}

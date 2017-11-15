@@ -1,6 +1,5 @@
 import * as redux from 'redux'
 import { FSAction ,EmptyAction} from 'modules/base/fsa'
-import * as api from 'modules/api' //TODO 何故か modules/apiだとエラー
 import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects'
 
 
@@ -17,6 +16,7 @@ export module ControlActionTypes {
 export interface PrepareNewEntity extends EmptyAction {
     type: ControlActionTypes,
 }
+
 
 export type ControlAction = PrepareNewEntity
 

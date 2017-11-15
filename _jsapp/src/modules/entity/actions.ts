@@ -1,6 +1,5 @@
 import * as redux from 'redux'
 import { FSAction, EmptyAction } from 'modules/base/fsa'
-import * as api from 'modules/api' //TODO 何故か modules/apiだとエラー
 import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects'
 
 import { Entity, Rel } from 'grpc/erd_pb'
@@ -13,6 +12,7 @@ export module EntityActionTypes {
     export const DELETE_ENTITY: EntityActionTypes = 'DELETE_ENTIY'
 }
 
+// === actions ===============
 export interface CreateNewEntity extends FSAction<Entity> {
     type: EntityActionTypes,
     payload: Entity

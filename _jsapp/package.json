@@ -40,6 +40,7 @@
         "react-motion": "^0.5.2",
         "react-redux": "^5.0.6",
         "redux": "^3.7.0",
-        "redux-saga": "^0.15.6"
+        "redux-saga": "^0.15.6",
+        "typescript-formatter": "^7.0.0"
     }
 }
