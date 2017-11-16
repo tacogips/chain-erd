@@ -31,7 +31,7 @@ export type ControlAction = PrepareNewEntity
 
 // === action creator =================
 export const actionCreators = {
-	prepareToCreateEntity: (repeat:boolean) => {
+    prepareToCreateEntity: (repeat: boolean) => {
         return <PrepareNewEntity>{
             type: ControlActionTypes.PREPARE_NEW_ENTIY,
             payload: {

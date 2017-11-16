@@ -7,12 +7,15 @@ import * as Konva from 'konva'
 import { Stage, Layer, Rect, Group, Circle } from 'react-konva'
 import { Map } from 'immutable'
 
-import { Entity, Rel } from 'grpc/erd_pb'
+import { Entity, Rel ,Coord} from 'grpc/erd_pb'
 
 export interface EntityPanelProps {
-		key:string
-		entity : Entity
-    onDragEnd?: () => void
+    key: string
+    entity: Entity
+}
+
+export interface EntityPanelProps {
+	dragStartPos: Coord
 }
 
 export class EntityPanel extends React.Component<EntityPanelProps, {}>{
@@ -35,13 +38,21 @@ export class EntityPanel extends React.Component<EntityPanelProps, {}>{
         document.body.style.cursor = 'default';
     }
 
+		onDragStart = (evt.any)  =>{
+		}
+
+    onDragEnd = (evt:any) => {
+			console.log(evt)
+
+    }
+
     handleClick = () => {
         this.refRect.fill("red")
         this.refRect.draw()
     }
 
     render() {
-				const {entity} = this.props
+        const { entity} = this.props
         return (
             <Rect
                 x={entity.getCoord().getX()}
@@ -51,6 +62,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, {}>{
                 fill={entity.getColor()}
                 shadowBlur={1}
                 draggable={true}
+                onDragEnd={this.onDragEnd}
                 ref={(ref) => this.refRect = ref}
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}

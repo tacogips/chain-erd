@@ -23,6 +23,7 @@ export class ToolPane extends React.Component<ToolPaneProps, {}>{
                 <button onClick={this.props.onCreateSingleEntityButton}>
                     New Entity
 								</button>
+
                 <button onClick={this.props.onRepeatCreateEntityButton}>
                     Repeatedly New Entity
 								</button>
