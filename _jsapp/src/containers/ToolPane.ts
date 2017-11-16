@@ -4,6 +4,7 @@ import { RootState } from 'modules/rootReducer'
 import { actionCreators } from 'modules/control/actions'
 import { connect, Dispatch } from 'react-redux'
 
+
 const mapStateToProps = (state: RootState, ownProps: ToolPaneProps) => (<ToolPaneProps>{
     ...ownProps,
     preparingCreateEntity: state.control.creatingNewEntity
@@ -11,8 +12,16 @@ const mapStateToProps = (state: RootState, ownProps: ToolPaneProps) => (<ToolPan
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: ToolPaneProps) => (<ToolPaneProps>{
     ...ownProps,
-    pushEntityButton: () => {
-        return dispatch(actionCreators.prepareNewEntity())
+    onCreateSingleEntityButton: () => {
+        return dispatch(actionCreators.prepareToCreateEntity(false))
+    },
+
+    onRepeatCreateEntityButton: () => {
+        return dispatch(actionCreators.prepareToCreateEntity(true))
+    },
+
+    onCancelAction: () => {
+        return dispatch(actionCreators.cancelAction())
     }
 })
 

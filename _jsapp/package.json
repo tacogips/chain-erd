@@ -11,6 +11,7 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@types/uuid": "^3.4.3",
         "@types/google-protobuf": "^3.2.7",
         "@types/react": "^16.0.21",
         "@types/react-dom": "^16.0.2",
@@ -32,6 +33,7 @@
         "axios": "^0.16.2",
         "classnames": "^2.2.5",
         "global": "^4.3.2",
+        "immutable": "^3.8.2",
         "isomorphic-fetch": "^2.2.1",
         "konva": "^1.7.6",
         "react": "16.1.0",
@@ -41,6 +43,7 @@
         "redux": "^3.7.0",
         "redux-saga": "^0.15.6",
         "typescript": "^2.6.1",
-        "typescript-formatter": "^7.0.0"
+        "typescript-formatter": "^7.0.0",
+        "uuid": "^3.1.0"
     }
 }

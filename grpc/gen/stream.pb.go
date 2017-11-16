@@ -10,8 +10,10 @@ import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/gogo/protobuf/types"
 import _ "github.com/gogo/protobuf/types"
 
-import context "golang.org/x/net/context"
-import grpc "google.golang.org/grpc"
+import (
+	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
+)
 
 import io "io"
 

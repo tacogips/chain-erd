@@ -6,7 +6,9 @@ import createSagaMiddleware from 'redux-saga'
 
 export interface ToolPaneProps {
     preparingCreateEntity?: boolean
-    pushEntityButton?: () => void
+    onCreateSingleEntityButton?: () => void
+    onRepeatCreateEntityButton?: () => void
+    onCancelAction?: () => void
 }
 
 export class ToolPane extends React.Component<ToolPaneProps, {}>{
@@ -15,19 +17,19 @@ export class ToolPane extends React.Component<ToolPaneProps, {}>{
         super(props, context)
     }
 
-    changePointer = () => {
-        if (this.props.preparingCreateEntity) {
-            document.body.style.cursor = 'pointer';
-        } else {
-            document.body.style.cursor = 'default';
-        }
-    }
-
     render() {
-        this.changePointer()
         return (
             <div>
-                <button onClick={this.props.pushEntityButton}>entity</button>
+                <button onClick={this.props.onCreateSingleEntityButton}>
+                    New Entity
+								</button>
+                <button onClick={this.props.onRepeatCreateEntityButton}>
+                    Repeatedly New Entity
+								</button>
+
+                <button onClick={this.props.onCancelAction}>
+                   Cancel
+								</button>
             </div>
         );
     }

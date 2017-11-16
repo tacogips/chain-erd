@@ -5,12 +5,12 @@ import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import * as Konva from 'konva'
 import { Stage, Layer, Rect, Group, Circle } from 'react-konva'
-
-import { Entities } from 'modules/entity/reducer'
+import { Map } from 'immutable'
 
 import { Entity, Rel } from 'grpc/erd_pb'
 
 export interface EntityPanelProps {
+		key:string
 		entity : Entity
     onDragEnd?: () => void
 }
@@ -44,7 +44,6 @@ export class EntityPanel extends React.Component<EntityPanelProps, {}>{
 				const {entity} = this.props
         return (
             <Rect
-
                 x={entity.getCoord().getX()}
                 y={entity.getCoord().getY()}
                 width={entity.getWidthHeight().getW()}
