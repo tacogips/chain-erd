@@ -1,5 +1,5 @@
 import * as redux from 'redux'
-import { FSAction ,EmptyAction} from 'modules/base/fsa'
+import { FSAction, EmptyAction } from 'modules/base/fsa'
 import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects'
 
 
@@ -13,18 +13,34 @@ export module ControlActionTypes {
     export const FINISH_CREATE_ENTITY: ControlActionTypes = 'FINISH_CREATE_ENTITY'
 }
 
-export interface PrepareNewEntity extends EmptyAction {
-    type: ControlActionTypes,
+export interface EntityActionOption {
+    repeat: boolean
 }
 
+export interface PrepareNewEntity extends FSAction<EntityActionOption> {
+    type: ControlActionTypes,
+    payload: EntityActionOption
+}
 
 export type ControlAction = PrepareNewEntity
 
 // === action creator =================
 export const actionCreators = {
-    prepareNewEntity: () => {
+    prepareToCreateEntity: () => {
         return <PrepareNewEntity>{
             type: ControlActionTypes.PREPARE_NEW_ENTIY,
+            payload: {
+                repeat: false
+            }
+        }
+    },
+
+    prepareToRepeatedlyCreateEntity: () => {
+        return <PrepareNewEntity>{
+            type: ControlActionTypes.PREPARE_NEW_ENTIY,
+            payload: {
+                repeat: true
+            }
         }
     },
 

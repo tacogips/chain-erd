@@ -546,7 +546,7 @@ proto.erd.Entity.toObject = function(includeInstance, msg) {
     color: jspb.Message.getFieldWithDefault(msg, 5, ""),
     columnsList: jspb.Message.toObjectList(msg.getColumnsList(),
     proto.erd.Column.toObject, includeInstance),
-    zIndex: jspb.Message.getFieldWithDefault(msg, 7, 0)
+    depth: jspb.Message.getFieldWithDefault(msg, 7, 0)
   };
 
   if (includeInstance) {
@@ -612,7 +612,7 @@ proto.erd.Entity.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 7:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setZIndex(value);
+      msg.setDepth(value);
       break;
     default:
       reader.skipField();
@@ -688,7 +688,7 @@ proto.erd.Entity.serializeBinaryToWriter = function(message, writer) {
       proto.erd.Column.serializeBinaryToWriter
     );
   }
-  f = message.getZIndex();
+  f = message.getDepth();
   if (f !== 0) {
     writer.writeInt32(
       7,
@@ -835,16 +835,16 @@ proto.erd.Entity.prototype.clearColumnsList = function() {
 
 
 /**
- * optional int32 z_index = 7;
+ * optional int32 depth = 7;
  * @return {number}
  */
-proto.erd.Entity.prototype.getZIndex = function() {
+proto.erd.Entity.prototype.getDepth = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
 };
 
 
 /** @param {number} value */
-proto.erd.Entity.prototype.setZIndex = function(value) {
+proto.erd.Entity.prototype.setDepth = function(value) {
   jspb.Message.setField(this, 7, value);
 };
 

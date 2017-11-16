@@ -5,7 +5,11 @@ import  * as uuidv4  from 'uuid/v4'
 import { connect, Dispatch } from 'react-redux'
 import { Entity, Coord, WidthHeight, Rel } from 'grpc/erd_pb'
 
+
 const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
+
+
+
 
     let clickAction: CanvasClickAction
     let mouseOverPointer = 'default'

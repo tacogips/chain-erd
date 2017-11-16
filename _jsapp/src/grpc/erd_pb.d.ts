@@ -95,8 +95,8 @@ export class Entity extends jspb.Message {
   setColumnsList(value: Array<Column>): void;
   addColumns(value?: Column, index?: number): Column;
 
-  getZIndex(): number;
-  setZIndex(value: number): void;
+  getDepth(): number;
+  setDepth(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Entity.AsObject;
@@ -116,7 +116,7 @@ export namespace Entity {
     widthHeight?: WidthHeight.AsObject,
     color: string,
     columnsList: Array<Column.AsObject>,
-    zIndex: number,
+    depth: number,
   }
 }
 

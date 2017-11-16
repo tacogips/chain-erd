@@ -26,7 +26,7 @@ class App extends React.Component<{}, any> {
             <Provider store={store}>
                 <div>
                     <ToolPane />
-                    <Canvas width={700} height={700} />
+                    <Canvas width={1300} height={1000} />
                 </div>
             </Provider>
         )

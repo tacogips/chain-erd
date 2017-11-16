@@ -37,7 +37,7 @@ message Entity {
   WidthHeight width_height = 4;
   string color             = 5;
   repeated Column columns  = 6;
-  int32 z_index            = 7; // depth //TODO
+  int32 depth              = 7;
 }
 
 // TODO tacogips add other types
