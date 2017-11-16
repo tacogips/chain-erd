@@ -11,6 +11,7 @@ export type ControlActionTypes = string
 export module ControlActionTypes {
     export const PREPARE_NEW_ENTIY: ControlActionTypes = 'PREPARE_NEW_ENTIY'
     export const FINISH_CREATE_ENTITY: ControlActionTypes = 'FINISH_CREATE_ENTITY'
+    export const CANCEL_ACTION: ControlActionTypes = 'CANCEL_ACTION'
 }
 
 export interface EntityActionOption {
@@ -22,24 +23,19 @@ export interface PrepareNewEntity extends FSAction<EntityActionOption> {
     payload: EntityActionOption
 }
 
+export interface CancelAction extends EmptyAction {
+    type: ControlActionTypes
+}
+
 export type ControlAction = PrepareNewEntity
 
 // === action creator =================
 export const actionCreators = {
-    prepareToCreateEntity: () => {
+	prepareToCreateEntity: (repeat:boolean) => {
         return <PrepareNewEntity>{
             type: ControlActionTypes.PREPARE_NEW_ENTIY,
             payload: {
-                repeat: false
-            }
-        }
-    },
-
-    prepareToRepeatedlyCreateEntity: () => {
-        return <PrepareNewEntity>{
-            type: ControlActionTypes.PREPARE_NEW_ENTIY,
-            payload: {
-                repeat: true
+                repeat: repeat
             }
         }
     },
@@ -47,6 +43,12 @@ export const actionCreators = {
     finishCreateEntity: () => {
         return <PrepareNewEntity>{
             type: ControlActionTypes.FINISH_CREATE_ENTITY,
+        }
+    },
+
+    cancelAction: () => {
+        return <CancelAction>{
+            type: ControlActionTypes.CANCEL_ACTION,
         }
     },
 }

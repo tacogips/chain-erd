@@ -8,9 +8,6 @@ import { Entity, Coord, WidthHeight, Rel } from 'grpc/erd_pb'
 
 const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
 
-
-
-
     let clickAction: CanvasClickAction
     let mouseOverPointer = 'default'
     if (state.control.creatingNewEntity) {
@@ -43,7 +40,6 @@ function defaultEntity(position: CanvasPosition): Entity {
     newEntity.setWidthHeight(wh)
 
     newEntity.setColor(DefaultlEntityColor.DEFAULT_ENTITY_COLOR)
-
     return newEntity
 }
 

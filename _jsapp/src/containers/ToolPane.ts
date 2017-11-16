@@ -13,11 +13,15 @@ const mapStateToProps = (state: RootState, ownProps: ToolPaneProps) => (<ToolPan
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: ToolPaneProps) => (<ToolPaneProps>{
     ...ownProps,
     onCreateSingleEntityButton: () => {
-        return dispatch(actionCreators.prepareToCreateEntity())
+        return dispatch(actionCreators.prepareToCreateEntity(false))
     },
 
     onRepeatCreateEntityButton: () => {
-        return dispatch(actionCreators.prepareToRepeatedlyCreateEntity())
+        return dispatch(actionCreators.prepareToCreateEntity(true))
+    },
+
+    onCancelAction: () => {
+        return dispatch(actionCreators.cancelAction())
     }
 })
 

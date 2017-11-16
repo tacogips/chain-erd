@@ -8,6 +8,7 @@ export interface ToolPaneProps {
     preparingCreateEntity?: boolean
     onCreateSingleEntityButton?: () => void
     onRepeatCreateEntityButton?: () => void
+    onCancelAction?: () => void
 }
 
 export class ToolPane extends React.Component<ToolPaneProps, {}>{
@@ -24,6 +25,10 @@ export class ToolPane extends React.Component<ToolPaneProps, {}>{
 								</button>
                 <button onClick={this.props.onRepeatCreateEntityButton}>
                     Repeatedly New Entity
+								</button>
+
+                <button onClick={this.props.onCancelAction}>
+                   Cancel
 								</button>
             </div>
         );

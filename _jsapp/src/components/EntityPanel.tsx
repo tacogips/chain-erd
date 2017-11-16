@@ -10,6 +10,7 @@ import { Map } from 'immutable'
 import { Entity, Rel } from 'grpc/erd_pb'
 
 export interface EntityPanelProps {
+		key:string
 		entity : Entity
     onDragEnd?: () => void
 }

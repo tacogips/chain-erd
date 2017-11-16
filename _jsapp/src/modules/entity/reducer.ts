@@ -15,6 +15,7 @@ export const initialState: EntityState = {
 
 export const entityReducer: Reducer<EntityState> = (state: EntityState = initialState, action: actions.EntityAction) => {
     switch (action.type) {
+
         case actions.EntityActionTypes.CREATE_NEW_ENTITY:
             const entity = action.payload
             const objectId = entity.getObjectId()

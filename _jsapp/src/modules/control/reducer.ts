@@ -17,7 +17,7 @@ export const controlReducer: Reducer<ControlState> = (state: ControlState = init
         case actions.ControlActionTypes.PREPARE_NEW_ENTIY:
             return <ControlState>{
                 ...state,
-                creatingNewEntity: !state.creatingNewEntity,
+                creatingNewEntity: true,
 								repeatAction :action.payload.repeat
             }
 
@@ -27,6 +27,14 @@ export const controlReducer: Reducer<ControlState> = (state: ControlState = init
                 creatingNewEntity: false,
 								repeatAction :false
             }
+
+        case actions.ControlActionTypes.CANCEL_ACTION:
+					//TODO (tacogips) should be  more elegant
+          return <ControlState>{
+              ...state,
+              creatingNewEntity: false,
+							repeatAction :false
+          }
 
         default:
             return state

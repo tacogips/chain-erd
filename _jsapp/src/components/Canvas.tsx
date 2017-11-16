@@ -85,7 +85,7 @@ export class Canvas extends React.Component<CanvasProps, {}>{
 
         //TODO(tacogips) Is there another way to iterate a interface?
         const entities = this.props.entities.valueSeq().map((entity:Entity) => {
-            return <EntityPanel entity={entity} />
+            return <EntityPanel key={entity.getObjectId()} entity={entity} />
         })
         const { width, height } = this.props
 
