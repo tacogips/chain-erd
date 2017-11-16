@@ -6,7 +6,7 @@ import { Entity, Rel } from 'grpc/erd_pb'
 
 export interface RootState {
 	  control? : ControlState
-		envity? : EntityState
+		entity? : EntityState
 
     //entities: Map<string, Entity.AsObject>
     //rels: Map<string, Rel.AsObject>

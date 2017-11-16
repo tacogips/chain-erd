@@ -1,6 +1,7 @@
 import { Canvas as CanvasComponent, CanvasProps, CanvasPosition, CanvasClickAction } from 'components/Canvas'
 import { RootState } from 'modules/rootReducer'
-import { actionCreators as entityAction } from 'modules/entity/actions'
+import { actionCreators as entityAction, DefaultlSize, DefaultlEntityColor } from 'modules/entity'
+import  * as uuidv4  from 'uuid/v4'
 import { connect, Dispatch } from 'react-redux'
 import { Entity, Coord, WidthHeight, Rel } from 'grpc/erd_pb'
 
@@ -15,7 +16,7 @@ const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
 
     return <CanvasProps>{
         ...ownProps,
-        entities: {},
+        entities: state.entity.entities,
         clickAction: clickAction,
         mouseOverPointer: mouseOverPointer
     }
@@ -25,26 +26,30 @@ const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
 function defaultEntity(position: CanvasPosition): Entity {
     const newEntity = new Entity()
 
-    //const coord = new Coord()
-    //coord.setX(position.layerX)
-    //coord.setY(position.layerY)
-    //newEntity.setCoord(coord)
+    newEntity.setObjectId(uuidv4())
 
-    //const wh = new WidthHeight()
-    //wh.setW(10)
-    //wh.setH(10)
-    //newEntity.setWidthHeight(wh)
+    const coord = new Coord()
+    coord.setX(position.layerX)
+    coord.setY(position.layerY)
+    newEntity.setCoord(coord)
+
+    const wh = new WidthHeight()
+    wh.setW(DefaultlSize.W)
+    wh.setH(DefaultlSize.H)
+    newEntity.setWidthHeight(wh)
+
+    newEntity.setColor(DefaultlEntityColor.DEFAULT_ENTITY_COLOR)
 
     return newEntity
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: CanvasProps) => {
 
-    const onClick = (canvasClickAciton:CanvasClickAction, clickPosition: CanvasPosition) => {
+    const onClick = (canvasClickAciton: CanvasClickAction, clickPosition: CanvasPosition) => {
         switch (canvasClickAciton) {
             case CanvasClickAction.CREATE_NEW_ENTITY:
-                //const newEntity = defaultEntity(clickPosition)
-                //dispatch(entityAction.createNewEntity(newEntity))
+                const newEntity = defaultEntity(clickPosition)
+                dispatch(entityAction.createNewEntity(newEntity))
         }
     }
 

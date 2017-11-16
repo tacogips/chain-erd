@@ -5,7 +5,9 @@ import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Stage, Layer, Rect, Group } from 'react-konva'
 import { EntityPanel } from './EntityPanel'
-import { Entities } from 'modules/entity'
+import { Map } from 'immutable'
+
+
 import { Entity } from 'grpc/erd_pb'
 
 export interface CanvasPosition {
@@ -29,8 +31,7 @@ export enum CanvasClickAction {
 export interface CanvasProps {
     width: number,
     height: number,
-
-    entities?: Entities
+    entities?: Map <string,Entity>
     mouseOverPointer?: string
     clickAction?: CanvasClickAction,
     onClick?: (
@@ -65,6 +66,7 @@ export class Canvas extends React.Component<CanvasProps, {}>{
         const nullOrZero = (v: any) => {
             return (!v) ? 0 : +v
         }
+
         const canvasPosition: CanvasPosition = {
             clientX: nullOrZero(evtVal.clientX),
             clientY: nullOrZero(evtVal.clientY),
@@ -82,8 +84,7 @@ export class Canvas extends React.Component<CanvasProps, {}>{
     render() {
 
         //TODO(tacogips) Is there another way to iterate a interface?
-        const entities = Object.keys(this.props.entities).map((entityId: string) => {
-            const entity = this.props.entities[entityId]
+        const entities = this.props.entities.valueSeq().map((entity:Entity) => {
             return <EntityPanel entity={entity} />
         })
         const { width, height } = this.props
