@@ -15,16 +15,7 @@ export class ToolPane extends React.Component<ToolPaneProps, {}>{
         super(props, context)
     }
 
-    changePointer = () => {
-        if (this.props.preparingCreateEntity) {
-            document.body.style.cursor = 'pointer';
-        } else {
-            document.body.style.cursor = 'default';
-        }
-    }
-
     render() {
-        this.changePointer()
         return (
             <div>
                 <button onClick={this.props.pushEntityButton}>entity</button>

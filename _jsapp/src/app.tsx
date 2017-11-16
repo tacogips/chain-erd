@@ -6,13 +6,10 @@ import createSagaMiddleware from 'redux-saga'
 import { rootReducer, RootState } from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
 import { Stage, Layer, Group } from 'react-konva'
-import { Canvas } from 'components/Canvas'
+import { Canvas } from 'containers/Canvas'
 import { ToolPane } from './containers/ToolPane'
 
-const initialState: RootState = {
-    entities: null,
-    rels: null
-}
+const initialState: RootState = {}
 
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(

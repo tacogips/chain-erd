@@ -34,10 +34,12 @@ import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/gogo/protobuf/types"
 import _ "github.com/gogo/protobuf/types"
 
-import context "golang.org/x/net/context"
-import grpc "google.golang.org/grpc"
+import (
+	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
+)
 
-import binary "encoding/binary"
+import encoding_binary "encoding/binary"
 
 import io "io"
 
@@ -539,13 +541,13 @@ func (m *Coord) MarshalTo(dAtA []byte) (int, error) {
 	if m.X != 0 {
 		dAtA[i] = 0x9
 		i++
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.X))))
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.X))))
 		i += 8
 	}
 	if m.Y != 0 {
 		dAtA[i] = 0x11
 		i++
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Y))))
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Y))))
 		i += 8
 	}
 	return i, nil
@@ -569,13 +571,13 @@ func (m *WidthHeight) MarshalTo(dAtA []byte) (int, error) {
 	if m.W != 0 {
 		dAtA[i] = 0x9
 		i++
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.W))))
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.W))))
 		i += 8
 	}
 	if m.H != 0 {
 		dAtA[i] = 0x11
 		i++
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.H))))
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.H))))
 		i += 8
 	}
 	return i, nil
@@ -884,7 +886,7 @@ func (m *NumberColumnAttribute) MarshalTo(dAtA []byte) (int, error) {
 	if m.DefaultValue != 0 {
 		dAtA[i] = 0x21
 		i++
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.DefaultValue))))
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.DefaultValue))))
 		i += 8
 	}
 	return i, nil
@@ -1367,7 +1369,7 @@ func (m *Coord) Unmarshal(dAtA []byte) error {
 			if (iNdEx + 8) > l {
 				return io.ErrUnexpectedEOF
 			}
-			v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			v = uint64(encoding_binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 			iNdEx += 8
 			m.X = float64(math.Float64frombits(v))
 		case 2:
@@ -1378,7 +1380,7 @@ func (m *Coord) Unmarshal(dAtA []byte) error {
 			if (iNdEx + 8) > l {
 				return io.ErrUnexpectedEOF
 			}
-			v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			v = uint64(encoding_binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 			iNdEx += 8
 			m.Y = float64(math.Float64frombits(v))
 		default:
@@ -1439,7 +1441,7 @@ func (m *WidthHeight) Unmarshal(dAtA []byte) error {
 			if (iNdEx + 8) > l {
 				return io.ErrUnexpectedEOF
 			}
-			v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			v = uint64(encoding_binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 			iNdEx += 8
 			m.W = float64(math.Float64frombits(v))
 		case 2:
@@ -1450,7 +1452,7 @@ func (m *WidthHeight) Unmarshal(dAtA []byte) error {
 			if (iNdEx + 8) > l {
 				return io.ErrUnexpectedEOF
 			}
-			v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			v = uint64(encoding_binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 			iNdEx += 8
 			m.H = float64(math.Float64frombits(v))
 		default:
@@ -2388,7 +2390,7 @@ func (m *NumberColumnAttribute) Unmarshal(dAtA []byte) error {
 			if (iNdEx + 8) > l {
 				return io.ErrUnexpectedEOF
 			}
-			v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			v = uint64(encoding_binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 			iNdEx += 8
 			m.DefaultValue = float64(math.Float64frombits(v))
 		default:
