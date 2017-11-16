@@ -17,9 +17,11 @@ Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:./grpc/gen \
 	  grpc/_protobuf/*.proto
 
+
 tsprotoc:
 	protoc \
 	--plugin=protoc-gen-ts=./_jsapp/node_modules/.bin/protoc-gen-ts \
+	--js_out=import_style=commonjs,binary:_jsapp/src/grpc  \
 	--ts_out=service=true:_jsapp/src/grpc  \
 	-I grpc/_protobuf/ \
   --proto_path=grpc/_protobuf \
