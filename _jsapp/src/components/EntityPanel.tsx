@@ -6,8 +6,8 @@ import createSagaMiddleware from 'redux-saga'
 import * as Konva from 'konva'
 import { Stage, Layer, Rect, Group, Circle } from 'react-konva'
 import { Map } from 'immutable'
-import { Entity, Rel, Coord, Move,Transform ,CoordWH} from 'grpc/erd_pb'
-import { newCoord } from 'grpc/util/coord'
+import { Entity, Rel, Coord, Move, Transform, CoordWH } from 'grpc/erd_pb'
+import { newCoord, newCoordWH } from 'grpc/util/coord'
 import { newMove } from 'grpc/util/move'
 import { Anchor } from './Anchor'
 
@@ -17,15 +17,14 @@ export interface EntityPanelProps {
     onSelect?: (objectId: string) => void
     onRelease?: (objectId: string) => void
     onMove?: (move: Move) => void
-		transforming?: () => void
-		transformfinished?: (transform:Transform ) => void
-
-		redraw:()=>void
+    transforming?: (objectId: string, coordWH: CoordWH) => void
+    transformfinished?: (transform: Transform) => void
+    redraw: () => void
 }
 
 export interface EntityPanelState {
     dragStartAt?: Coord
-    transformStartAt?:CoordWH
+    transformStartAt?: CoordWH
     previousMousePointer: string
 }
 
@@ -72,7 +71,13 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
     }
 
     handleClick = () => {
+    }
 
+    transforming = (fn: (anchor: any, parentEntity: Entity) => CoordWH) => (anchor: any, parentEntity: Entity) => {
+        return (anchor: any, parentEntity: Entity) => {
+            const cwh = fn(anchor, parentEntity)
+            this.props.transforming(this.props.entity.getObjectId(), cwh)
+        }
     }
 
     render() {
@@ -89,9 +94,9 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         const columnBoxH = h - 20
 
         const topLeft: { x: number, y: number } = { x: 0, y: 0 }
-        const topRight: { x: number, y: number } = { x:  w, y: 0 }
-        const bottomLeft: { x: number, y: number } = { x: 0, y:  h }
-        const bottomRight: { x: number, y: number } = { x:  w, y:  h }
+        const topRight: { x: number, y: number } = { x: w, y: 0 }
+        const bottomLeft: { x: number, y: number } = { x: 0, y: h }
+        const bottomRight: { x: number, y: number } = { x: w, y: h }
 
         return (
             <Group
@@ -113,12 +118,15 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
                 />
 
                 <Rect
+                    x={0}
                     y={columnBoxY}
                     width={entity.getWidthHeight().getW()}
                     height={columnBoxH}
                     fill={entity.getColor()}
                     shadowBlur={1} />
+
                 <Anchor redraw={this.props.redraw} x={topLeft.x} y={topLeft.y} />
+
             </Group>
         );
     }

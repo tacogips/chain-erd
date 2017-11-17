@@ -54,7 +54,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
         }
 
-
         case actions.EntityActionTypes.TRANSFORMING_ENTITY: {
             const { objectId, coordWH } = <{ objectId: string, coordWH: CoordWH }>action.payload
 
