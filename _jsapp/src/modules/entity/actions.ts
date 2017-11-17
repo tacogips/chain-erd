@@ -2,7 +2,7 @@ import * as redux from 'redux'
 import { FSAction, EmptyAction } from 'modules/base/fsa'
 import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects'
 
-import { Entity, Rel, Move } from 'grpc/erd_pb'
+import { Entity, Rel, Move, CoordWH, Transform } from 'grpc/erd_pb'
 
 
 //=== action types ============
@@ -12,6 +12,9 @@ export module EntityActionTypes {
     export const DELETE_ENTITY: EntityActionTypes = 'DELETE_ENTIY'
     export const MOVE_ENTITY: EntityActionTypes = 'MOVE_ENTITY'
     export const SELECT_ENTITY: EntityActionTypes = 'SELECT_ENTITY'
+
+    export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
+    export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
 }
 
 // === actions ===============
@@ -41,12 +44,30 @@ export interface ReleaseEntity extends FSAction<string> {
     payload: string
 }
 
+// Transforming
+export interface TransformingEntity extends FSAction<{ objectId: string, coordWH: CoordWH }> {
+    type: EntityActionTypes,
+    payload: {
+        objectId: string,
+        coordWH: CoordWH
+    }
+}
+
+// Transforming
+export interface TransformFinishedEntity extends FSAction<Transform> {
+    type: EntityActionTypes,
+    payload: Transform
+}
+
 export type EntityAction =
     CreateNewEntity |
     DeleteEntity |
     SelectEntity |
-    ReleaseEntity|
-		MoveEntity
+    ReleaseEntity |
+    MoveEntity |
+    TransformingEntity |
+    TransformFinishedEntity
+
 
 // === action creator =================
 export const actionCreators = {
@@ -76,8 +97,21 @@ export const actionCreators = {
             type: EntityActionTypes.SELECT_ENTITY,
             payload: objectId
         }
-    }
+    },
 
+    transformingEntity: (objectId: string, coordWH: CoordWH) => {
+        return <TransformingEntity>{
+            type: EntityActionTypes.TRANSFORMING_ENTITY,
+            payload: { objectId: objectId, coordWH: coordWH }
+        }
+    },
+
+    transformFinishedEntity: (objectId: string, transform: Transform) => {
+        return <TransformFinishedEntity>{
+            type: EntityActionTypes.TRANSFORM_FINISHED_ENTITY,
+            payload: transform
+        }
+    }
 
 }
 

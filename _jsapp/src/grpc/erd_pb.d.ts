@@ -395,6 +395,66 @@ export namespace Move {
   }
 }
 
+export class CoordWH extends jspb.Message {
+  hasCoord(): boolean;
+  clearCoord(): void;
+  getCoord(): Coord | undefined;
+  setCoord(value?: Coord): void;
+
+  hasWidthHeight(): boolean;
+  clearWidthHeight(): void;
+  getWidthHeight(): WidthHeight | undefined;
+  setWidthHeight(value?: WidthHeight): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CoordWH.AsObject;
+  static toObject(includeInstance: boolean, msg: CoordWH): CoordWH.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: CoordWH, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CoordWH;
+  static deserializeBinaryFromReader(message: CoordWH, reader: jspb.BinaryReader): CoordWH;
+}
+
+export namespace CoordWH {
+  export type AsObject = {
+    coord?: Coord.AsObject,
+    widthHeight?: WidthHeight.AsObject,
+  }
+}
+
+export class Transform extends jspb.Message {
+  getObjectId(): string;
+  setObjectId(value: string): void;
+
+  hasFrom(): boolean;
+  clearFrom(): void;
+  getFrom(): CoordWH | undefined;
+  setFrom(value?: CoordWH): void;
+
+  hasTo(): boolean;
+  clearTo(): void;
+  getTo(): CoordWH | undefined;
+  setTo(value?: CoordWH): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Transform.AsObject;
+  static toObject(includeInstance: boolean, msg: Transform): Transform.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Transform, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Transform;
+  static deserializeBinaryFromReader(message: Transform, reader: jspb.BinaryReader): Transform;
+}
+
+export namespace Transform {
+  export type AsObject = {
+    objectId: string,
+    from?: CoordWH.AsObject,
+    to?: CoordWH.AsObject,
+  }
+}
+
 export class Activity extends jspb.Message {
   getId(): string;
   setId(value: string): void;

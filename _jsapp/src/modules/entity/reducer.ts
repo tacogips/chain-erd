@@ -2,7 +2,7 @@ import * as actions from './actions'
 import { Reducer } from 'redux'
 import { Map } from 'immutable'
 
-import { Entity, Rel, Move } from 'grpc/erd_pb'
+import { Entity, Rel, Move, CoordWH } from 'grpc/erd_pb'
 
 export interface EntityState {
     entities: Map<string, Entity>
@@ -54,6 +54,31 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
         }
 
+
+        case actions.EntityActionTypes.TRANSFORMING_ENTITY: {
+            const { objectId, coordWH } = <{ objectId: string, coordWH: CoordWH }>action.payload
+
+            if (!state.entities.has(objectId)) {
+                console.error("cant move invalid object [${objectId}]")
+                return
+            }
+
+            const entity = state.entities.get(objectId)
+            entity.setCoord(coordWH.getCoord())
+            entity.setWidthHeight(coordWH.getWidthHeight())
+
+            return <EntityState>{
+                ...state,
+                entities: state.entities.set(objectId, entity)
+            }
+        }
+
+
+        case actions.EntityActionTypes.TRANSFORM_FINISHED_ENTITY: {
+					//TODO(tacogips) :
+        }
+
+        //case actions.EntityActionTypes.DELETE_ENTITY:
         //case actions.EntityActionTypes.DELETE_ENTITY:
         //    return <EntityState>{
         //        ...state,

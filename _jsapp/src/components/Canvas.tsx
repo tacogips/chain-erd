@@ -7,7 +7,6 @@ import { Stage, Layer, Rect, Group } from 'react-konva'
 import { EntityPanel } from 'containers/EntityPanel'
 import { Map } from 'immutable'
 
-
 import { Entity } from 'grpc/erd_pb'
 
 export interface CanvasPosition {
@@ -31,7 +30,7 @@ export enum CanvasClickAction {
 export interface CanvasProps {
     width: number,
     height: number,
-    entities?: Map <string,Entity>
+    entities?: Map<string, Entity>
     mouseOverPointer?: string
     clickAction?: CanvasClickAction,
     onClick?: (
@@ -41,6 +40,7 @@ export interface CanvasProps {
 
 export class Canvas extends React.Component<CanvasProps, {}>{
     private stage: any
+    private refMainLayer: any
 
     constructor(props?: CanvasProps, context?: any) {
         super(props, context)
@@ -81,11 +81,15 @@ export class Canvas extends React.Component<CanvasProps, {}>{
         this.props.onClick(this.props.clickAction, canvasPosition)
     }
 
-    render() {
+    redraw = () => {
+        this.refMainLayer.draw()
+    }
 
+
+    render() {
         //TODO(tacogips) Is there another way to iterate a interface?
-        const entities = this.props.entities.valueSeq().map((entity:Entity) => {
-            return <EntityPanel key={entity.getObjectId()} entity={entity} />
+        const entities = this.props.entities.valueSeq().map((entity: Entity) => {
+            return <EntityPanel key={entity.getObjectId()} entity={entity} redraw={this.redraw} />
         })
         const { width, height } = this.props
 
@@ -97,7 +101,7 @@ export class Canvas extends React.Component<CanvasProps, {}>{
                 onContentMouseOver={this.onMouseOver}
                 onContentMouseOut={this.onMouseOut}
                 onContentClick={this.onClickEvent} >
-                <Layer>
+                <Layer ref={(ref) => this.refMainLayer = ref}>
                     {entities}
                 </Layer>
             </Stage>
