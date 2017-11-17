@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Stage, Layer, Rect, Group } from 'react-konva'
-import { EntityPanel } from './EntityPanel'
+import { EntityPanel } from 'containers/EntityPanel'
 import { Map } from 'immutable'
 
 
