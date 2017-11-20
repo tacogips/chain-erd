@@ -12,6 +12,8 @@ export module EntityActionTypes {
     export const DELETE_ENTITY: EntityActionTypes = 'DELETE_ENTIY'
     export const MOVE_ENTITY: EntityActionTypes = 'MOVE_ENTITY'
     export const SELECT_ENTITY: EntityActionTypes = 'SELECT_ENTITY'
+    export const CHOICE_ENTITIES: EntityActionTypes = 'CHOICE_ENTITIES'
+    export const SEQ_CHOICE_ENTITIES: EntityActionTypes = 'SEQ_CHOICE_ENTITIES'
 
     export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
     export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
@@ -38,15 +40,21 @@ export interface SelectEntity extends FSAction<string> {
     payload: string
 }
 
-// on action end
-export interface ReleaseEntity extends FSAction<string> {
+export interface ChoiceEntities extends FSAction<string> {
     type: EntityActionTypes,
     payload: string
 }
 
-export interface ChoiceTwoEntities extends FSAction<{begin:string,end:string}> {
+// choice sequential
+export interface SeqChoiceEntities extends FSAction<string> {
     type: EntityActionTypes,
-    payload: {begin:string,end:string}
+    payload: string
+}
+
+// on action end
+export interface ReleaseEntity extends FSAction<string> {
+    type: EntityActionTypes,
+    payload: string
 }
 
 // Transforming
@@ -70,6 +78,8 @@ export type EntityAction =
     CreateNewEntity |
     DeleteEntity |
     SelectEntity |
+		ChoiceEntities|
+		SeqChoiceEntities|
     ReleaseEntity |
     MoveEntity |
     TransformingEntity |
@@ -102,6 +112,20 @@ export const actionCreators = {
     selectEntity: (objectId: string) => {
         return <SelectEntity>{
             type: EntityActionTypes.SELECT_ENTITY,
+            payload: objectId
+        }
+    },
+
+    choiceEntities: (objectId: string) => {
+        return <ChoiceEntities>{
+            type: EntityActionTypes.CHOICE_ENTITIES,
+            payload: objectId
+        }
+    },
+
+    seqChoiceEntities: (objectId: string) => {
+        return <SeqChoiceEntities>{
+            type: EntityActionTypes.SEQ_CHOICE_ENTITIES,
             payload: objectId
         }
     },

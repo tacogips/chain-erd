@@ -31,7 +31,6 @@ export const controlReducer: Reducer<ControlState> = (state: ControlState = init
             }
 
         case actions.ControlActionTypes.CANCEL_ACTION:
-					//TODO (tacogips) should be  more elegant
           return <ControlState>{
               ...state,
               creatingNewEntity: false,
@@ -40,9 +39,9 @@ export const controlReducer: Reducer<ControlState> = (state: ControlState = init
 
 
         case actions.ControlActionTypes.CONNECTING_ONE_TO_MENY_REL:
-					//TODO (tacogips) should be  more elegant
           return <ControlState>{
               ...state,
+							connectingOneToMenyRel:true,
               creatingNewEntity: false,
 							repeatAction :false
           }
