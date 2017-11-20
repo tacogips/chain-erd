@@ -4,25 +4,11 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Stage, Layer, Rect, Group } from 'react-konva'
-import { EntityPanel } from './EntityPanel'
+import { EntityPanel } from 'containers/EntityPanel'
 import { Map } from 'immutable'
 
-
 import { Entity } from 'grpc/erd_pb'
-
-export interface CanvasPosition {
-    clientX: number
-    clientY: number
-
-    layerX: number
-    layerY: number
-
-    pageX: number
-    pageY: number
-
-    screenX: number
-    screenY: number
-}
+import {positionFromEvent,EventPosition} from './util/event_position'
 
 export enum CanvasClickAction {
     CREATE_NEW_ENTITY,
@@ -31,16 +17,17 @@ export enum CanvasClickAction {
 export interface CanvasProps {
     width: number,
     height: number,
-    entities?: Map <string,Entity>
+    entities?: Map<string, Entity>
     mouseOverPointer?: string
     clickAction?: CanvasClickAction,
     onClick?: (
         canvasClickAciton: CanvasClickAction,
-        canvasPosition: CanvasPosition) => void
+        canvasPosition: EventPosition) => void
 }
 
 export class Canvas extends React.Component<CanvasProps, {}>{
     private stage: any
+    private refMainLayer: any
 
     constructor(props?: CanvasProps, context?: any) {
         super(props, context)
@@ -67,24 +54,18 @@ export class Canvas extends React.Component<CanvasProps, {}>{
             return (!v) ? 0 : +v
         }
 
-        const canvasPosition: CanvasPosition = {
-            clientX: nullOrZero(evtVal.clientX),
-            clientY: nullOrZero(evtVal.clientY),
-            layerX: nullOrZero(evtVal.layerX),
-            layerY: nullOrZero(evtVal.layerY),
-            pageX: nullOrZero(evtVal.pageX),
-            pageY: nullOrZero(evtVal.pageY),
-            screenX: nullOrZero(evtVal.screenX),
-            screenY: nullOrZero(evtVal.screenY),
-        }
+        const canvasPosition=  positionFromEvent(evtVal)
 
         this.props.onClick(this.props.clickAction, canvasPosition)
     }
 
-    render() {
+    redraw = () => {
+        this.refMainLayer.draw()
+    }
 
+    render() {
         //TODO(tacogips) Is there another way to iterate a interface?
-        const entities = this.props.entities.valueSeq().map((entity:Entity) => {
+        const entities = this.props.entities.valueSeq().map((entity: Entity) => {
             return <EntityPanel key={entity.getObjectId()} entity={entity} />
         })
         const { width, height } = this.props
@@ -97,7 +78,7 @@ export class Canvas extends React.Component<CanvasProps, {}>{
                 onContentMouseOver={this.onMouseOver}
                 onContentMouseOut={this.onMouseOut}
                 onContentClick={this.onClickEvent} >
-                <Layer>
+                <Layer ref={(ref) => this.refMainLayer = ref}>
                     {entities}
                 </Layer>
             </Stage>
