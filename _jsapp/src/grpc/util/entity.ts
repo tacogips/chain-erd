@@ -1,6 +1,8 @@
+
 import { Entity, Coord, CoordWH, WidthHeight, ColumnType } from 'grpc/erd_pb'
 
 import { DefaultlSize, DefaultlEntityColor } from 'modules/entity'
+import { newCoord } from './coord'
 import { newColumn, newStringColumnAttr, newNumberColumnAttr } from './column'
 
 import * as uuidv4 from 'uuid/v4'
@@ -21,9 +23,9 @@ export function newEntity(coord: Coord): Entity {
 
     //TODO(taco) mock column--------------------
     const mocIntAttr = newNumberColumnAttr(
-			{ pk: false, fk: false, unique: false, notNull: false },
+        { pk: false, fk: false, unique: false, notNull: false },
         18, 0, false, 1.0)
-    const col1 = newColumn(uuidv4(), "column1", ColumnType.INT, mocIntAttr )
+    const col1 = newColumn(uuidv4(), "column1", ColumnType.INT, mocIntAttr)
     newEntity.addColumns(col1)
 
     const mocStrAttr = newStringColumnAttr({ pk: false, fk: false, unique: false, notNull: false }, 256, "hogege")
@@ -33,5 +35,15 @@ export function newEntity(coord: Coord): Entity {
 
     newEntity.setColor(DefaultlEntityColor.DEFAULT_ENTITY_COLOR)
     return newEntity
+}
+
+export function getCentor(entity: Entity): Coord {
+    const { x, y } = entity.getCoord().toObject()
+    const { w, h } = entity.getWidthHeight().toObject()
+
+    const centerX = x + w / 2
+    const centerY = y + h / 2
+
+    return newCoord(centerX, centerY)
 }
 

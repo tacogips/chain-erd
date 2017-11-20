@@ -294,15 +294,15 @@ export class Rel extends jspb.Message {
   getObjectId(): string;
   setObjectId(value: string): void;
 
-  hasPoint1(): boolean;
-  clearPoint1(): void;
-  getPoint1(): RelPoint | undefined;
-  setPoint1(value?: RelPoint): void;
+  hasPointBegin(): boolean;
+  clearPointBegin(): void;
+  getPointBegin(): RelPoint | undefined;
+  setPointBegin(value?: RelPoint): void;
 
-  hasPoint2(): boolean;
-  clearPoint2(): void;
-  getPoint2(): RelPoint | undefined;
-  setPoint2(value?: RelPoint): void;
+  hasPointEnd(): boolean;
+  clearPointEnd(): void;
+  getPointEnd(): RelPoint | undefined;
+  setPointEnd(value?: RelPoint): void;
 
   hasAttribute(): boolean;
   clearAttribute(): void;
@@ -322,8 +322,8 @@ export class Rel extends jspb.Message {
 export namespace Rel {
   export type AsObject = {
     objectId: string,
-    point1?: RelPoint.AsObject,
-    point2?: RelPoint.AsObject,
+    pointBegin?: RelPoint.AsObject,
+    pointEnd?: RelPoint.AsObject,
     attribute?: RelationAttribute.AsObject,
   }
 }
@@ -332,8 +332,8 @@ export class RelPoint extends jspb.Message {
   getEntityObjectId(): number;
   setEntityObjectId(value: number): void;
 
-  getColumnName(): string;
-  setColumnName(value: string): void;
+  getColumnObjectId(): string;
+  setColumnObjectId(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RelPoint.AsObject;
@@ -348,10 +348,10 @@ export class RelPoint extends jspb.Message {
 export namespace RelPoint {
   export type AsObject = {
     entityObjectId: number,
-    columnName: string,
+    columnObjectId: string,
   }
 
-  export enum Assoc {
+  export enum Associate {
     One = 0,
     Many = 1,
   }

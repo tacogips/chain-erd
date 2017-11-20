@@ -12,6 +12,9 @@ export module ControlActionTypes {
     export const PREPARE_NEW_ENTIY: ControlActionTypes = 'PREPARE_NEW_ENTIY'
     export const FINISH_CREATE_ENTITY: ControlActionTypes = 'FINISH_CREATE_ENTITY'
     export const CANCEL_ACTION: ControlActionTypes = 'CANCEL_ACTION'
+
+    export const CONNECTING_ONE_TO_MENY_REL: ControlActionTypes = 'CONNECTING_ONE_TO_MENY_REL'
+    export const FINISH_CONNECTING_REL: ControlActionTypes = 'FINISH_CONNECTING_REL'
 }
 
 export interface EntityActionOption {
@@ -26,6 +29,16 @@ export interface PrepareNewEntity extends FSAction<EntityActionOption> {
 export interface CancelAction extends EmptyAction {
     type: ControlActionTypes
 }
+
+
+export interface ConnectingOneToMenyRel extends EmptyAction {
+    type: ControlActionTypes,
+}
+
+export interface FinishConnectingRel extends EmptyAction {
+    type: ControlActionTypes,
+}
+
 
 export type ControlAction = PrepareNewEntity
 
@@ -51,5 +64,17 @@ export const actionCreators = {
             type: ControlActionTypes.CANCEL_ACTION,
         }
     },
+
+    connectingOneToMenyRel: () => {
+        return <CancelAction>{
+            type: ControlActionTypes.CONNECTING_ONE_TO_MENY_REL,
+        }
+    },
+
+    finishConnectingRel: () => {
+        return <CancelAction>{
+            type: ControlActionTypes.FINISH_CONNECTING_REL,
+        }
+    }
 }
 

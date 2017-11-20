@@ -44,6 +44,11 @@ export interface ReleaseEntity extends FSAction<string> {
     payload: string
 }
 
+export interface ChoiceTwoEntities extends FSAction<{begin:string,end:string}> {
+    type: EntityActionTypes,
+    payload: {begin:string,end:string}
+}
+
 // Transforming
 
 //TODO(tacogips) :delete

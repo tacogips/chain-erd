@@ -28,7 +28,7 @@ goog.exportSymbol('proto.erd.NumberColumnAttribute', null, global);
 goog.exportSymbol('proto.erd.Order', null, global);
 goog.exportSymbol('proto.erd.Rel', null, global);
 goog.exportSymbol('proto.erd.RelPoint', null, global);
-goog.exportSymbol('proto.erd.RelPoint.Assoc', null, global);
+goog.exportSymbol('proto.erd.RelPoint.Associate', null, global);
 goog.exportSymbol('proto.erd.RelationAttribute', null, global);
 goog.exportSymbol('proto.erd.StringColumnAttribute', null, global);
 goog.exportSymbol('proto.erd.Transform', null, global);
@@ -2115,8 +2115,8 @@ proto.erd.Rel.prototype.toObject = function(opt_includeInstance) {
 proto.erd.Rel.toObject = function(includeInstance, msg) {
   var f, obj = {
     objectId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    point1: (f = msg.getPoint1()) && proto.erd.RelPoint.toObject(includeInstance, f),
-    point2: (f = msg.getPoint2()) && proto.erd.RelPoint.toObject(includeInstance, f),
+    pointBegin: (f = msg.getPointBegin()) && proto.erd.RelPoint.toObject(includeInstance, f),
+    pointEnd: (f = msg.getPointEnd()) && proto.erd.RelPoint.toObject(includeInstance, f),
     attribute: (f = msg.getAttribute()) && proto.erd.RelationAttribute.toObject(includeInstance, f)
   };
 
@@ -2161,12 +2161,12 @@ proto.erd.Rel.deserializeBinaryFromReader = function(msg, reader) {
     case 2:
       var value = new proto.erd.RelPoint;
       reader.readMessage(value,proto.erd.RelPoint.deserializeBinaryFromReader);
-      msg.setPoint1(value);
+      msg.setPointBegin(value);
       break;
     case 3:
       var value = new proto.erd.RelPoint;
       reader.readMessage(value,proto.erd.RelPoint.deserializeBinaryFromReader);
-      msg.setPoint2(value);
+      msg.setPointEnd(value);
       break;
     case 4:
       var value = new proto.erd.RelationAttribute;
@@ -2209,7 +2209,7 @@ proto.erd.Rel.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getPoint1();
+  f = message.getPointBegin();
   if (f != null) {
     writer.writeMessage(
       2,
@@ -2217,7 +2217,7 @@ proto.erd.Rel.serializeBinaryToWriter = function(message, writer) {
       proto.erd.RelPoint.serializeBinaryToWriter
     );
   }
-  f = message.getPoint2();
+  f = message.getPointEnd();
   if (f != null) {
     writer.writeMessage(
       3,
@@ -2252,23 +2252,23 @@ proto.erd.Rel.prototype.setObjectId = function(value) {
 
 
 /**
- * optional RelPoint point1 = 2;
+ * optional RelPoint point_begin = 2;
  * @return {?proto.erd.RelPoint}
  */
-proto.erd.Rel.prototype.getPoint1 = function() {
+proto.erd.Rel.prototype.getPointBegin = function() {
   return /** @type{?proto.erd.RelPoint} */ (
     jspb.Message.getWrapperField(this, proto.erd.RelPoint, 2));
 };
 
 
 /** @param {?proto.erd.RelPoint|undefined} value */
-proto.erd.Rel.prototype.setPoint1 = function(value) {
+proto.erd.Rel.prototype.setPointBegin = function(value) {
   jspb.Message.setWrapperField(this, 2, value);
 };
 
 
-proto.erd.Rel.prototype.clearPoint1 = function() {
-  this.setPoint1(undefined);
+proto.erd.Rel.prototype.clearPointBegin = function() {
+  this.setPointBegin(undefined);
 };
 
 
@@ -2276,29 +2276,29 @@ proto.erd.Rel.prototype.clearPoint1 = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.erd.Rel.prototype.hasPoint1 = function() {
+proto.erd.Rel.prototype.hasPointBegin = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional RelPoint point2 = 3;
+ * optional RelPoint point_end = 3;
  * @return {?proto.erd.RelPoint}
  */
-proto.erd.Rel.prototype.getPoint2 = function() {
+proto.erd.Rel.prototype.getPointEnd = function() {
   return /** @type{?proto.erd.RelPoint} */ (
     jspb.Message.getWrapperField(this, proto.erd.RelPoint, 3));
 };
 
 
 /** @param {?proto.erd.RelPoint|undefined} value */
-proto.erd.Rel.prototype.setPoint2 = function(value) {
+proto.erd.Rel.prototype.setPointEnd = function(value) {
   jspb.Message.setWrapperField(this, 3, value);
 };
 
 
-proto.erd.Rel.prototype.clearPoint2 = function() {
-  this.setPoint2(undefined);
+proto.erd.Rel.prototype.clearPointEnd = function() {
+  this.setPointEnd(undefined);
 };
 
 
@@ -2306,7 +2306,7 @@ proto.erd.Rel.prototype.clearPoint2 = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.erd.Rel.prototype.hasPoint2 = function() {
+proto.erd.Rel.prototype.hasPointEnd = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
@@ -2389,7 +2389,7 @@ proto.erd.RelPoint.prototype.toObject = function(opt_includeInstance) {
 proto.erd.RelPoint.toObject = function(includeInstance, msg) {
   var f, obj = {
     entityObjectId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    columnName: jspb.Message.getFieldWithDefault(msg, 2, "")
+    columnObjectId: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -2432,7 +2432,7 @@ proto.erd.RelPoint.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setColumnName(value);
+      msg.setColumnObjectId(value);
       break;
     default:
       reader.skipField();
@@ -2470,7 +2470,7 @@ proto.erd.RelPoint.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getColumnName();
+  f = message.getColumnObjectId();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -2483,7 +2483,7 @@ proto.erd.RelPoint.serializeBinaryToWriter = function(message, writer) {
 /**
  * @enum {number}
  */
-proto.erd.RelPoint.Assoc = {
+proto.erd.RelPoint.Associate = {
   ONE: 0,
   MANY: 1
 };
@@ -2504,16 +2504,16 @@ proto.erd.RelPoint.prototype.setEntityObjectId = function(value) {
 
 
 /**
- * optional string column_name = 2;
+ * optional string column_object_id = 2;
  * @return {string}
  */
-proto.erd.RelPoint.prototype.getColumnName = function() {
+proto.erd.RelPoint.prototype.getColumnObjectId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
-proto.erd.RelPoint.prototype.setColumnName = function(value) {
+proto.erd.RelPoint.prototype.setColumnObjectId = function(value) {
   jspb.Message.setField(this, 2, value);
 };
 
