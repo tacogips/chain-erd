@@ -1,4 +1,7 @@
 
+import { Coord, CoordWH, WidthHeight } from 'grpc/erd_pb'
+import { newCoord } from 'grpc/util/coord'
+
 export interface EventPosition {
     clientX: number
     clientY: number
@@ -12,6 +15,7 @@ export interface EventPosition {
     screenX: number
     screenY: number
 }
+
 
 
 export function positionFromEvent(evtVal: any): EventPosition {
@@ -30,7 +34,10 @@ export function positionFromEvent(evtVal: any): EventPosition {
     }
 }
 
+export function layerPositionToCoord(eventPosition: EventPosition): Coord {
+    return newCoord(eventPosition.layerX, eventPosition.layerY)
+}
 
 export interface PositionFunction extends Function {
-    (anchorPosition: EventPosition):void;
+    (anchorPosition: EventPosition): void;
 }

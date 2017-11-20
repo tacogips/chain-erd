@@ -898,8 +898,9 @@ proto.erd.Column.prototype.toObject = function(opt_includeInstance) {
  */
 proto.erd.Column.toObject = function(includeInstance, msg) {
   var f, obj = {
-    name: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    type: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    objectId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    name: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    type: jspb.Message.getFieldWithDefault(msg, 3, 0),
     attrs: (f = msg.getAttrs()) && proto.erd.EntityColumnAttributes.toObject(includeInstance, f)
   };
 
@@ -938,14 +939,18 @@ proto.erd.Column.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setName(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.setObjectId(value);
       break;
     case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setName(value);
+      break;
+    case 3:
       var value = /** @type {!proto.erd.ColumnType} */ (reader.readEnum());
       msg.setType(value);
       break;
-    case 3:
+    case 4:
       var value = new proto.erd.EntityColumnAttributes;
       reader.readMessage(value,proto.erd.EntityColumnAttributes.deserializeBinaryFromReader);
       msg.setAttrs(value);
@@ -979,24 +984,31 @@ proto.erd.Column.prototype.serializeBinary = function() {
  */
 proto.erd.Column.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getName();
-  if (f !== 0) {
-    writer.writeInt32(
+  f = message.getObjectId();
+  if (f.length > 0) {
+    writer.writeString(
       1,
+      f
+    );
+  }
+  f = message.getName();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
       f
     );
   }
   f = message.getType();
   if (f !== 0.0) {
     writer.writeEnum(
-      2,
+      3,
       f
     );
   }
   f = message.getAttrs();
   if (f != null) {
     writer.writeMessage(
-      3,
+      4,
       f,
       proto.erd.EntityColumnAttributes.serializeBinaryToWriter
     );
@@ -1005,48 +1017,63 @@ proto.erd.Column.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional int32 name = 1;
- * @return {number}
+ * optional string object_id = 1;
+ * @return {string}
  */
-proto.erd.Column.prototype.getName = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+proto.erd.Column.prototype.getObjectId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {number} value */
-proto.erd.Column.prototype.setName = function(value) {
+/** @param {string} value */
+proto.erd.Column.prototype.setObjectId = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
 
 /**
- * optional ColumnType type = 2;
- * @return {!proto.erd.ColumnType}
+ * optional string name = 2;
+ * @return {string}
  */
-proto.erd.Column.prototype.getType = function() {
-  return /** @type {!proto.erd.ColumnType} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+proto.erd.Column.prototype.getName = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
-/** @param {!proto.erd.ColumnType} value */
-proto.erd.Column.prototype.setType = function(value) {
+/** @param {string} value */
+proto.erd.Column.prototype.setName = function(value) {
   jspb.Message.setField(this, 2, value);
 };
 
 
 /**
- * optional EntityColumnAttributes attrs = 3;
+ * optional ColumnType type = 3;
+ * @return {!proto.erd.ColumnType}
+ */
+proto.erd.Column.prototype.getType = function() {
+  return /** @type {!proto.erd.ColumnType} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {!proto.erd.ColumnType} value */
+proto.erd.Column.prototype.setType = function(value) {
+  jspb.Message.setField(this, 3, value);
+};
+
+
+/**
+ * optional EntityColumnAttributes attrs = 4;
  * @return {?proto.erd.EntityColumnAttributes}
  */
 proto.erd.Column.prototype.getAttrs = function() {
   return /** @type{?proto.erd.EntityColumnAttributes} */ (
-    jspb.Message.getWrapperField(this, proto.erd.EntityColumnAttributes, 3));
+    jspb.Message.getWrapperField(this, proto.erd.EntityColumnAttributes, 4));
 };
 
 
 /** @param {?proto.erd.EntityColumnAttributes|undefined} value */
 proto.erd.Column.prototype.setAttrs = function(value) {
-  jspb.Message.setWrapperField(this, 3, value);
+  jspb.Message.setWrapperField(this, 4, value);
 };
 
 
@@ -1060,7 +1087,7 @@ proto.erd.Column.prototype.clearAttrs = function() {
  * @return {!boolean}
  */
 proto.erd.Column.prototype.hasAttrs = function() {
-  return jspb.Message.getField(this, 3) != null;
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -1115,7 +1142,10 @@ proto.erd.EntityColumnAttributes.toObject = function(includeInstance, msg) {
     attrNumber: (f = msg.getAttrNumber()) && proto.erd.NumberColumnAttribute.toObject(includeInstance, f),
     attrString: (f = msg.getAttrString()) && proto.erd.StringColumnAttribute.toObject(includeInstance, f),
     isFk: jspb.Message.getFieldWithDefault(msg, 4, false),
-    isPk: jspb.Message.getFieldWithDefault(msg, 5, false)
+    isPk: jspb.Message.getFieldWithDefault(msg, 5, false),
+    isUnique: jspb.Message.getFieldWithDefault(msg, 6, false),
+    isNotNull: jspb.Message.getFieldWithDefault(msg, 7, false),
+    isAutoIncrement: jspb.Message.getFieldWithDefault(msg, 8, false)
   };
 
   if (includeInstance) {
@@ -1174,6 +1204,18 @@ proto.erd.EntityColumnAttributes.deserializeBinaryFromReader = function(msg, rea
     case 5:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsPk(value);
+      break;
+    case 6:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsUnique(value);
+      break;
+    case 7:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsNotNull(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsAutoIncrement(value);
       break;
     default:
       reader.skipField();
@@ -1239,6 +1281,27 @@ proto.erd.EntityColumnAttributes.serializeBinaryToWriter = function(message, wri
   if (f) {
     writer.writeBool(
       5,
+      f
+    );
+  }
+  f = message.getIsUnique();
+  if (f) {
+    writer.writeBool(
+      6,
+      f
+    );
+  }
+  f = message.getIsNotNull();
+  if (f) {
+    writer.writeBool(
+      7,
+      f
+    );
+  }
+  f = message.getIsAutoIncrement();
+  if (f) {
+    writer.writeBool(
+      8,
       f
     );
   }
@@ -1366,6 +1429,57 @@ proto.erd.EntityColumnAttributes.prototype.getIsPk = function() {
 /** @param {boolean} value */
 proto.erd.EntityColumnAttributes.prototype.setIsPk = function(value) {
   jspb.Message.setField(this, 5, value);
+};
+
+
+/**
+ * optional bool is_unique = 6;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.erd.EntityColumnAttributes.prototype.getIsUnique = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 6, false));
+};
+
+
+/** @param {boolean} value */
+proto.erd.EntityColumnAttributes.prototype.setIsUnique = function(value) {
+  jspb.Message.setField(this, 6, value);
+};
+
+
+/**
+ * optional bool is_not_null = 7;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.erd.EntityColumnAttributes.prototype.getIsNotNull = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 7, false));
+};
+
+
+/** @param {boolean} value */
+proto.erd.EntityColumnAttributes.prototype.setIsNotNull = function(value) {
+  jspb.Message.setField(this, 7, value);
+};
+
+
+/**
+ * optional bool is_auto_increment = 8;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.erd.EntityColumnAttributes.prototype.getIsAutoIncrement = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 8, false));
+};
+
+
+/** @param {boolean} value */
+proto.erd.EntityColumnAttributes.prototype.setIsAutoIncrement = function(value) {
+  jspb.Message.setField(this, 8, value);
 };
 
 

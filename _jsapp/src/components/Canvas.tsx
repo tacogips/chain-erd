@@ -67,27 +67,14 @@ export class Canvas extends React.Component<CanvasProps, {}>{
 
     render() {
 
-			  //TODO(tacogips) very slow when selected entity to be front
-				//TODO(tacogisp) use group by
-				//TODO(tacogisp) use temp also layer?
-
-        //TODO(tacogisp) ugly
+        //TODO(tacogips) very slow when make selected entity on another layer to show forefront;.
         const entities = this.props.entities.valueSeq()
-            //.filter((entity) => {
-            //    return !this.props.currentSelectEntities.has(entity.getObjectId())
-            //})
             .map((entity: Entity) => {
                 return <EntityPanel key={entity.getObjectId()} entity={entity} />
             })
 
 
-			 console.debug("canvas rerenderd")
-
-        ////TODO(tacogisp) ugly
-        //const selectedEntities = this.props.currentSelectEntities.valueSeq()
-        //    .map((entity: Entity) => {
-        //        return <EntityPanel key={entity.getObjectId()} entity={entity} />
-        //    })
+        console.debug("canvas rerenderd")
 
         const { width, height } = this.props
 

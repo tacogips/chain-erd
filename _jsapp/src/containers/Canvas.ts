@@ -1,11 +1,15 @@
 import { Canvas as CanvasComponent, CanvasProps, CanvasClickAction } from 'components/Canvas'
-import { EventPosition} from 'components/util/event_position'
+import { EventPosition,layerPositionToCoord} from 'components/util/event_position'
 
 import { RootState } from 'modules/rootReducer'
 import { actionCreators as entityAction, DefaultlSize, DefaultlEntityColor } from 'modules/entity'
-import  * as uuidv4  from 'uuid/v4'
 import { connect, Dispatch } from 'react-redux'
 import { Entity, Coord, WidthHeight, Rel } from 'grpc/erd_pb'
+
+import {newEntity} from 'grpc/util/entity'
+import {newColumn} from 'grpc/util/column'
+
+layerPositionToCoord
 
 const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
 
@@ -25,35 +29,13 @@ const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
     }
 }
 
-// TODO(tacogips) move somewhere out of canvas
-function defaultEntity(position: EventPosition): Entity {
-    const newEntity = new Entity()
-
-    newEntity.setObjectId(uuidv4())
-
-    const coord = new Coord()
-    coord.setX(position.layerX)
-    coord.setY(position.layerY)
-    newEntity.setCoord(coord)
-
-    const wh = new WidthHeight()
-    wh.setW(DefaultlSize.W)
-    wh.setH(DefaultlSize.H)
-    newEntity.setWidthHeight(wh)
-
-		newEntity.setName("NewEntity")
-
-    newEntity.setColor(DefaultlEntityColor.DEFAULT_ENTITY_COLOR)
-    return newEntity
-}
-
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: CanvasProps) => {
 
     const onClick = (canvasClickAciton: CanvasClickAction, clickPosition: EventPosition) => {
         switch (canvasClickAciton) {
             case CanvasClickAction.CREATE_NEW_ENTITY:
-                const newEntity = defaultEntity(clickPosition)
-                dispatch(entityAction.createNewEntity(newEntity))
+								layerPositionToCoord(clickPosition)
+                dispatch(entityAction.createNewEntity(newEntity(layerPositionToCoord(clickPosition))))
         }
     }
 

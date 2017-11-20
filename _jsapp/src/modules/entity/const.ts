@@ -3,7 +3,7 @@ export namespace DefaultlEntityColor{
 }
 
 export namespace DefaultlSize{
-	export const W = 100
+	export const W = 180
 	export const H = 150
 }
 

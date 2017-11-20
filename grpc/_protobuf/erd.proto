@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+
 package erd;
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
@@ -57,9 +58,10 @@ enum ColumnType {
 }
 
 message Column {
-  int32 name                   = 1;
-  ColumnType type              = 2;
-  EntityColumnAttributes attrs = 3;
+  string object_id             = 1;
+  string name                  = 2;
+  ColumnType type              = 3;
+  EntityColumnAttributes attrs = 4;
 }
 
 message EntityColumnAttributes {
@@ -68,6 +70,9 @@ message EntityColumnAttributes {
   StringColumnAttribute attr_string = 3 [ (gogoproto.nullable) = true ];
   bool is_fk                        = 4;
   bool is_pk                        = 5;
+  bool is_unique                    = 6;
+  bool is_not_null                  = 7;
+  bool is_auto_increment            = 8;
 }
 
 message EnumColumnAttribute {

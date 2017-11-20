@@ -121,8 +121,11 @@ export namespace Entity {
 }
 
 export class Column extends jspb.Message {
-  getName(): number;
-  setName(value: number): void;
+  getObjectId(): string;
+  setObjectId(value: string): void;
+
+  getName(): string;
+  setName(value: string): void;
 
   getType(): ColumnType;
   setType(value: ColumnType): void;
@@ -144,7 +147,8 @@ export class Column extends jspb.Message {
 
 export namespace Column {
   export type AsObject = {
-    name: number,
+    objectId: string,
+    name: string,
     type: ColumnType,
     attrs?: EntityColumnAttributes.AsObject,
   }
@@ -172,6 +176,15 @@ export class EntityColumnAttributes extends jspb.Message {
   getIsPk(): boolean;
   setIsPk(value: boolean): void;
 
+  getIsUnique(): boolean;
+  setIsUnique(value: boolean): void;
+
+  getIsNotNull(): boolean;
+  setIsNotNull(value: boolean): void;
+
+  getIsAutoIncrement(): boolean;
+  setIsAutoIncrement(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): EntityColumnAttributes.AsObject;
   static toObject(includeInstance: boolean, msg: EntityColumnAttributes): EntityColumnAttributes.AsObject;
@@ -189,6 +202,9 @@ export namespace EntityColumnAttributes {
     attrString?: StringColumnAttribute.AsObject,
     isFk: boolean,
     isPk: boolean,
+    isUnique: boolean,
+    isNotNull: boolean,
+    isAutoIncrement: boolean,
   }
 }
 
