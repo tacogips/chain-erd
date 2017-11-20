@@ -40,6 +40,8 @@ function defaultEntity(position: EventPosition): Entity {
     wh.setH(DefaultlSize.H)
     newEntity.setWidthHeight(wh)
 
+		newEntity.setName("NewEntity")
+
     newEntity.setColor(DefaultlEntityColor.DEFAULT_ENTITY_COLOR)
     return newEntity
 }

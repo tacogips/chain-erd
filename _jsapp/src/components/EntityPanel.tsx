@@ -34,10 +34,11 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
 
     constructor(props?: EntityPanelProps, context?: any) {
         super(props, context)
-    }
-
-    changeSize() {
-
+        this.state = {
+            anchorDragging: false,
+            dragStartAt: null,
+            transformStartAt: null
+        }
     }
 
     onMouseOver = () => {
@@ -48,13 +49,15 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         document.body.style.cursor = 'default';
     }
 
-    onDragStart = (evt: any) => {
+    onClick = (evt: any) => {
+        const { onSelect, entity } = this.props
+        onSelect(entity.getObjectId())
+    }
 
+    onDragStart = (evt: any) => {
         if (this.state.anchorDragging) {
             return
         }
-        const { onSelect, entity } = this.props
-        onSelect(entity.getObjectId())
 
         const coord = newCoord(this.refGroup.attrs.x, this.refGroup.attrs.y)
         this.setState({ dragStartAt: coord })
@@ -63,7 +66,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
     onDragEnd = (evt: any) => {
         if (this.state.anchorDragging) {
 
-					// end anchor action
+            // end anchor action
             this.setState({ anchorDragging: false })
             this.refGroup.setDraggable(true) //TODO(tacogips)not work?
             return
@@ -78,10 +81,6 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
 
         this.props.onMove(move)
         this.setState({ dragStartAt: null })
-    }
-
-    handleClick = () => {
-
     }
 
     render() {
@@ -165,7 +164,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
                 onMouseOut={this.onMouseOut}
                 onDragStart={this.onDragStart}
                 onDragEnd={this.onDragEnd}
-                onClick={this.handleClick} >
+                onClick={this.onClick} >
 
                 <Rect
                     width={entity.getWidthHeight().getW()}
