@@ -31,18 +31,13 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: EntityPanel
     },
 
     onTransforming: (objectId: string, coordWH: CoordWH) => {
-        dispatch(controlActionCreators.cancelAction()) // cancel what you doing
         return dispatch(actionCreators.transformingEntity(objectId,coordWH))
 		},
 
-    onTransformFinished: (objectId: string, coordWH: Transform) => {
-			//    transformFinishedEntity: (objectId: string, transform: Transform) => {
-			//        return <TransformFinishedEntity>{
-			//            type: EntityActionTypes.TRANSFORM_FINISHED_ENTITY,
-			//            payload: transform
-			//        }
+    onTransformFinished: (transform: Transform) => {
+        dispatch(controlActionCreators.cancelAction()) // cancel what you doing
+        return dispatch(actionCreators.transformFinishedEntity(transform))
 		}
-
 
 })
 

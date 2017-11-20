@@ -45,6 +45,8 @@ export interface ReleaseEntity extends FSAction<string> {
 }
 
 // Transforming
+
+//TODO(tacogips) :delete
 export interface TransformingEntity extends FSAction<{ objectId: string, coordWH: CoordWH }> {
     type: EntityActionTypes,
     payload: {
@@ -99,6 +101,7 @@ export const actionCreators = {
         }
     },
 
+	//TODO(tacogips) :delete
     transformingEntity: (objectId: string, coordWH: CoordWH) => {
         return <TransformingEntity>{
             type: EntityActionTypes.TRANSFORMING_ENTITY,
@@ -106,7 +109,7 @@ export const actionCreators = {
         }
     },
 
-    transformFinishedEntity: (objectId: string, transform: Transform) => {
+    transformFinishedEntity: (transform: Transform) => {
         return <TransformFinishedEntity>{
             type: EntityActionTypes.TRANSFORM_FINISHED_ENTITY,
             payload: transform

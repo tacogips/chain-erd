@@ -3,6 +3,7 @@ import { EntityEditPane as EntityEditPaneComponent, EntityEditPaneProps } from '
 import { RootState } from 'modules/rootReducer'
 import { actionCreators } from 'modules/control/actions'
 import { connect, Dispatch } from 'react-redux'
+import { Map } from 'immutable'
 
 
 const mapStateToProps = (state: RootState, ownProps: EntityEditPaneProps) => (<EntityEditPaneProps>{

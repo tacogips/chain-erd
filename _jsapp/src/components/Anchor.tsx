@@ -12,8 +12,8 @@ export interface AnchorProps {
     x: number,
     y: number,
     onMouseDownPre: (evt: any) => void
-    onDragEndPre: (evt: any) => void
     transforming: (anchorPosition: EventPosition) => void
+    transformed: (anchorPosition: EventPosition) => void
 }
 
 export interface AnchorState {
@@ -22,7 +22,6 @@ export interface AnchorState {
 export class Anchor extends React.Component<AnchorProps, AnchorState>{
     private refCircle: any
 
-    private circleStroke = 2 //TODO(tacogips) tobe const
 
     constructor(props?: AnchorProps, context?: any) {
         super(props, context)
@@ -30,18 +29,17 @@ export class Anchor extends React.Component<AnchorProps, AnchorState>{
 
     onMouseOver = (evt: any) => {
         document.body.style.cursor = 'pointer'
-        this.refCircle.setStrokeWidth(this.circleStroke + 4)
+        this.refCircle.setStrokeWidth(5)
         this.refCircle.draw()
     }
 
     onMouseOut = () => {
         document.body.style.cursor = 'default'
-        this.refCircle.setStrokeWidth(this.circleStroke)
+        this.refCircle.setStrokeWidth(1)
         this.refCircle.draw()
     }
     onMouseDown = (evt: any) => {
         this.props.onMouseDownPre(evt)
-        //this.props.onDragEndPre: (evt:any) => void
     }
 
     onDragMove = (evt: any) => {
@@ -49,7 +47,7 @@ export class Anchor extends React.Component<AnchorProps, AnchorState>{
     }
 
     onDragEnd = (evt: any) => {
-        this.props.onDragEndPre(evt)
+        this.props.transformed(positionFromEvent(evt.evt))
     }
 
     render() {
@@ -61,7 +59,7 @@ export class Anchor extends React.Component<AnchorProps, AnchorState>{
                 radius={5}
                 fill={'#ddd'}
                 stroke='black'
-                strokeWidth={this.circleStroke}
+                strokeWidth={1}
                 x={x}
                 y={y}
                 draggable={true}
