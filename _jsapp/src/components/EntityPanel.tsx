@@ -7,7 +7,7 @@ import * as Konva from 'konva'
 import { Stage, Layer, Rect, Group, Circle } from 'react-konva'
 import { Map } from 'immutable'
 import { Entity, Rel, Coord, Move, Transform, CoordWH } from 'grpc/erd_pb'
-import { newCoord, newCoordWH  } from 'grpc/util/coord'
+import { newCoord, newCoordWH } from 'grpc/util/coord'
 import { newTransform } from 'grpc/util/transform'
 import { newMove } from 'grpc/util/move'
 import { Anchor } from './Anchor'
@@ -29,8 +29,8 @@ export interface EntityPanelState {
     transformStartAt?: CoordWH
     showAnchors: boolean
 
-	  width: number, //TODO(tacogips) ugly.for realtime update
-	  height : number
+    width: number, //TODO(tacogips) ugly.for realtime update
+    height: number
 }
 
 export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelState>{
@@ -40,15 +40,15 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
     constructor(props?: EntityPanelProps, context?: any) {
         super(props, context)
 
-			  const  width = this.props.entity.getWidthHeight().getW()
-			  const  height = this.props.entity.getWidthHeight().getH()
+        const width = this.props.entity.getWidthHeight().getW()
+        const height = this.props.entity.getWidthHeight().getH()
         this.state = {
             anchorDragging: false,
             showAnchors: false,
             dragStartAt: null,
             transformStartAt: null,
-						width:width,
-						height :height
+            width: width,
+            height: height
         }
     }
 
@@ -148,8 +148,6 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
 
     genAnchors = (entity: Entity, x: number, y: number, w: number, h: number) => {
 
-				const offset = 3
-
         const topLeft: { x: number, y: number } = { x: 0, y: 0 }
         const topRight: { x: number, y: number } = { x: w, y: 0 }
         const bottomLeft: { x: number, y: number } = { x: 0, y: h }
@@ -158,16 +156,15 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         const genTransformHdr = (transformFn: (anchorPosition: EventPosition, parentEntity: Entity) => CoordWH, parentEntity: Entity) => {
             return (anchorPosition: EventPosition) => {
                 const newCoordinateWidthHeight = transformFn(anchorPosition, parentEntity)
-								// for real time update
-								this.setState(
-									{width : newCoordinateWidthHeight.getWidthHeight().getW(),
-									 height :newCoordinateWidthHeight.getWidthHeight().getH()
-								})
+                // for real time update
+                this.setState(
+                    {
+                        width: newCoordinateWidthHeight.getWidthHeight().getW(),
+                        height: newCoordinateWidthHeight.getWidthHeight().getH()
+                    })
                 this.props.onTransforming(entity.getObjectId(), newCoordinateWidthHeight)
             }
         }
-
-
 
         const anchorTransformTopLeft = (anchorPosition: EventPosition, parentEntity: Entity) => {
             const newX = anchorPosition.layerX
@@ -194,67 +191,74 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
             const newW = w - (anchorPosition.layerX - x)
             const newH = (anchorPosition.layerY - y)
             return newCoordWH({ x: newX, y: newY }, { w: newW, h: newH })
-				}
+        }
 
-			const anchorTransformBottomRight  =  (anchorPosition: EventPosition, parentEntity: Entity) =>{
+        const anchorTransformBottomRight = (anchorPosition: EventPosition, parentEntity: Entity) => {
             const newX = x
             const newY = y
             const newW = (anchorPosition.layerX - x)
             const newH = (anchorPosition.layerY - y)
             return newCoordWH({ x: newX, y: newY }, { w: newW, h: newH })
-			}
+        }
 
 
-			const anchorOnMouseDownPre = (evt: any) => {
+        const anchorOnMouseDownPre = (evt: any) => {
             this.setState({ anchorDragging: true })
             this.refGroup.setDraggable(false) //TODO(tacogips)not work?
         }
 
+        const genTransformfinishedFn = (newCoordWh: (anchorPosition: EventPosition, parentEntity: Entity) => CoordWH) => (pos: EventPosition) => {
 
-				const genTransformfinishedFn =(newCoordWh:(anchorPosition: EventPosition, parentEntity: Entity)=>CoordWH)=>(pos:EventPosition)=> {
+            const from = newCoordWH(
+                {
+                    x: entity.getCoord().getX(),
+                    y: entity.getCoord().getY()
+                },
 
-					const from =newCoordWH(
-							{x:entity.getCoord().getX(),
-							 y:entity.getCoord().getY()},
+                {
+                    w: entity.getWidthHeight().getW(),
+                    h: entity.getWidthHeight().getH()
+                })
 
-							{w:entity.getWidthHeight().getW(),
-							 h:entity.getWidthHeight().getH()})
+            const to = newCoordWh(pos, entity)
 
-					const to =newCoordWh(pos,entity)
-
-					const transform = newTransform(entity.getObjectId(),from,to)
-    			this.props.onTransformFinished(transform)
-				}
+            const transform = newTransform(entity.getObjectId(), from, to)
+            this.props.onTransformFinished(transform)
+        }
 
         const anchors: React.ReactElement<Anchor>[] = []
         anchors.push(<Anchor
+            key={"topleft"}
             x={topLeft.x} y={topLeft.y}
             onMouseDownPre={anchorOnMouseDownPre}
-            transforming={genTransformHdr(anchorTransformTopLeft,entity)}
-						transformed={genTransformfinishedFn(anchorTransformTopLeft) }
-					/>)
+            transforming={genTransformHdr(anchorTransformTopLeft, entity)}
+            transformed={genTransformfinishedFn(anchorTransformTopLeft)}
+        />)
 
         anchors.push(<Anchor
+
+            key={"topright"}
             x={topLeft.x + w} y={topLeft.y}
             onMouseDownPre={anchorOnMouseDownPre}
-            transforming={genTransformHdr(anchorTransformTopRight,entity)}
-						transformed={genTransformfinishedFn(anchorTransformTopRight) }
-					/>)
+            transforming={genTransformHdr(anchorTransformTopRight, entity)}
+            transformed={genTransformfinishedFn(anchorTransformTopRight)}
+        />)
 
         anchors.push(<Anchor
+            key={"bottomleft"}
             x={topLeft.x} y={topLeft.y + h}
             onMouseDownPre={anchorOnMouseDownPre}
-            transforming={genTransformHdr(anchorTransformBottomLeft,entity)}
-						transformed={genTransformfinishedFn(anchorTransformBottomLeft) }
-					/>)
+            transforming={genTransformHdr(anchorTransformBottomLeft, entity)}
+            transformed={genTransformfinishedFn(anchorTransformBottomLeft)}
+        />)
 
         anchors.push(<Anchor
-
+            key={"bottomright"}
             x={topLeft.x + w} y={topLeft.y + h}
             onMouseDownPre={anchorOnMouseDownPre}
-            transforming={genTransformHdr(anchorTransformBottomRight,entity )}
-            transformed={genTransformHdr(anchorTransformBottomRight,entity)}
-					/>)
+            transforming={genTransformHdr(anchorTransformBottomRight, entity)}
+            transformed={genTransformHdr(anchorTransformBottomRight, entity)}
+        />)
 
         return anchors
     }
