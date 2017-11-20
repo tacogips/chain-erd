@@ -5,19 +5,18 @@ import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Stage, Layer, Rect, Circle } from 'react-konva'
 import { Map } from 'immutable'
-
-import { Entity } from 'grpc/erd_pb'
+import { Entity, CoordWH } from 'grpc/erd_pb'
+import { positionFromEvent, EventPosition } from './util/event_position'
 
 export interface AnchorProps {
     x: number,
     y: number,
-    onClick?: () => void
-    onDragMove?: () => void
-    redraw: () => void
+    onMouseDownPre: (evt: any) => void
+    onDragEndPre: (evt: any) => void
+    transforming: (anchorPosition: EventPosition) => void
 }
 
 export interface AnchorState {
-    previousMousePointer: string
 }
 
 export class Anchor extends React.Component<AnchorProps, AnchorState>{
@@ -30,38 +29,48 @@ export class Anchor extends React.Component<AnchorProps, AnchorState>{
     }
 
     onMouseOver = (evt: any) => {
-        console.log(evt)
-
-        this.setState({ previousMousePointer: document.body.style.cursor })
         document.body.style.cursor = 'pointer'
         this.refCircle.setStrokeWidth(this.circleStroke + 4)
         this.refCircle.draw()
-        this.props.redraw()
     }
 
     onMouseOut = () => {
-        //document.body.style.cursor = this.state.previousMousePointer
-        //this.refCircle.setStrokeWidth(this.circleStroke)
-        //this.refCircle.draw()
-        //this.props.redraw()
+        document.body.style.cursor = 'default'
+        this.refCircle.setStrokeWidth(this.circleStroke)
+        this.refCircle.draw()
+    }
+    onMouseDown = (evt: any) => {
+        this.props.onMouseDownPre(evt)
+        //this.props.onDragEndPre: (evt:any) => void
+    }
+
+    onDragMove = (evt: any) => {
+        this.props.transforming(positionFromEvent(evt.evt))
+    }
+
+    onDragEnd = (evt: any) => {
+        this.props.onDragEndPre(evt)
     }
 
     render() {
-        const { x, y, onDragMove } = this.props
+        const { x, y } = this.props
 
         return (
             <Circle
                 ref={(ref) => this.refCircle = ref}
-                radius={3}
+                radius={5}
                 fill={'#ddd'}
                 stroke='black'
                 strokeWidth={this.circleStroke}
                 x={x}
                 y={y}
                 draggable={true}
+								onMouseDown  ={this.onMouseDown}
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
-                onDragMove={onDragMove} />
+                onDragMove={this.onDragMove}
+							  onDragEnd={this.onDragEnd}
+					/>
         );
     }
 }

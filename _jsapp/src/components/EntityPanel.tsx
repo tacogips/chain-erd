@@ -10,6 +10,7 @@ import { Entity, Rel, Coord, Move, Transform, CoordWH } from 'grpc/erd_pb'
 import { newCoord, newCoordWH } from 'grpc/util/coord'
 import { newMove } from 'grpc/util/move'
 import { Anchor } from './Anchor'
+import { positionFromEvent, EventPosition, PositionFunction } from './util/event_position'
 
 export interface EntityPanelProps {
     key: string
@@ -17,15 +18,14 @@ export interface EntityPanelProps {
     onSelect?: (objectId: string) => void
     onRelease?: (objectId: string) => void
     onMove?: (move: Move) => void
-    transforming?: (objectId: string, coordWH: CoordWH) => void
+    onTransforming?: (objectId: string, coordWH: CoordWH) => void
     transformfinished?: (transform: Transform) => void
-    redraw: () => void
 }
 
 export interface EntityPanelState {
+    anchorDragging: boolean
     dragStartAt?: Coord
     transformStartAt?: CoordWH
-    previousMousePointer: string
 }
 
 export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelState>{
@@ -41,15 +41,18 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
     }
 
     onMouseOver = () => {
-        this.setState({ previousMousePointer: document.body.style.cursor })
         document.body.style.cursor = 'pointer';
     }
 
     onMouseOut = () => {
-        document.body.style.cursor = this.state.previousMousePointer;
+        document.body.style.cursor = 'default';
     }
 
     onDragStart = (evt: any) => {
+
+        if (this.state.anchorDragging) {
+            return
+        }
         const { onSelect, entity } = this.props
         onSelect(entity.getObjectId())
 
@@ -58,6 +61,13 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
     }
 
     onDragEnd = (evt: any) => {
+        if (this.state.anchorDragging) {
+
+					// end anchor action
+            this.setState({ anchorDragging: false })
+            this.refGroup.setDraggable(true) //TODO(tacogips)not work?
+            return
+        }
         if (!this.state.dragStartAt) {
             console.error("invalid dragging")
             return
@@ -71,13 +81,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
     }
 
     handleClick = () => {
-    }
 
-    transforming = (fn: (anchor: any, parentEntity: Entity) => CoordWH) => (anchor: any, parentEntity: Entity) => {
-        return (anchor: any, parentEntity: Entity) => {
-            const cwh = fn(anchor, parentEntity)
-            this.props.transforming(this.props.entity.getObjectId(), cwh)
-        }
     }
 
     render() {
@@ -98,6 +102,59 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         const bottomLeft: { x: number, y: number } = { x: 0, y: h }
         const bottomRight: { x: number, y: number } = { x: w, y: h }
 
+        const genTransformHdr = (transformFn: (anchorPosition: EventPosition, parentEntity: Entity) => CoordWH, parentEntity: Entity) => {
+            return (anchorPosition: EventPosition) => {
+                const newCoordinateWidthHeight = transformFn(anchorPosition, parentEntity)
+                this.props.onTransforming(this.props.entity.getObjectId(), newCoordinateWidthHeight)
+            }
+        }
+
+        const anchorTransformTopLeft = genTransformHdr((anchorPosition: EventPosition, parentEntity: Entity) => {
+            const newX = anchorPosition.layerX
+            const newY = anchorPosition.layerY
+            const newW = w - (anchorPosition.layerX - x)
+            const newH = h - (anchorPosition.layerY - y)
+            return newCoordWH({ x: newX, y: newY }, { w: newW, h: newH })
+        }, entity)
+
+        const anchorTransformTopRight = genTransformHdr((anchorPosition: EventPosition, parentEntity: Entity) => {
+            const newX = x
+            const newY = anchorPosition.layerY
+            const newW = (anchorPosition.layerX - x)
+            const newH = h - (anchorPosition.layerY - y)
+
+            return newCoordWH({ x: newX, y: newY }, { w: newW, h: newH })
+        }, entity)
+
+
+        const anchorTransformBottomLeft = genTransformHdr((anchorPosition: EventPosition, parentEntity: Entity) => {
+            const newX = anchorPosition.layerX
+            const newY = y
+            const newW = w - (anchorPosition.layerX - x)
+            const newH = (anchorPosition.layerY - y)
+            return newCoordWH({ x: newX, y: newY }, { w: newW, h: newH })
+        }, entity)
+
+
+        const anchorTransformBottomRight = genTransformHdr((anchorPosition: EventPosition, parentEntity: Entity) => {
+            const newX = x
+            const newY = y
+            const newW = (anchorPosition.layerX - x)
+            const newH = (anchorPosition.layerY - y)
+            return newCoordWH({ x: newX, y: newY }, { w: newW, h: newH })
+        }, entity)
+
+
+        const anchorOnMouseDownPre = (evt: any) => {
+            this.setState({ anchorDragging: true })
+            this.refGroup.setDraggable(false) //TODO(tacogips)not work?
+        }
+
+        const anchorOnDragEndPre = (evt: any) => {
+            ///this.setState({ anchorDragging: false })
+            ///this.refGroup.setDraggable(true) //TODO(tacogips)not work?
+        }
+
         return (
             <Group
                 x={x}
@@ -108,7 +165,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
                 onMouseOut={this.onMouseOut}
                 onDragStart={this.onDragStart}
                 onDragEnd={this.onDragEnd}
-                onClick={this.handleClick}>
+                onClick={this.handleClick} >
 
                 <Rect
                     width={entity.getWidthHeight().getW()}
@@ -125,9 +182,31 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
                     fill={entity.getColor()}
                     shadowBlur={1} />
 
-                <Anchor redraw={this.props.redraw} x={topLeft.x} y={topLeft.y} />
+                <Anchor
+                    x={topLeft.x} y={topLeft.y}
+                    onMouseDownPre={anchorOnMouseDownPre}
+                    onDragEndPre={anchorOnDragEndPre}
+                    transforming={anchorTransformTopLeft} />
 
-            </Group>
+                <Anchor
+                    x={topLeft.x + w} y={topLeft.y}
+                    onMouseDownPre={anchorOnMouseDownPre}
+                    onDragEndPre={anchorOnDragEndPre}
+                    transforming={anchorTransformTopRight} />
+
+                <Anchor
+                    x={topLeft.x} y={topLeft.y + h}
+                    onMouseDownPre={anchorOnMouseDownPre}
+                    onDragEndPre={anchorOnDragEndPre}
+                    transforming={anchorTransformBottomLeft} />
+
+                <Anchor
+                    x={topLeft.x + w} y={topLeft.y + h}
+                    onMouseDownPre={anchorOnMouseDownPre}
+                    onDragEndPre={anchorOnDragEndPre}
+                    transforming={anchorTransformBottomRight} />
+
+            </Group >
         );
     }
 }

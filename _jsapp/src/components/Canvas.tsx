@@ -8,20 +8,7 @@ import { EntityPanel } from 'containers/EntityPanel'
 import { Map } from 'immutable'
 
 import { Entity } from 'grpc/erd_pb'
-
-export interface CanvasPosition {
-    clientX: number
-    clientY: number
-
-    layerX: number
-    layerY: number
-
-    pageX: number
-    pageY: number
-
-    screenX: number
-    screenY: number
-}
+import {positionFromEvent,EventPosition} from './util/event_position'
 
 export enum CanvasClickAction {
     CREATE_NEW_ENTITY,
@@ -35,7 +22,7 @@ export interface CanvasProps {
     clickAction?: CanvasClickAction,
     onClick?: (
         canvasClickAciton: CanvasClickAction,
-        canvasPosition: CanvasPosition) => void
+        canvasPosition: EventPosition) => void
 }
 
 export class Canvas extends React.Component<CanvasProps, {}>{
@@ -67,16 +54,7 @@ export class Canvas extends React.Component<CanvasProps, {}>{
             return (!v) ? 0 : +v
         }
 
-        const canvasPosition: CanvasPosition = {
-            clientX: nullOrZero(evtVal.clientX),
-            clientY: nullOrZero(evtVal.clientY),
-            layerX: nullOrZero(evtVal.layerX),
-            layerY: nullOrZero(evtVal.layerY),
-            pageX: nullOrZero(evtVal.pageX),
-            pageY: nullOrZero(evtVal.pageY),
-            screenX: nullOrZero(evtVal.screenX),
-            screenY: nullOrZero(evtVal.screenY),
-        }
+        const canvasPosition=  positionFromEvent(evtVal)
 
         this.props.onClick(this.props.clickAction, canvasPosition)
     }
@@ -85,11 +63,10 @@ export class Canvas extends React.Component<CanvasProps, {}>{
         this.refMainLayer.draw()
     }
 
-
     render() {
         //TODO(tacogips) Is there another way to iterate a interface?
         const entities = this.props.entities.valueSeq().map((entity: Entity) => {
-            return <EntityPanel key={entity.getObjectId()} entity={entity} redraw={this.redraw} />
+            return <EntityPanel key={entity.getObjectId()} entity={entity} />
         })
         const { width, height } = this.props
 

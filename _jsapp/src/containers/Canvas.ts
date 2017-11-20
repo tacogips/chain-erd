@@ -1,4 +1,6 @@
-import { Canvas as CanvasComponent, CanvasProps, CanvasPosition, CanvasClickAction } from 'components/Canvas'
+import { Canvas as CanvasComponent, CanvasProps, CanvasClickAction } from 'components/Canvas'
+import { EventPosition} from 'components/util/event_position'
+
 import { RootState } from 'modules/rootReducer'
 import { actionCreators as entityAction, DefaultlSize, DefaultlEntityColor } from 'modules/entity'
 import  * as uuidv4  from 'uuid/v4'
@@ -23,7 +25,7 @@ const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
 }
 
 // TODO(tacogips) move somewhere out of canvas
-function defaultEntity(position: CanvasPosition): Entity {
+function defaultEntity(position: EventPosition): Entity {
     const newEntity = new Entity()
 
     newEntity.setObjectId(uuidv4())
@@ -44,7 +46,7 @@ function defaultEntity(position: CanvasPosition): Entity {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: CanvasProps) => {
 
-    const onClick = (canvasClickAciton: CanvasClickAction, clickPosition: CanvasPosition) => {
+    const onClick = (canvasClickAciton: CanvasClickAction, clickPosition: EventPosition) => {
         switch (canvasClickAciton) {
             case CanvasClickAction.CREATE_NEW_ENTITY:
                 const newEntity = defaultEntity(clickPosition)
