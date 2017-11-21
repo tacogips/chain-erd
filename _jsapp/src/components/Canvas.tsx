@@ -4,6 +4,9 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Stage, Layer, Rect, Group } from 'react-konva'
+import { RelationOfEntities } from 'modules/entity'
+
+import { RelLine } from 'components/RelLine'
 import { EntityPanel } from 'containers/EntityPanel'
 import { Map } from 'immutable'
 
@@ -19,6 +22,7 @@ export interface CanvasProps {
     height: number,
     entities?: Map<string, Entity>
     currentSelectEntities?: Map<string, Entity>
+    relationOfEntities?: RelationOfEntities
     mouseOverPointer?: string
     clickAction?: CanvasClickAction,
     onClick?: (
@@ -73,11 +77,20 @@ export class Canvas extends React.Component<CanvasProps, {}>{
                 return <EntityPanel key={entity.getObjectId()} entity={entity} />
             })
 
+        const rels = this.props.relationOfEntities.map().valueSeq().map((rel) => {
+            const beginEntity = this.props.entities.get(rel.getPointBegin().getEntityObjectId())
+            const endEntity = this.props.entities.get(rel.getPointEnd().getEntityObjectId())
+
+            return <RelLine key={rel.getObjectId()} rel={rel}
+                beginEntity={beginEntity}
+                endEntity={endEntity} />
+        })
 
         console.debug("canvas rerenderd")
 
         const { width, height } = this.props
 
+        //TODO(taco) better off render relations on another stage or layer? to reduce canvas rerender cost>
         return (
             <Stage
                 ref={(ref) => this.stage = ref}
@@ -87,6 +100,7 @@ export class Canvas extends React.Component<CanvasProps, {}>{
                 onContentMouseOut={this.onMouseOut}
                 onContentClick={this.onClickEvent} >
                 <Layer ref={(ref) => this.refMainLayer = ref}>
+										{rels}
                     {entities}
                 </Layer>
             </Stage>

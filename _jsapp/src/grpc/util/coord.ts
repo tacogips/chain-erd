@@ -7,6 +7,10 @@ export function newCoord(x: number, y: number): Coord {
     return coord
 }
 
+export function coordToArray(coord:Coord): number[] {
+	return [coord.getX(),	coord.getY()]
+}
+
 export function newCoordWH(
     coord: { x: number, y: number },
     widthHeight: { w: number, h: number }): CoordWH {
@@ -26,3 +30,6 @@ export function newCoordWH(
 
     return cwh
 }
+
+
+

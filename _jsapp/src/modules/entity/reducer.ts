@@ -8,12 +8,11 @@ export interface EntityState {
     entities: Map<string, Entity>
     currentSelectEntities: Map<string, Entity>
     seqentialChoiceEntities: List<string> //choice sequential.e.g. when connecting with relation
-    relOfEntities: RelationOfEntities
+    relationOfEntities: RelationOfEntities
 }
 
-
 // imutable relations store
-class RelationOfEntities {
+export class RelationOfEntities {
     private rels: Map<string, Rel>
 
     private relObjIdByBeginEntityObjId: Map<string, Set<string>>
@@ -36,6 +35,9 @@ class RelationOfEntities {
         })
     }
 
+    map(): Map<string, Rel> {
+        return this.rels
+    }
     add(rel: Rel): RelationOfEntities {
         const newMap = this.rels.set(rel.getObjectId(), rel)
         return new RelationOfEntities(newMap)
@@ -69,7 +71,7 @@ export const initialState: EntityState = {
     entities: Map<string, Entity>(),
     currentSelectEntities: Map<string, Entity>(),
     seqentialChoiceEntities: List<string>(),
-    relOfEntities: new RelationOfEntities()
+    relationOfEntities: new RelationOfEntities()
 }
 
 export const entityReducer: Reducer<EntityState> = (state: EntityState = initialState, action: actions.EntityAction) => {
@@ -209,7 +211,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
 
             return <EntityState>{
                 ...state,
-									relOfEntities:state.relOfEntities.add(rel)
+                relOfEntities: state.relationOfEntities.add(rel)
             }
         }
 

@@ -37,7 +37,7 @@ export function newEntity(coord: Coord): Entity {
     return newEntity
 }
 
-export function getCentor(entity: Entity): Coord {
+export function getCentorCoord(entity: Entity): Coord {
     const { x, y } = entity.getCoord().toObject()
     const { w, h } = entity.getWidthHeight().toObject()
 
