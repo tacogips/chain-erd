@@ -329,8 +329,8 @@ export namespace Rel {
 }
 
 export class RelPoint extends jspb.Message {
-  getEntityObjectId(): number;
-  setEntityObjectId(value: number): void;
+  getEntityObjectId(): string;
+  setEntityObjectId(value: string): void;
 
   getColumnObjectId(): string;
   setColumnObjectId(value: string): void;
@@ -347,7 +347,7 @@ export class RelPoint extends jspb.Message {
 
 export namespace RelPoint {
   export type AsObject = {
-    entityObjectId: number,
+    entityObjectId: string,
     columnObjectId: string,
   }
 

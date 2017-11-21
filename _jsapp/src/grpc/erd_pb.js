@@ -2388,7 +2388,7 @@ proto.erd.RelPoint.prototype.toObject = function(opt_includeInstance) {
  */
 proto.erd.RelPoint.toObject = function(includeInstance, msg) {
   var f, obj = {
-    entityObjectId: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    entityObjectId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     columnObjectId: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
@@ -2427,7 +2427,7 @@ proto.erd.RelPoint.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt32());
+      var value = /** @type {string} */ (reader.readString());
       msg.setEntityObjectId(value);
       break;
     case 2:
@@ -2464,8 +2464,8 @@ proto.erd.RelPoint.prototype.serializeBinary = function() {
 proto.erd.RelPoint.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getEntityObjectId();
-  if (f !== 0) {
-    writer.writeInt32(
+  if (f.length > 0) {
+    writer.writeString(
       1,
       f
     );
@@ -2489,15 +2489,15 @@ proto.erd.RelPoint.Associate = {
 };
 
 /**
- * optional int32 entity_object_id = 1;
- * @return {number}
+ * optional string entity_object_id = 1;
+ * @return {string}
  */
 proto.erd.RelPoint.prototype.getEntityObjectId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.erd.RelPoint.prototype.setEntityObjectId = function(value) {
   jspb.Message.setField(this, 1, value);
 };

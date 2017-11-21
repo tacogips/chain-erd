@@ -233,6 +233,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
             anchors = this.genAnchors(entity, x, y, w, h)
         }
 
+				// offset for adjusting appearance
         const titleOffset: { x: number, y: number } = { x: 5, y: 3 }
         const columnAreaOffset: { x: number, y: number } = { x: 5, y: 3 }
 

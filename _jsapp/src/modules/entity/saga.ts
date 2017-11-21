@@ -13,18 +13,11 @@ function* onCreateEntity(action: EntityAction) {
     }
 }
 
-export function* createEntityWatcher() {
-    yield takeLatest(EntityActionTypes.CREATE_NEW_ENTITY, onCreateEntity)
-    yield takeLatest(EntityActionTypes.SELECT_ENTITY, onSelectEntity)
-    //TODO reset state when control action cancelled
-}
-
 function* onSelectEntity(action: EntityAction) {
     const currentState = <RootState>(yield select())
     const selectAction = <SelectEntity>action
 
     const objectId = selectAction.payload
-
 
     if (currentState.control.connectingOneToMenyRel) {
         if (currentState.entity.seqentialChoiceEntities.contains(objectId)) {
@@ -47,4 +40,9 @@ function* onSelectEntity(action: EntityAction) {
 }
 
 
+export function* entityWatcher() {
+    yield takeLatest(EntityActionTypes.CREATE_NEW_ENTITY, onCreateEntity)
+    yield takeLatest(EntityActionTypes.SELECT_ENTITY, onSelectEntity)
+    //TODO reset state when control action cancelled
+}
 

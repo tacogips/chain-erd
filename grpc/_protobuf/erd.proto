@@ -100,7 +100,7 @@ message Rel {
 }
 
 message RelPoint {
-  int32 entity_object_id  = 1;
+  string entity_object_id  = 1;
   string column_object_id = 2;
   enum Associate {
     One  = 0;
