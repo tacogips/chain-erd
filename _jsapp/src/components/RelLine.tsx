@@ -24,6 +24,7 @@ export interface RelLineProps {
 }
 
 export interface RelLineState {
+
 }
 
 export class RelLine extends React.Component<RelLineProps, RelLineState>{
@@ -39,9 +40,6 @@ export class RelLine extends React.Component<RelLineProps, RelLineState>{
         const endCoord = getCentorCoord(endEntity)
 
         const points = coordToArray(beginCoord).concat(coordToArray(endCoord))
-
-        //TODO(taco)
-        console.debug(points)
 
         return (
             <Group ref={(ref) => this.refGroup = ref} >

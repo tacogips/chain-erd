@@ -10,27 +10,25 @@ export interface RelationState {
 
 
 // imutable relations store
+//TODO(taco) ugly
 export class RelationOfEntities {
+    static generateNew(): RelationOfEntities {
+        return new RelationOfEntities(Map(), Map(), Map())
+    }
+
     private rels: Map<string, Rel>
 
     private relObjIdByBeginEntityObjId: Map<string, Set<string>>
     private relObjIdByEndEntityObjId: Map<string, Set<string>>
 
-    constructor(rels?: Map<string, Rel>) {
+    private constructor(rels: Map<string, Rel>,
+        relObjIdByBeginEntityObjId: Map<string, Set<string>>,
+        relObjIdByEndEntityObjId: Map<string, Set<string>>) {
 
-        this.rels = Map()
-        this.relObjIdByBeginEntityObjId = Map()
-        this.relObjIdByEndEntityObjId = Map()
-        if (!rels) {
-            return
-        }
-
+        this.relObjIdByBeginEntityObjId = relObjIdByBeginEntityObjId
+        this.relObjIdByEndEntityObjId = relObjIdByEndEntityObjId
         this.rels = rels
 
-        //TODO(taco) performance bottle neck?
-        rels.valueSeq().forEach((rel) => {
-            this.updateRelAddition(rel)
-        })
     }
 
     map(): Map<string, Rel> {
@@ -39,21 +37,26 @@ export class RelationOfEntities {
 
     add(rel: Rel): RelationOfEntities {
         const newMap = this.rels.set(rel.getObjectId(), rel)
-        return new RelationOfEntities(newMap)
+        const { begin, end } = RelationOfEntities.updateRelAddition(rel, this.relObjIdByBeginEntityObjId, this.relObjIdByEndEntityObjId)
+        return new RelationOfEntities(newMap, begin, end)
     }
 
-    private updateRelAddition(rel: Rel) {
+    private static updateRelAddition(rel: Rel,
+        relObjIdByBeginEntityObjId: Map<string, Set<string>>,
+        relObjIdByEndEntityObjId: Map<string, Set<string>>): { begin: Map<string, Set<string>>, end: Map<string, Set<string>> } {
+
         const relObjectId = rel.getObjectId()
         const begin = rel.getPointBegin()
         const end = rel.getPointEnd()
 
-
-        this.relObjIdByBeginEntityObjId = this.addToMapOfSet(begin.getEntityObjectId(), relObjectId, this.relObjIdByBeginEntityObjId)
-        this.relObjIdByEndEntityObjId = this.addToMapOfSet(end.getEntityObjectId(), relObjectId, this.relObjIdByEndEntityObjId)
+        return {
+            begin: RelationOfEntities.addToMapOfSet(begin.getEntityObjectId(), relObjectId, relObjIdByBeginEntityObjId),
+            end: RelationOfEntities.addToMapOfSet(end.getEntityObjectId(), relObjectId, relObjIdByEndEntityObjId)
+        }
     }
 
     //TODO(taco) performance bottle neck?
-    private addToMapOfSet(key: string, val: string, src: Map<string, Set<string>>): Map<string, Set<string>> {
+    private static addToMapOfSet(key: string, val: string, src: Map<string, Set<string>>): Map<string, Set<string>> {
         if (!src.has(key)) {
             return src.set(key, Set(val))
         } else {
@@ -65,7 +68,7 @@ export class RelationOfEntities {
 }
 
 export const initialState: RelationState = {
-    relationOfEntities: new RelationOfEntities()
+    relationOfEntities: RelationOfEntities.generateNew()
 }
 
 export const relationReducer: Reducer<RelationState> = (state: RelationState = initialState, action: actions.RelationAction) => {

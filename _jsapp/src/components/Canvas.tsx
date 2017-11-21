@@ -65,10 +65,6 @@ export class Canvas extends React.Component<CanvasProps, {}>{
         this.props.onClick(this.props.clickAction, canvasPosition)
     }
 
-    redraw = () => {
-        this.refMainLayer.draw()
-    }
-
     render() {
 
         //TODO(tacogips) very slow when make selected entity on another layer to show forefront;.

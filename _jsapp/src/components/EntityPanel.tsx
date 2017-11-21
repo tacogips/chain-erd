@@ -13,6 +13,7 @@ import { newMove } from 'grpc/util/move'
 import { Anchor } from './Anchor'
 import { positionFromEvent, EventPosition, PositionFunction } from './util/event_position'
 
+
 import { ColumnsInEntityPanel, ColumnsInEntityPanelProps } from './ColumnsInEntityPanel'
 
 export interface EntityPanelProps {
@@ -20,7 +21,8 @@ export interface EntityPanelProps {
     entity: Entity
     onSelect?: (objectId: string) => void
     onRelease?: (objectId: string) => void
-    onMove?: (move: Move) => void
+    onMoving?: (evtPos:EventPosition) => void
+    onMoveEnd?: (move: Move) => void
     onTransforming?: (objectId: string, coordWH: CoordWH) => void
     onTransformFinished?: (transform: Transform) => void
 }
@@ -94,7 +96,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         const to = newCoord(this.refGroup.attrs.x, this.refGroup.attrs.y)
         const move = newMove(this.props.entity.getObjectId(), this.state.dragStartAt, to)
 
-        this.props.onMove(move)
+        this.props.onMoveEnd(move)
         this.setState({ dragStartAt: null })
     }
 
@@ -214,7 +216,10 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         return anchors
     }
 
-
+		onDragMove =(evt:any)=>{
+				const pos = positionFromEvent(evt.evt)
+				this.props.onMoving(pos)
+		}
 
     render() {
         const { entity } = this.props
@@ -246,6 +251,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
                 onDragStart={this.onDragStart}
+                onDragMove={this.onDragMove}
                 onDragEnd={this.onDragEnd}
                 onClick={this.onClick} >
 

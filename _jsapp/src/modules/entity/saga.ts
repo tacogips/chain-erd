@@ -7,8 +7,6 @@ import { newRelation} from 'grpc/util/relation'
 
 import { RelAssociation} from 'grpc/erd_pb'
 
-
-
 import { List } from 'immutable'
 import { RootState } from 'modules/rootReducer'
 
@@ -18,6 +16,14 @@ function* onCreateEntity(action: EntityAction) {
         yield put(controlActionCreators.finishCreateEntity())
     }
 }
+
+//function* onMoveEntity(action: EntityAction) {
+//
+//    if (!state.control.repeatAction) {
+//        yield put(controlActionCreators.finishCreateEntity())
+//    }
+//}
+
 
 function* onSelectEntity(action: EntityAction) {
     const currentState = <RootState>(yield select())

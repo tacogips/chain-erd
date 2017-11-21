@@ -10,7 +10,6 @@ export interface EntityState {
     seqentialChoiceEntities: List<string> //choice sequential.e.g. when connecting with relation
 }
 
-
 export const initialState: EntityState = {
     entities: Map<string, Entity>(),
     currentSelectEntities: Map<string, Entity>(),
@@ -34,7 +33,8 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
 
             return <EntityState>{
                 ...state,
-                entities: state.entities.set(objectId, entity)
+                entities: state.entities.set(objectId, entity),
+                seqentialchoiceEntities: List(),
             }
         }
 
@@ -53,7 +53,8 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
 
             return <EntityState>{
                 ...state,
-                entities: state.entities.set(objectId, entity)
+                entities: state.entities.set(objectId, entity),
+								seqentialchoiceEntities:List()
             }
         }
 
@@ -66,6 +67,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             const entity = state.entities.get(objectId)
 
             const m = Map<string, Entity>()
+
             return <EntityState>{
                 ...state,
                 currentSelectEntities: m.set(objectId, entity),
