@@ -6,17 +6,19 @@
 ER Diagram drawing tool for everyone
 
 # Contribution
-# Requirements
+# Dependencies
+## Server
 - grpc
 - protobuf
 - gogoproto
 
-```
-go get -u google.golang.org/grpc
-go get -u github.com/golang/protobuf/proto
-go get -u github.com/golang/protobuf/protoc-gen-go
-go get -u github.com/gogo/protobuf/proto/...
-```
+run
+`make install-dev-deps`
+to install dependencies
+
+## Frontend
+`cd _jsapp`
+`yarn install`
 
 ## TODOS
 - [ ] IRI compatible quads.

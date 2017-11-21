@@ -1,71 +1,123 @@
+
 import * as actions from './actions'
 import { Reducer } from 'redux'
 import { Map, List, Set } from 'immutable'
 
-import { Entity, Rel, Move, CoordWH, Transform } from 'grpc/erd_pb'
+import { Entity, Rel, Move, Coord, CoordWH, Transform } from 'grpc/erd_pb'
 
 export interface RelationState {
     relationOfEntities: RelationOfEntities
 }
 
+//for readabily
+type EntityId = string
+type RelationId = string
 
 // imutable relations store
+//TODO(taco) ugly
 export class RelationOfEntities {
-    private rels: Map<string, Rel>
+    static generateNew(): RelationOfEntities {
+        return new RelationOfEntities(Map(), Map(), Map())
+    }
 
-    private relObjIdByBeginEntityObjId: Map<string, Set<string>>
-    private relObjIdByEndEntityObjId: Map<string, Set<string>>
+    private rels: Map<RelationId, Rel>
 
-    constructor(rels?: Map<string, Rel>) {
+    private relObjIdByBeginEntityObjId: Map<EntityId, Set<RelationId>>
+    private relObjIdByEndEntityObjId: Map<EntityId, Set<RelationId>>
 
-        this.rels = Map()
-        this.relObjIdByBeginEntityObjId = Map()
-        this.relObjIdByEndEntityObjId = Map()
-        if (!rels) {
-            return
+    getRelationsConnectedTo(entityObjectId: EntityId): Set<Rel> {
+        const objIds = this.getRelationObjectIdsBeginWith(entityObjectId).merge(this.getRelationObjectIdsEndWith(entityObjectId))
+
+				if (objIds.isEmpty()){
+					return Set()
+				}
+
+        return Set(objIds.valueSeq().map((objId:string) => {return this.rels.get(objId)}))
+    }
+
+    getRelationObjectIdsBeginWith(entityObjectId: EntityId): Set<RelationId> {
+        if (!this.relObjIdByBeginEntityObjId.has(entityObjectId)) {
+            return Set()
         }
+        return this.relObjIdByBeginEntityObjId.get(entityObjectId)
+    }
 
-        this.rels = rels
+    getRelationObjectIdsEndWith(entityObjectId: EntityId): Set<RelationId> {
+        if (!this.relObjIdByEndEntityObjId.has(entityObjectId)) {
+            return Set()
+        }
+        return this.relObjIdByEndEntityObjId.get(entityObjectId)
+    }
 
-        //TODO(taco) performance bottle neck?
-        rels.valueSeq().forEach((rel) => {
-            this.updateRelAddition(rel)
+    getByObjectIds(objectIds: RelationId[]): Rel[] {
+        return objectIds.map((objectId) => {
+            return this.rels.get(objectId)
         })
     }
 
-    map(): Map<string, Rel> {
+    private constructor(rels: Map<RelationId, Rel>,
+        relObjIdByBeginEntityObjId: Map<EntityId, Set<RelationId>>,
+        relObjIdByEndEntityObjId: Map<EntityId, Set<RelationId>>) {
+
+        this.relObjIdByBeginEntityObjId = relObjIdByBeginEntityObjId
+        this.relObjIdByEndEntityObjId = relObjIdByEndEntityObjId
+        this.rels = rels
+    }
+
+    map(): Map<RelationId, Rel> {
         return this.rels
     }
 
-    add(rel: Rel): RelationOfEntities {
-        const newMap = this.rels.set(rel.getObjectId(), rel)
-        return new RelationOfEntities(newMap)
+    add(newRel: Rel): RelationOfEntities {
+        const newMap = this.rels.set(newRel.getObjectId(), newRel)
+
+        const { begin, end } = RelationOfEntities.updateConnectedEntities(newRel, this.relObjIdByBeginEntityObjId, this.relObjIdByEndEntityObjId)
+        return new RelationOfEntities(newMap, begin, end)
     }
 
-    private updateRelAddition(rel: Rel) {
+    updates(targetRels: Rel[]): RelationOfEntities {
+        let newMap = this.rels
+        let begin = this.relObjIdByBeginEntityObjId
+        let end = this.relObjIdByEndEntityObjId
+
+        targetRels.forEach((eachRel) => {
+            newMap = newMap.set(eachRel.getObjectId(), eachRel)
+            const result = RelationOfEntities.updateConnectedEntities(eachRel, begin, end)
+
+            begin = result.begin
+            end = result.end
+        })
+
+        return new RelationOfEntities(newMap, begin, end)
+    }
+
+    private static updateConnectedEntities(rel: Rel,
+        relObjIdByBeginEntityObjId: Map<EntityId, Set<RelationId>>,
+        relObjIdByEndEntityObjId: Map<EntityId, Set<RelationId>>): { begin: Map<EntityId, Set<RelationId>>, end: Map<EntityId, Set<RelationId>> } {
+
         const relObjectId = rel.getObjectId()
         const begin = rel.getPointBegin()
         const end = rel.getPointEnd()
 
-
-        this.relObjIdByBeginEntityObjId = this.addToMapOfSet(begin.getEntityObjectId(), relObjectId, this.relObjIdByBeginEntityObjId)
-        this.relObjIdByEndEntityObjId = this.addToMapOfSet(end.getEntityObjectId(), relObjectId, this.relObjIdByEndEntityObjId)
+        return {
+            begin: RelationOfEntities.addToMapOfSet(begin.getEntityObjectId(), relObjectId, relObjIdByBeginEntityObjId),
+            end: RelationOfEntities.addToMapOfSet(end.getEntityObjectId(), relObjectId, relObjIdByEndEntityObjId)
+        }
     }
 
     //TODO(taco) performance bottle neck?
-    private addToMapOfSet(key: string, val: string, src: Map<string, Set<string>>): Map<string, Set<string>> {
+    private static addToMapOfSet(key: string, val: string, src: Map<string, Set<string>>): Map<string, Set<string>> {
         if (!src.has(key)) {
-            return src.set(key, Set(val))
+            return src.set(key, Set([val]))
         } else {
-            const srcList = src.get(key)
-            const newList = srcList.add(val)
-            return src.set(key, newList)
+            const srcSet = src.get(key)
+            return src.set(key, srcSet.add(val))
         }
     }
 }
 
 export const initialState: RelationState = {
-    relationOfEntities: new RelationOfEntities()
+    relationOfEntities: RelationOfEntities.generateNew()
 }
 
 export const relationReducer: Reducer<RelationState> = (state: RelationState = initialState, action: actions.RelationAction) => {
@@ -77,6 +129,21 @@ export const relationReducer: Reducer<RelationState> = (state: RelationState = i
             return <RelationState>{
                 ...state,
                 relationOfEntities: state.relationOfEntities.add(rel)
+            }
+        }
+
+        case actions.RelationActionTypes.RERENDER_BY_ENTITY_MOVE: {
+					//TODO(taco) this functino used to update state and rerender relation line at once entity move
+					// 1. is updating  relationOfEntities  collect? Is there any better way?
+					// 2. this calls to amount of rerendering canvas
+
+            const { entityObjectId, coord } = <{ entityObjectId: string, coord: Coord }>action.payload
+
+						const targetRels = state.relationOfEntities.getRelationsConnectedTo(entityObjectId)
+            // relationOfEntities.
+            return <RelationState>{
+                ...state,
+                relationOfEntities: state.relationOfEntities.updates(targetRels.toArray())
             }
         }
 

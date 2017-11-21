@@ -2,7 +2,7 @@ import * as redux from 'redux'
 import { FSAction, EmptyAction } from 'modules/base/fsa'
 import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects'
 
-import { Entity, Rel, Move, CoordWH, Transform } from 'grpc/erd_pb'
+import { Entity, Rel, Move, Coord,CoordWH, Transform } from 'grpc/erd_pb'
 
 //=== action types ============
 export type EntityActionTypes = string
@@ -10,9 +10,12 @@ export module EntityActionTypes {
     export const CREATE_NEW_ENTITY: EntityActionTypes = 'CREATE_NEW_ENTIY'
     export const DELETE_ENTITY: EntityActionTypes = 'DELETE_ENTIY'
     export const MOVE_ENTITY: EntityActionTypes = 'MOVE_ENTITY'
+    export const MOVING_ENTITY: EntityActionTypes = 'MOVING_ENTITY'
+
     export const SELECT_ENTITY: EntityActionTypes = 'SELECT_ENTITY'
     export const CHOICE_ENTITIES: EntityActionTypes = 'CHOICE_ENTITIES'
     export const SEQ_CHOICE_ENTITIES: EntityActionTypes = 'SEQ_CHOICE_ENTITIES'
+    export const CANCEL_SELECTION: EntityActionTypes = 'CANCEL_SELECTION'
 
     export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
     export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
@@ -30,6 +33,11 @@ export interface DeleteEntity extends FSAction<Entity> {
     payload: Entity
 }
 
+export interface MovingEntity extends FSAction<{objectId:string,coord:Coord}> {
+    type: EntityActionTypes,
+    payload: {objectId:string,coord:Coord}
+}
+
 export interface MoveEntity extends FSAction<Move> {
     type: EntityActionTypes,
     payload: Move
@@ -40,9 +48,14 @@ export interface SelectEntity extends FSAction<string> {
     payload: string
 }
 
+
 export interface ChoiceEntities extends FSAction<string> {
     type: EntityActionTypes,
     payload: string
+}
+
+export interface CancelSelectionEntity extends EmptyAction {
+    type: EntityActionTypes,
 }
 
 // choice sequential
@@ -82,6 +95,7 @@ export type EntityAction =
 		SeqChoiceEntities|
     ReleaseEntity |
     MoveEntity |
+    MovingEntity |
     TransformingEntity |
     TransformFinishedEntity
 
@@ -102,10 +116,18 @@ export const actionCreators = {
         }
     },
 
+	//TODO(tacogips) rename to "move finished entity"
     moveEntity: (move: Move) => {
         return <MoveEntity>{
             type: EntityActionTypes.MOVE_ENTITY,
             payload: move
+        }
+    },
+
+	movingEntity: (objectId:string,coord:Coord) => {
+        return <MovingEntity>{
+            type: EntityActionTypes.MOVING_ENTITY,
+            payload: {objectId:objectId,coord:coord}
         }
     },
 
@@ -127,6 +149,12 @@ export const actionCreators = {
         return <SeqChoiceEntities>{
             type: EntityActionTypes.SEQ_CHOICE_ENTITIES,
             payload: objectId
+        }
+    },
+
+    cancelSelection: () => {
+        return <CancelSelectionEntity>{
+            type: EntityActionTypes.CANCEL_SELECTION,
         }
     },
 

@@ -2,14 +2,13 @@ import * as actions from './actions'
 import { Reducer } from 'redux'
 import { Map, List, Set } from 'immutable'
 
-import { Entity, Rel, Move, CoordWH, Transform } from 'grpc/erd_pb'
+import { Entity, Rel, Move, Coord,CoordWH, Transform } from 'grpc/erd_pb'
 
 export interface EntityState {
     entities: Map<string, Entity>
     currentSelectEntities: Map<string, Entity>
     seqentialChoiceEntities: List<string> //choice sequential.e.g. when connecting with relation
 }
-
 
 export const initialState: EntityState = {
     entities: Map<string, Entity>(),
@@ -34,7 +33,8 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
 
             return <EntityState>{
                 ...state,
-                entities: state.entities.set(objectId, entity)
+                entities: state.entities.set(objectId, entity),
+                seqentialchoiceEntities: List(),
             }
         }
 
@@ -53,7 +53,27 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
 
             return <EntityState>{
                 ...state,
-                entities: state.entities.set(objectId, entity)
+                entities: state.entities.set(objectId, entity),
+								seqentialchoiceEntities:List()
+            }
+        }
+
+        case actions.EntityActionTypes.MOVING_ENTITY: {
+
+            const {objectId, coord} = <{objectId:string,coord:Coord}>action.payload
+
+            if (!state.entities.has(objectId)) {
+                console.error(`cant move invalid object [${objectId}]`)
+                return
+            }
+
+            const entity = state.entities.get(objectId)
+            entity.setCoord(coord)
+
+            return <EntityState>{
+                ...state,
+                entities: state.entities.set(objectId, entity),
+								seqentialchoiceEntities:List()
             }
         }
 
@@ -66,6 +86,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             const entity = state.entities.get(objectId)
 
             const m = Map<string, Entity>()
+
             return <EntityState>{
                 ...state,
                 currentSelectEntities: m.set(objectId, entity),
@@ -85,6 +106,15 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 ...state,
                 currentSelectEntities: Map<string, Entity>(),
                 seqentialChoiceEntities: state.seqentialChoiceEntities.push(objectId)
+            }
+        }
+
+
+        case actions.EntityActionTypes.CANCEL_SELECTION: {
+            return <EntityState>{
+                ...state,
+                currentSelectEntities: Map<string, Entity>(),
+                seqentialChoiceEntities: List()
             }
         }
 
@@ -125,8 +155,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 entities: state.entities.set(objectId, entity)
             }
         }
-
-
 
         default:
             return state
