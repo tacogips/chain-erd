@@ -41,10 +41,11 @@ export class RelLine extends React.Component<RelLineProps, RelLineState>{
         const points = coordToArray(beginCoord).concat(coordToArray(endCoord))
 
         return (
-            <Group ref={(ref) => this.refGroup = ref} >
+            <Group
+                ref={(ref) => this.refGroup = ref} >
                 <Line points={points}
                     stroke="black"
-                    strokeWidth={5}
+                    strokeWidth={3}
                 />
             </Group >
         );

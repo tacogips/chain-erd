@@ -133,10 +133,13 @@ export const relationReducer: Reducer<RelationState> = (state: RelationState = i
         }
 
         case actions.RelationActionTypes.RERENDER_BY_ENTITY_MOVE: {
+					//TODO(taco) this functino used to update state and rerender relation line at once entity move
+					// 1. is updating  relationOfEntities  collect? Is there any better way?
+					// 2. this calls to amount of rerendering canvas
+
             const { entityObjectId, coord } = <{ entityObjectId: string, coord: Coord }>action.payload
 
 						const targetRels = state.relationOfEntities.getRelationsConnectedTo(entityObjectId)
-
             // relationOfEntities.
             return <RelationState>{
                 ...state,

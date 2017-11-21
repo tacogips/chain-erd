@@ -7,7 +7,7 @@ import { RootState } from 'modules/rootReducer'
 import { actionCreators } from 'modules/entity/actions'
 import { connect, Dispatch } from 'react-redux'
 
-import { Move, Transform, CoordWH } from 'grpc/erd_pb'
+import { Move, Transform, Coord,CoordWH } from 'grpc/erd_pb'
 
 import { positionFromEvent, EventPosition, PositionFunction ,layerPositionToCoord} from 'components/util/event_position'
 
@@ -28,8 +28,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: EntityPanel
         //return dispatch(actionCreators.selectEntity(objectId))
     },
 
-    onMoving: (objectId: string, pos: EventPosition) => {
-        return dispatch(actionCreators.movingEntity(objectId, layerPositionToCoord(pos)))
+    onMoving: (objectId: string, coord: Coord) => {
+        return dispatch(actionCreators.movingEntity(objectId, coord))
     },
 
     onMoveEnd: (move: Move) => {

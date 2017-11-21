@@ -21,7 +21,7 @@ export interface EntityPanelProps {
     entity: Entity
     onSelect?: (objectId: string) => void
     onRelease?: (objectId: string) => void
-    onMoving?: (objectId: string,evtPos:EventPosition) => void
+    onMoving?: (objectId: string, coord: Coord) => void
     onMoveEnd?: (move: Move) => void
     onTransforming?: (objectId: string, coordWH: CoordWH) => void
     onTransformFinished?: (transform: Transform) => void
@@ -31,7 +31,6 @@ export interface EntityPanelState {
     anchorDragging: boolean
     dragStartAt?: Coord
     transformStartAt?: CoordWH
-    showAnchors: boolean
 
     width: number, //TODO(tacogips) ugly.for realtime update
     height: number
@@ -48,7 +47,6 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         const height = this.props.entity.getWidthHeight().getH()
         this.state = {
             anchorDragging: false,
-            showAnchors: false,
             dragStartAt: null,
             transformStartAt: null,
             width: width,
@@ -58,12 +56,10 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
 
     onMouseOver = () => {
         document.body.style.cursor = 'pointer';
-        this.setState({ showAnchors: true })
     }
 
     onMouseOut = () => {
         document.body.style.cursor = 'default';
-        //this.setState({ showAnchors: false })
     }
 
     onClick = (evt: any) => {
@@ -80,14 +76,14 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         this.setState({ dragStartAt: coord })
     }
 
-		onDragMove =(evt:any)=>{
+    onDragMove = (evt: any) => {
         if (this.state.anchorDragging) {
             return
         }
 
-				const pos = positionFromEvent(evt.evt)
-				this.props.onMoving(this.props.entity.getObjectId(),pos)
-		}
+        this.props.onMoving(this.props.entity.getObjectId(),
+            newCoord(evt.target.attrs.x, evt.target.attrs.y))
+    }
 
     onDragEnd = (evt: any) => {
         if (this.state.anchorDragging) {
@@ -239,11 +235,9 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         const columnBoxH = h - 20
 
         let anchors: React.ReactElement<Anchor>[] = []
-        if (this.state.showAnchors) {
-            anchors = this.genAnchors(entity, x, y, w, h)
-        }
+        anchors = this.genAnchors(entity, x, y, w, h)
 
-				// offset for adjusting appearance
+        // offset for adjusting appearance
         const titleOffset: { x: number, y: number } = { x: 5, y: 3 }
         const columnAreaOffset: { x: number, y: number } = { x: 5, y: 3 }
 
@@ -268,7 +262,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
                 />
                 <Text text={entity.getName()}
                     x={titleOffset.x} y={titleOffset.y}
-                    width={entity.getWidthHeight().getW()-titleOffset.x}
+                    width={entity.getWidthHeight().getW() - titleOffset.x}
                     height={titleBoxH} />
 
                 <Rect
@@ -280,10 +274,10 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
                     shadowBlur={1} />
 
                 <ColumnsInEntityPanel
-										entity={entity}
+                    entity={entity}
                     x={columnAreaOffset.x}
-                    y={columnBoxY+columnAreaOffset.y}
-                    w={entity.getWidthHeight().getW()-columnAreaOffset.x}
+                    y={columnBoxY + columnAreaOffset.y}
+                    w={entity.getWidthHeight().getW() - columnAreaOffset.x}
                     h={columnBoxH} />
 
                 {anchors}
