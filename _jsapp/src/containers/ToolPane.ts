@@ -22,8 +22,13 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: ToolPanePro
 
     onCancelAction: () => {
         return dispatch(actionCreators.cancelAction())
+    },
+
+    onOneToManyRel: () => {
+        return dispatch(actionCreators.connectingOneToMenyRel())
     }
 })
 
 export const ToolPane = connect(mapStateToProps, mapDispatchToProps)(ToolPaneComponent)
+
 

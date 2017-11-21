@@ -4,7 +4,6 @@ import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects'
 
 import { Entity, Rel, Move, CoordWH, Transform } from 'grpc/erd_pb'
 
-
 //=== action types ============
 export type EntityActionTypes = string
 export module EntityActionTypes {
@@ -12,9 +11,12 @@ export module EntityActionTypes {
     export const DELETE_ENTITY: EntityActionTypes = 'DELETE_ENTIY'
     export const MOVE_ENTITY: EntityActionTypes = 'MOVE_ENTITY'
     export const SELECT_ENTITY: EntityActionTypes = 'SELECT_ENTITY'
+    export const CHOICE_ENTITIES: EntityActionTypes = 'CHOICE_ENTITIES'
+    export const SEQ_CHOICE_ENTITIES: EntityActionTypes = 'SEQ_CHOICE_ENTITIES'
 
     export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
     export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
+
 }
 
 // === actions ===============
@@ -38,6 +40,17 @@ export interface SelectEntity extends FSAction<string> {
     payload: string
 }
 
+export interface ChoiceEntities extends FSAction<string> {
+    type: EntityActionTypes,
+    payload: string
+}
+
+// choice sequential
+export interface SeqChoiceEntities extends FSAction<string> {
+    type: EntityActionTypes,
+    payload: string
+}
+
 // on action end
 export interface ReleaseEntity extends FSAction<string> {
     type: EntityActionTypes,
@@ -45,6 +58,8 @@ export interface ReleaseEntity extends FSAction<string> {
 }
 
 // Transforming
+
+//TODO(tacogips) :delete
 export interface TransformingEntity extends FSAction<{ objectId: string, coordWH: CoordWH }> {
     type: EntityActionTypes,
     payload: {
@@ -63,6 +78,8 @@ export type EntityAction =
     CreateNewEntity |
     DeleteEntity |
     SelectEntity |
+		ChoiceEntities|
+		SeqChoiceEntities|
     ReleaseEntity |
     MoveEntity |
     TransformingEntity |
@@ -99,6 +116,21 @@ export const actionCreators = {
         }
     },
 
+    choiceEntities: (objectId: string) => {
+        return <ChoiceEntities>{
+            type: EntityActionTypes.CHOICE_ENTITIES,
+            payload: objectId
+        }
+    },
+
+    seqChoiceEntities: (objectId: string) => {
+        return <SeqChoiceEntities>{
+            type: EntityActionTypes.SEQ_CHOICE_ENTITIES,
+            payload: objectId
+        }
+    },
+
+	//TODO(tacogips) :delete
     transformingEntity: (objectId: string, coordWH: CoordWH) => {
         return <TransformingEntity>{
             type: EntityActionTypes.TRANSFORMING_ENTITY,
@@ -106,12 +138,11 @@ export const actionCreators = {
         }
     },
 
-    transformFinishedEntity: (objectId: string, transform: Transform) => {
+    transformFinishedEntity: (transform: Transform) => {
         return <TransformFinishedEntity>{
             type: EntityActionTypes.TRANSFORM_FINISHED_ENTITY,
             payload: transform
         }
     }
-
 }
 

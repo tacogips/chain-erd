@@ -57,9 +57,10 @@ enum ColumnType {
 }
 
 message Column {
-  int32 name                   = 1;
-  ColumnType type              = 2;
-  EntityColumnAttributes attrs = 3;
+  string object_id             = 1;
+  string name                  = 2;
+  ColumnType type              = 3;
+  EntityColumnAttributes attrs = 4;
 }
 
 message EntityColumnAttributes {
@@ -68,6 +69,9 @@ message EntityColumnAttributes {
   StringColumnAttribute attr_string = 3 [ (gogoproto.nullable) = true ];
   bool is_fk                        = 4;
   bool is_pk                        = 5;
+  bool is_unique                    = 6;
+  bool is_not_null                  = 7;
+  bool is_auto_increment            = 8;
 }
 
 message EnumColumnAttribute {
@@ -87,21 +91,23 @@ message NumberColumnAttribute {
   double default_value = 4;
 }
 
-// relation between enitties
+// relation between enitities
 message Rel {
   string object_id            = 1 [ (gogoproto.customname) = "ObjectID" ];
-  RelPoint point1             = 2;
-  RelPoint point2             = 3;
+  RelPoint point_begin        = 2;
+  RelPoint point_end          = 3;
   RelationAttribute attribute = 4;
 }
 
 message RelPoint {
-  int32 entity_object_id = 1;
-  string column_name     = 2;
-  enum Assoc {
-    One  = 0;
-    Many = 1;
-  }
+  string entity_object_id  = 1;
+  string column_object_id  = 2 [ (gogoproto.nullable) = true ];
+  RelAssociation association = 3;
+}
+
+enum RelAssociation {
+  One  = 0;
+  Many = 1;
 }
 
 message RelationAttribute {
