@@ -74,6 +74,7 @@ export class Canvas extends React.Component<CanvasProps, {}>{
             })
 
         const rels = this.props.relationOfEntities.map().valueSeq().map((rel) => {
+
             const beginEntity = this.props.entities.get(rel.getPointBegin().getEntityObjectId())
             const endEntity = this.props.entities.get(rel.getPointEnd().getEntityObjectId())
 

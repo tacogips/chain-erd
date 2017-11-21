@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: EntityPanel
     },
 
     onMoving: (pos: EventPosition) => {
-			console.debug(pos)
+			//console.debug(pos)
 		},
 
     onMoveEnd: (move: Move) => {
