@@ -34,6 +34,9 @@ function* onSelectEntity(action: EntityAction) {
 
         const latestState = <RootState>(yield select())
 
+			console.debug("choice")
+			console.debug(latestState.entity.seqentialChoiceEntities.size)
+
         if (latestState.entity.seqentialChoiceEntities.size >= 2) {
             //TODO (taco) add rel
             const beginEntityObjId = latestState.entity.seqentialChoiceEntities.get(0)
@@ -49,6 +52,7 @@ function* onSelectEntity(action: EntityAction) {
                 RelAssociation.Many)
 
             yield put(relationActionCreators.addRelation(newRel))
+            yield put(actionCreators.cancelSelection())
             yield put(controlActionCreators.finishConnectingRel())
         }
 

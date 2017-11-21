@@ -109,6 +109,15 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
         }
 
+
+        case actions.EntityActionTypes.CANCEL_SELECTION: {
+            return <EntityState>{
+                ...state,
+                currentSelectEntities: Map<string, Entity>(),
+                seqentialChoiceEntities: List()
+            }
+        }
+
         case actions.EntityActionTypes.TRANSFORMING_ENTITY: {
             const { objectId, coordWH } = <{ objectId: string, coordWH: CoordWH }>action.payload
 

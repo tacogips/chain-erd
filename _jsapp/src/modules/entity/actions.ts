@@ -11,9 +11,11 @@ export module EntityActionTypes {
     export const DELETE_ENTITY: EntityActionTypes = 'DELETE_ENTIY'
     export const MOVE_ENTITY: EntityActionTypes = 'MOVE_ENTITY'
     export const MOVING_ENTITY: EntityActionTypes = 'MOVING_ENTITY'
+
     export const SELECT_ENTITY: EntityActionTypes = 'SELECT_ENTITY'
     export const CHOICE_ENTITIES: EntityActionTypes = 'CHOICE_ENTITIES'
     export const SEQ_CHOICE_ENTITIES: EntityActionTypes = 'SEQ_CHOICE_ENTITIES'
+    export const CANCEL_SELECTION: EntityActionTypes = 'CANCEL_SELECTION'
 
     export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
     export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
@@ -46,9 +48,14 @@ export interface SelectEntity extends FSAction<string> {
     payload: string
 }
 
+
 export interface ChoiceEntities extends FSAction<string> {
     type: EntityActionTypes,
     payload: string
+}
+
+export interface CancelSelectionEntity extends EmptyAction {
+    type: EntityActionTypes,
 }
 
 // choice sequential
@@ -142,6 +149,12 @@ export const actionCreators = {
         return <SeqChoiceEntities>{
             type: EntityActionTypes.SEQ_CHOICE_ENTITIES,
             payload: objectId
+        }
+    },
+
+    cancelSelection: () => {
+        return <CancelSelectionEntity>{
+            type: EntityActionTypes.CANCEL_SELECTION,
         }
     },
 

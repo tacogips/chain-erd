@@ -9,7 +9,6 @@ import { Entity, Coord, WidthHeight, Rel } from 'grpc/erd_pb'
 import {newEntity} from 'grpc/util/entity'
 import {newColumn} from 'grpc/util/column'
 
-
 const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
 
     let clickAction: CanvasClickAction
