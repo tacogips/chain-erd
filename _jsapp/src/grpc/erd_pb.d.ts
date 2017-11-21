@@ -335,6 +335,9 @@ export class RelPoint extends jspb.Message {
   getColumnObjectId(): string;
   setColumnObjectId(value: string): void;
 
+  getAssociation(): RelAssociation;
+  setAssociation(value: RelAssociation): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RelPoint.AsObject;
   static toObject(includeInstance: boolean, msg: RelPoint): RelPoint.AsObject;
@@ -349,11 +352,7 @@ export namespace RelPoint {
   export type AsObject = {
     entityObjectId: string,
     columnObjectId: string,
-  }
-
-  export enum Associate {
-    One = 0,
-    Many = 1,
+    association: RelAssociation,
   }
 }
 
@@ -513,5 +512,10 @@ export enum ColumnType {
   DATE = 9,
   DATETIME = 10,
   TIMESTAMP = 11,
+}
+
+export enum RelAssociation {
+  One = 0,
+  Many = 1,
 }
 

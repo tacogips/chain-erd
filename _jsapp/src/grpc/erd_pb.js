@@ -27,8 +27,8 @@ goog.exportSymbol('proto.erd.Move', null, global);
 goog.exportSymbol('proto.erd.NumberColumnAttribute', null, global);
 goog.exportSymbol('proto.erd.Order', null, global);
 goog.exportSymbol('proto.erd.Rel', null, global);
+goog.exportSymbol('proto.erd.RelAssociation', null, global);
 goog.exportSymbol('proto.erd.RelPoint', null, global);
-goog.exportSymbol('proto.erd.RelPoint.Associate', null, global);
 goog.exportSymbol('proto.erd.RelationAttribute', null, global);
 goog.exportSymbol('proto.erd.StringColumnAttribute', null, global);
 goog.exportSymbol('proto.erd.Transform', null, global);
@@ -2389,7 +2389,8 @@ proto.erd.RelPoint.prototype.toObject = function(opt_includeInstance) {
 proto.erd.RelPoint.toObject = function(includeInstance, msg) {
   var f, obj = {
     entityObjectId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    columnObjectId: jspb.Message.getFieldWithDefault(msg, 2, "")
+    columnObjectId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    association: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -2434,6 +2435,10 @@ proto.erd.RelPoint.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setColumnObjectId(value);
       break;
+    case 3:
+      var value = /** @type {!proto.erd.RelAssociation} */ (reader.readEnum());
+      msg.setAssociation(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -2477,16 +2482,15 @@ proto.erd.RelPoint.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getAssociation();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      3,
+      f
+    );
+  }
 };
 
-
-/**
- * @enum {number}
- */
-proto.erd.RelPoint.Associate = {
-  ONE: 0,
-  MANY: 1
-};
 
 /**
  * optional string entity_object_id = 1;
@@ -2515,6 +2519,21 @@ proto.erd.RelPoint.prototype.getColumnObjectId = function() {
 /** @param {string} value */
 proto.erd.RelPoint.prototype.setColumnObjectId = function(value) {
   jspb.Message.setField(this, 2, value);
+};
+
+
+/**
+ * optional RelAssociation association = 3;
+ * @return {!proto.erd.RelAssociation}
+ */
+proto.erd.RelPoint.prototype.getAssociation = function() {
+  return /** @type {!proto.erd.RelAssociation} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {!proto.erd.RelAssociation} value */
+proto.erd.RelPoint.prototype.setAssociation = function(value) {
+  jspb.Message.setField(this, 3, value);
 };
 
 
@@ -3542,6 +3561,14 @@ proto.erd.ColumnType = {
   DATE: 9,
   DATETIME: 10,
   TIMESTAMP: 11
+};
+
+/**
+ * @enum {number}
+ */
+proto.erd.RelAssociation = {
+  ONE: 0,
+  MANY: 1
 };
 
 goog.object.extend(exports, proto.erd);

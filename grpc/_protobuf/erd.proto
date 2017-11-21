@@ -101,11 +101,13 @@ message Rel {
 
 message RelPoint {
   string entity_object_id  = 1;
-  string column_object_id = 2;
-  enum Associate {
-    One  = 0;
-    Many = 1;
-  }
+  string column_object_id  = 2 [ (gogoproto.nullable) = true ];
+  RelAssociation association = 3;
+}
+
+enum RelAssociation {
+  One  = 0;
+  Many = 1;
 }
 
 message RelationAttribute {

@@ -211,6 +211,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
 
             return <EntityState>{
                 ...state,
+								seqentialChoiceEntities: List<string>(),
                 relOfEntities: state.relationOfEntities.add(rel)
             }
         }

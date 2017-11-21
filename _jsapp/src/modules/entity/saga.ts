@@ -2,6 +2,11 @@ import { EntityActionTypes, actionCreators, EntityAction, SelectEntity } from '.
 import { actionCreators as controlActionCreators } from 'modules/control/actions'
 import { Reducer } from 'redux'
 import { call, put, takeEvery, takeLatest, take, select } from 'redux-saga/effects'
+import { newRelation} from 'grpc/util/relation'
+
+import { RelAssociation} from 'grpc/erd_pb'
+
+
 
 import { List } from 'immutable'
 import { RootState } from 'modules/rootReducer'
@@ -30,6 +35,19 @@ function* onSelectEntity(action: EntityAction) {
 
         if (currentState.entity.seqentialChoiceEntities.size >= 2) {
           //TODO (taco) add rel
+					const beginEntityObjId = currentState.entity.seqentialChoiceEntities.get(0)
+					const beginEntity = currentState.entity.entities.get(beginEntityObjId)
+
+					const endEntityObjId  = currentState.entity.seqentialChoiceEntities.get(1)
+					const endEntity = currentState.entity.entities.get(endEntityObjId)
+
+					const newRel = newRelation(
+					    beginEntity,
+					    endEntity,
+					    RelAssociation.One ,
+					    RelAssociation.Many )
+
+					yield put(actionCreators.addRelation(newRel))
 
 					yield put(controlActionCreators.finishConnectingRel())
         }
