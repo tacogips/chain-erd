@@ -36,7 +36,7 @@ export class RelLine extends React.Component<RelLineProps, RelLineState>{
     render() {
         const { rel, beginEntity, endEntity } = this.props
         const beginCoord = getCentorCoord(beginEntity)
-        const endCoord = getCentorCoord(endEntity)
+        const endCoord  = getCentorCoord(endEntity)
 
         const points = coordToArray(beginCoord).concat(coordToArray(endCoord))
 
@@ -45,7 +45,7 @@ export class RelLine extends React.Component<RelLineProps, RelLineState>{
                 ref={(ref) => this.refGroup = ref} >
                 <Line points={points}
                     stroke="black"
-                    strokeWidth={3}
+                    strokeWidth={2}
                 />
             </Group >
         );
