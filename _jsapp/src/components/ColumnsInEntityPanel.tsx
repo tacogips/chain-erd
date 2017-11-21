@@ -14,8 +14,6 @@ import { newMove } from 'grpc/util/move'
 import { Anchor } from './Anchor'
 import { positionFromEvent, EventPosition, PositionFunction } from './util/event_position'
 
-
-
 export interface ColumnsInEntityPanelProps {
     entity: Entity
     x: number,
@@ -46,31 +44,31 @@ class ColumnLine {
     }
 
 
-	private  commonText():string{
-			const attr = this.column.getAttrs()
-			const {isPk,isFk,isUnique,isNotNull} =attr.toObject()
+    private commonText(): string {
+        const attr = this.column.getAttrs()
+        const { isPk, isFk, isUnique, isNotNull } = attr.toObject()
 
-		  let result = ""
-		//TODO(taco) dowes typescript has StringBuilder?
+        let result = ""
+        //TODO(taco) dowes typescript has StringBuilder?
 
-			if (isPk){
-				result = result + "<PK>"
-			}
+        if (isPk) {
+            result = result + "<PK>"
+        }
 
-			if (isFk){
-				result = result +"<FK>"
-			}
+        if (isFk) {
+            result = result + "<FK>"
+        }
 
-			if (isUnique){
-				result = result +"<U>"
-			}
+        if (isUnique) {
+            result = result + "<U>"
+        }
 
-			if (isNotNull){
-				result = result +"<NN>"
-			}
+        if (isNotNull) {
+            result = result + "<NN>"
+        }
 
-			return result
-	}
+        return result
+    }
 
     private toStrColumnText = () => {
         const name = this.column.getName()
@@ -116,7 +114,8 @@ export class ColumnsInEntityPanel extends React.Component<ColumnsInEntityPanelPr
             const offsetY = 3
             const y = (columnHeight * idx) + offsetY
             const cl = new ColumnLine(column)
-            return <Text text={cl.toText()} y={y} width={w} height={columnHeight} />
+            return <Text key={column.getObjectId()}
+                text={cl.toText()} y={y} width={w} height={columnHeight} />
         })
 
         return (

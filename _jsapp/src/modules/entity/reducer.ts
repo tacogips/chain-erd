@@ -38,6 +38,7 @@ export class RelationOfEntities {
     map(): Map<string, Rel> {
         return this.rels
     }
+
     add(rel: Rel): RelationOfEntities {
         const newMap = this.rels.set(rel.getObjectId(), rel)
         return new RelationOfEntities(newMap)
@@ -48,13 +49,14 @@ export class RelationOfEntities {
         const begin = rel.getPointBegin()
         const end = rel.getPointEnd()
 
+
         this.relObjIdByBeginEntityObjId = this.addToMapOfSet(begin.getEntityObjectId(), relObjectId, this.relObjIdByBeginEntityObjId)
         this.relObjIdByEndEntityObjId = this.addToMapOfSet(end.getEntityObjectId(), relObjectId, this.relObjIdByEndEntityObjId)
     }
 
     //TODO(taco) performance bottle neck?
     private addToMapOfSet(key: string, val: string, src: Map<string, Set<string>>): Map<string, Set<string>> {
-        if (src.has(key)) {
+        if (!src.has(key)) {
             return src.set(key, Set(val))
         } else {
             const srcList = src.get(key)
@@ -62,8 +64,6 @@ export class RelationOfEntities {
             return src.set(key, newList)
         }
     }
-
-
 }
 
 
@@ -145,23 +145,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
         }
 
-
-
-        //case actions.EntityActionTypes.SELECT_ENTITY: {
-        //    const objectId = <string>action.payload
-        //    if (!objectId || objectId.length == 0 || !state.entities.has(objectId)) {
-        //        console.error(`invalid entity:no object id[${objectId}]`)
-        //        return
-        //    }
-        //    const entity = state.entities.get(objectId)
-
-        //	  const m = Map<string, Entity>()
-        //    return <EntityState>{
-        //        ...state,
-        //        currentSelectEntities:m.set(objectId,entity)
-        //    }
-        //}
-
         case actions.EntityActionTypes.TRANSFORMING_ENTITY: {
             const { objectId, coordWH } = <{ objectId: string, coordWH: CoordWH }>action.payload
 
@@ -200,11 +183,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
         }
 
-
-        //case actions.EntityActionTypes.DELETE_ENTITY:
-        //    return <EntityState>{
-        //        ...state,
-        //    }
 
         case actions.EntityActionTypes.ADD_RELATION: {
             const rel = <Rel>action.payload

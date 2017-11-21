@@ -268,7 +268,8 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
                     fill={entity.getColor()}
                     shadowBlur={1} />
 
-                <ColumnsInEntityPanel entity={entity}
+                <ColumnsInEntityPanel
+										entity={entity}
                     x={columnAreaOffset.x}
                     y={columnBoxY+columnAreaOffset.y}
                     w={entity.getWidthHeight().getW()-columnAreaOffset.x}

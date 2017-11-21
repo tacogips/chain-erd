@@ -24,6 +24,7 @@ function* onSelectEntity(action: EntityAction) {
 
     const objectId = selectAction.payload
 
+		// if add relation
     if (currentState.control.connectingOneToMenyRel) {
         if (currentState.entity.seqentialChoiceEntities.contains(objectId)) {
             return
@@ -31,15 +32,15 @@ function* onSelectEntity(action: EntityAction) {
 
         yield put(actionCreators.seqChoiceEntities(objectId))
 
-        const state = <RootState>(yield select())
+        const latestState = <RootState>(yield select())
 
-        if (currentState.entity.seqentialChoiceEntities.size >= 2) {
+        if (latestState.entity.seqentialChoiceEntities.size >= 2) {
           //TODO (taco) add rel
-					const beginEntityObjId = currentState.entity.seqentialChoiceEntities.get(0)
-					const beginEntity = currentState.entity.entities.get(beginEntityObjId)
+					const beginEntityObjId = latestState.entity.seqentialChoiceEntities.get(0)
+					const beginEntity = latestState.entity.entities.get(beginEntityObjId)
 
-					const endEntityObjId  = currentState.entity.seqentialChoiceEntities.get(1)
-					const endEntity = currentState.entity.entities.get(endEntityObjId)
+					const endEntityObjId  = latestState.entity.seqentialChoiceEntities.get(1)
+					const endEntity = latestState.entity.entities.get(endEntityObjId)
 
 					const newRel = newRelation(
 					    beginEntity,
@@ -48,7 +49,6 @@ function* onSelectEntity(action: EntityAction) {
 					    RelAssociation.Many )
 
 					yield put(actionCreators.addRelation(newRel))
-
 					yield put(controlActionCreators.finishConnectingRel())
         }
 
