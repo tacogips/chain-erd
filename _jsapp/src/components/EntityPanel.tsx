@@ -21,7 +21,7 @@ export interface EntityPanelProps {
     entity: Entity
     onSelect?: (objectId: string) => void
     onRelease?: (objectId: string) => void
-    onMoving?: (evtPos:EventPosition) => void
+    onMoving?: (objectId: string,evtPos:EventPosition) => void
     onMoveEnd?: (move: Move) => void
     onTransforming?: (objectId: string, coordWH: CoordWH) => void
     onTransformFinished?: (transform: Transform) => void
@@ -79,6 +79,15 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         const coord = newCoord(this.refGroup.attrs.x, this.refGroup.attrs.y)
         this.setState({ dragStartAt: coord })
     }
+
+		onDragMove =(evt:any)=>{
+        if (this.state.anchorDragging) {
+            return
+        }
+
+				const pos = positionFromEvent(evt.evt)
+				this.props.onMoving(this.props.entity.getObjectId(),pos)
+		}
 
     onDragEnd = (evt: any) => {
         if (this.state.anchorDragging) {
@@ -216,10 +225,6 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
         return anchors
     }
 
-		onDragMove =(evt:any)=>{
-				const pos = positionFromEvent(evt.evt)
-				this.props.onMoving(pos)
-		}
 
     render() {
         const { entity } = this.props

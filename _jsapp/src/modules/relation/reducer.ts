@@ -9,6 +9,10 @@ export interface RelationState {
     relationOfEntities: RelationOfEntities
 }
 
+//for readabily
+type EntityId = string
+type RelationId = string
+
 // imutable relations store
 //TODO(taco) ugly
 export class RelationOfEntities {
@@ -16,46 +20,51 @@ export class RelationOfEntities {
         return new RelationOfEntities(Map(), Map(), Map())
     }
 
-    private rels: Map<string, Rel>
+    private rels: Map<RelationId, Rel>
 
-    private relObjIdByBeginEntityObjId: Map<string, Set<string>>
-    private relObjIdByEndEntityObjId: Map<string, Set<string>>
+    private relObjIdByBeginEntityObjId: Map<EntityId, Set<RelationId>>
+    private relObjIdByEndEntityObjId: Map<EntityId, Set<RelationId>>
 
-    getRelationsConnectedTo(entityObjectId: string): Set<Rel> {
+    getRelationsConnectedTo(entityObjectId: EntityId): Set<Rel> {
         const objIds = this.getRelationObjectIdsBeginWith(entityObjectId).merge(this.getRelationObjectIdsEndWith(entityObjectId))
-        return Set(objIds.map((objId) => this.rels.get(objId)))
+
+				if (objIds.isEmpty()){
+					return Set()
+				}
+
+        return Set(objIds.valueSeq().map((objId:string) => {return this.rels.get(objId)}))
     }
 
-    getRelationObjectIdsBeginWith(entityObjectId: string): Set<string> {
+    getRelationObjectIdsBeginWith(entityObjectId: EntityId): Set<RelationId> {
         if (!this.relObjIdByBeginEntityObjId.has(entityObjectId)) {
             return Set()
         }
         return this.relObjIdByBeginEntityObjId.get(entityObjectId)
     }
 
-    getRelationObjectIdsEndWith(entityObjectId: string): Set<string> {
+    getRelationObjectIdsEndWith(entityObjectId: EntityId): Set<RelationId> {
         if (!this.relObjIdByEndEntityObjId.has(entityObjectId)) {
             return Set()
         }
         return this.relObjIdByEndEntityObjId.get(entityObjectId)
     }
 
-    getByObjectIds(objectIds: string[]): Rel[] {
+    getByObjectIds(objectIds: RelationId[]): Rel[] {
         return objectIds.map((objectId) => {
             return this.rels.get(objectId)
         })
     }
 
-    private constructor(rels: Map<string, Rel>,
-        relObjIdByBeginEntityObjId: Map<string, Set<string>>,
-        relObjIdByEndEntityObjId: Map<string, Set<string>>) {
+    private constructor(rels: Map<RelationId, Rel>,
+        relObjIdByBeginEntityObjId: Map<EntityId, Set<RelationId>>,
+        relObjIdByEndEntityObjId: Map<EntityId, Set<RelationId>>) {
 
         this.relObjIdByBeginEntityObjId = relObjIdByBeginEntityObjId
         this.relObjIdByEndEntityObjId = relObjIdByEndEntityObjId
         this.rels = rels
     }
 
-    map(): Map<string, Rel> {
+    map(): Map<RelationId, Rel> {
         return this.rels
     }
 
@@ -74,6 +83,7 @@ export class RelationOfEntities {
         targetRels.forEach((eachRel) => {
             newMap = newMap.set(eachRel.getObjectId(), eachRel)
             const result = RelationOfEntities.updateConnectedEntities(eachRel, begin, end)
+
             begin = result.begin
             end = result.end
         })
@@ -82,8 +92,8 @@ export class RelationOfEntities {
     }
 
     private static updateConnectedEntities(rel: Rel,
-        relObjIdByBeginEntityObjId: Map<string, Set<string>>,
-        relObjIdByEndEntityObjId: Map<string, Set<string>>): { begin: Map<string, Set<string>>, end: Map<string, Set<string>> } {
+        relObjIdByBeginEntityObjId: Map<EntityId, Set<RelationId>>,
+        relObjIdByEndEntityObjId: Map<EntityId, Set<RelationId>>): { begin: Map<EntityId, Set<RelationId>>, end: Map<EntityId, Set<RelationId>> } {
 
         const relObjectId = rel.getObjectId()
         const begin = rel.getPointBegin()
@@ -98,11 +108,10 @@ export class RelationOfEntities {
     //TODO(taco) performance bottle neck?
     private static addToMapOfSet(key: string, val: string, src: Map<string, Set<string>>): Map<string, Set<string>> {
         if (!src.has(key)) {
-            return src.set(key, Set(val))
+            return src.set(key, Set([val]))
         } else {
-            const srcList = src.get(key)
-            const newList = srcList.add(val)
-            return src.set(key, newList)
+            const srcSet = src.get(key)
+            return src.set(key, srcSet.add(val))
         }
     }
 }

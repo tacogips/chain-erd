@@ -24,7 +24,6 @@ export interface RelLineProps {
 }
 
 export interface RelLineState {
-
 }
 
 export class RelLine extends React.Component<RelLineProps, RelLineState>{
