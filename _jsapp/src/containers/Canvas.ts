@@ -23,7 +23,7 @@ const mapStateToProps = (state: RootState, ownProps: CanvasProps) => {
         ...ownProps,
         entities: state.entity.entities,
 				currentSelectEntities:state.entity.currentSelectEntities,
-    		relationOfEntities: state.entity.relationOfEntities,
+    		relationOfEntities: state.relation.relationOfEntities,
         clickAction: clickAction,
         mouseOverPointer: mouseOverPointer
     }

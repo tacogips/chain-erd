@@ -4,7 +4,6 @@ import { call, put, takeEvery, takeLatest, take } from 'redux-saga/effects'
 
 import { Entity, Rel, Move, CoordWH, Transform } from 'grpc/erd_pb'
 
-
 //=== action types ============
 export type EntityActionTypes = string
 export module EntityActionTypes {
@@ -18,8 +17,6 @@ export module EntityActionTypes {
     export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
     export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
 
-	//TODO(taco) tobe Relation actions
-    export const ADD_RELATION: EntityActionTypes = 'ADD_RELATION'
 }
 
 // === actions ===============
@@ -60,13 +57,6 @@ export interface ReleaseEntity extends FSAction<string> {
     payload: string
 }
 
-// add relation
-//TODO(taco) tobe Relation actions
-export interface AddRelation extends FSAction<Rel> {
-    type: EntityActionTypes,
-    payload: Rel
-}
-
 // Transforming
 
 //TODO(tacogips) :delete
@@ -93,8 +83,7 @@ export type EntityAction =
     ReleaseEntity |
     MoveEntity |
     TransformingEntity |
-    TransformFinishedEntity |
-		AddRelation
+    TransformFinishedEntity
 
 
 // === action creator =================
@@ -154,14 +143,6 @@ export const actionCreators = {
             type: EntityActionTypes.TRANSFORM_FINISHED_ENTITY,
             payload: transform
         }
-    },
-
-    addRelation: (rel: Rel) => {
-        return <AddRelation>{
-            type: EntityActionTypes.ADD_RELATION,
-            payload: rel
-        }
     }
-
 }
 

@@ -8,70 +8,13 @@ export interface EntityState {
     entities: Map<string, Entity>
     currentSelectEntities: Map<string, Entity>
     seqentialChoiceEntities: List<string> //choice sequential.e.g. when connecting with relation
-    relationOfEntities: RelationOfEntities
-}
-
-// imutable relations store
-export class RelationOfEntities {
-    private rels: Map<string, Rel>
-
-    private relObjIdByBeginEntityObjId: Map<string, Set<string>>
-    private relObjIdByEndEntityObjId: Map<string, Set<string>>
-
-    constructor(rels?: Map<string, Rel>) {
-
-        this.rels = Map()
-        this.relObjIdByBeginEntityObjId = Map()
-        this.relObjIdByEndEntityObjId = Map()
-        if (!rels) {
-            return
-        }
-
-        this.rels = rels
-
-        //TODO(taco) performance bottle neck?
-        rels.valueSeq().forEach((rel) => {
-            this.updateRelAddition(rel)
-        })
-    }
-
-    map(): Map<string, Rel> {
-        return this.rels
-    }
-
-    add(rel: Rel): RelationOfEntities {
-        const newMap = this.rels.set(rel.getObjectId(), rel)
-        return new RelationOfEntities(newMap)
-    }
-
-    private updateRelAddition(rel: Rel) {
-        const relObjectId = rel.getObjectId()
-        const begin = rel.getPointBegin()
-        const end = rel.getPointEnd()
-
-
-        this.relObjIdByBeginEntityObjId = this.addToMapOfSet(begin.getEntityObjectId(), relObjectId, this.relObjIdByBeginEntityObjId)
-        this.relObjIdByEndEntityObjId = this.addToMapOfSet(end.getEntityObjectId(), relObjectId, this.relObjIdByEndEntityObjId)
-    }
-
-    //TODO(taco) performance bottle neck?
-    private addToMapOfSet(key: string, val: string, src: Map<string, Set<string>>): Map<string, Set<string>> {
-        if (!src.has(key)) {
-            return src.set(key, Set(val))
-        } else {
-            const srcList = src.get(key)
-            const newList = srcList.add(val)
-            return src.set(key, newList)
-        }
-    }
 }
 
 
 export const initialState: EntityState = {
     entities: Map<string, Entity>(),
     currentSelectEntities: Map<string, Entity>(),
-    seqentialChoiceEntities: List<string>(),
-    relationOfEntities: new RelationOfEntities()
+    seqentialChoiceEntities: List<string>()
 }
 
 export const entityReducer: Reducer<EntityState> = (state: EntityState = initialState, action: actions.EntityAction) => {
@@ -82,7 +25,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
 
             if (!objectId || objectId.length == 0) {
                 console.error(`invalid entity:no object id[${objectId}]`)
-                return
+                return state
             }
 
             if (state.entities.has(objectId)) {
@@ -184,15 +127,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
         }
 
 
-        case actions.EntityActionTypes.ADD_RELATION: {
-            const rel = <Rel>action.payload
-
-            return <EntityState>{
-                ...state,
-								seqentialChoiceEntities: List<string>(),
-                relOfEntities: state.relationOfEntities.add(rel)
-            }
-        }
 
         default:
             return state

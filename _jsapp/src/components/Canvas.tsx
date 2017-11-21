@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Stage, Layer, Rect, Group } from 'react-konva'
-import { RelationOfEntities } from 'modules/entity'
+import { RelationOfEntities } from 'modules/relation'
 
 import { RelLine } from 'components/RelLine'
 import { EntityPanel } from 'containers/EntityPanel'

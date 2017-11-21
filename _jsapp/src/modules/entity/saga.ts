@@ -1,5 +1,6 @@
 import { EntityActionTypes, actionCreators, EntityAction, SelectEntity } from './actions'
 import { actionCreators as controlActionCreators } from 'modules/control/actions'
+import { actionCreators as relationActionCreators } from 'modules/relation/actions'
 import { Reducer } from 'redux'
 import { call, put, takeEvery, takeLatest, take, select } from 'redux-saga/effects'
 import { newRelation} from 'grpc/util/relation'
@@ -48,7 +49,7 @@ function* onSelectEntity(action: EntityAction) {
 					    RelAssociation.One ,
 					    RelAssociation.Many )
 
-					yield put(actionCreators.addRelation(newRel))
+					yield put(relationActionCreators.addRelation(newRel))
 					yield put(controlActionCreators.finishConnectingRel())
         }
 

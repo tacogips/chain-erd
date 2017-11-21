@@ -11,7 +11,6 @@ export function newEntity(coord: Coord): Entity {
     const newEntity = new Entity()
 
     newEntity.setObjectId(uuidv4())
-
     newEntity.setCoord(coord)
 
     const wh = new WidthHeight()
