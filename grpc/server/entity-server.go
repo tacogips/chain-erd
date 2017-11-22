@@ -13,11 +13,6 @@ type EntityServer struct {
 	AppCtx context.Context
 }
 
-// CreateEntity
-//func (server EntityServer) CreateEntity(_ context.Context, position *gen.CoordWidthHeight) (*gen.Activity, error) {
-//	store.CreateEntity(server.AppCtx, objPosition)
-//}
-
 func (server EntityServer) CreateEntity(_ go16ctx.Context, in *gen.Entity) (*gen.Activity, error) {
 	ev := event.NewCeateEntityEvent(in)
 	activity, err := event.Exec(server.AppCtx, ev)

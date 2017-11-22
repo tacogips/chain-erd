@@ -14,6 +14,8 @@ import (
 
 func registerServices(c context.Context, grpcServer *grpc.Server) error {
 	gen.RegisterEntityServiceServer(grpcServer, *server.NewEntityServer(c))
+	gen.RegisterStreamServiceServer(grpcServer, *server.NewStreamServer(c))
+
 	healthpb.RegisterHealthServer(grpcServer, health.NewServer())
 
 	return nil

@@ -7,12 +7,22 @@ import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "erd.proto";
+import "auth.proto";
 
 option go_package                      = "gen";
 option (gogoproto.marshaler_all)       = true;
 option (gogoproto.sizer_all)           = true;
 option (gogoproto.unmarshaler_all)     = true;
 option (gogoproto.goproto_getters_all) = false;
+
+message StreamConnectReq {
+  auth.Authed authed = 1;
+  enum Action {
+    REGISTER = 0;
+    LOGOUT   = 1;
+  }
+  Action action = 2;
+}
 
 message StreamPayload {
   enum Event {
@@ -28,4 +38,5 @@ message StreamPayload {
   }
 }
 
-service StreamService { rpc Receive(erd.Empty) returns (stream StreamPayload); }
+// TODO(taco) implment auth
+service StreamService { rpc Connect(StreamConnectReq) returns (stream StreamPayload); }

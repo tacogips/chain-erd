@@ -5,6 +5,7 @@ import * as erd_pb from "./erd_pb";
 import * as github_com_gogo_protobuf_gogoproto_gogo_pb from "./github.com/gogo/protobuf/gogoproto/gogo_pb";
 import * as google_protobuf_duration_pb from "google-protobuf/google/protobuf/duration_pb";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 export class EntityService {
   static serviceName = "erd.EntityService";
 }
@@ -14,7 +15,7 @@ export namespace EntityService {
     static readonly service = EntityService;
     static readonly requestStream = false;
     static readonly responseStream = false;
-    static readonly requestType = erd_pb.Entity;
+    static readonly requestType = google_protobuf_empty_pb.Empty;
     static readonly responseType = erd_pb.Activity;
   }
   export class MoveEntity {
