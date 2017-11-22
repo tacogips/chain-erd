@@ -9,17 +9,19 @@ import (
 type StreamListener struct {
 	c          context.Context
 	cancelFunc context.CancelFunc
-	sessionID  string
+	authed     gen.Authed
 	mailBox    chan []byte
+	sink       gen.StreamService_ConnectServer
 }
 
-func newStreamListener(c context.Context, sessionID string, mailBoxSize int, sink gen.StreamService_ConnectServer) *StreamListener {
+func newStreamListener(c context.Context, authed gen.Authed, mailBoxSize int, sink gen.StreamService_ConnectServer) *StreamListener {
 	c, cancel := context.WithCancel(c)
 	return &StreamListener{
 		c:          c,
 		cancelFunc: cancel,
-		sessionID:  sessionID,
+		authed:     authed,
 		mailBox:    make(chan []byte, mailBoxSize),
+		sink:       sink,
 	}
 }
 

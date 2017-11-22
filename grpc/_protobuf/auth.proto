@@ -14,7 +14,7 @@ option (gogoproto.unmarshaler_all)     = true;
 option (gogoproto.goproto_getters_all) = false;
 
 message Authed{
-	string session_id = 1;
+	string session_id = 1 [ (gogoproto.customname) = "SessionID" ] ;
 }
 
 //TODO(taco) implment auth

@@ -16,12 +16,14 @@ type StreamServer struct {
 func (svr *StreamServer) addListener(newListener StreamListener) {
 	svr.listenerLock.Lock()
 	defer svr.listenerLock.Unlock()
-	svr.listenersBySessionID[newListener.sessionID] = newListener
+
+	svr.listenersBySessionID[newListener.authed.SessionID] = newListener
 }
 
 func (svr *StreamServer) removeListener(sessionID string) {
 	svr.listenerLock.Lock()
 	defer svr.listenerLock.Unlock()
+
 	delete(svr.listenersBySessionID, sessionID)
 }
 
