@@ -12,6 +12,7 @@ type StreamServer struct {
 	AppCtx               context.Context
 	listenerLock         *sync.Mutex
 	listenersBySessionID map[string]*StreamListener
+	broadcastChannel     chan *gen.StreamPayload
 }
 
 func (svr *StreamServer) addListener(newListener *StreamListener) {
@@ -40,6 +41,27 @@ func (svr *StreamServer) hasListener(sessionID string) bool {
 	return ok
 }
 
+func (svr *StreamServer) BroadcastChannel() chan<- *gen.StreamPayload {
+	return svr.broadcastChannel
+}
+
+func (svr *StreamServer) ListenBroadcast() {
+	for {
+		select {
+		case payload := <-svr.broadcastChannel:
+			for sessionID, mailbox := range svr.listenersBySessionID {
+				//TODO(taco) prevent send to listner who generate this payload
+				print(sessionID)
+				mailbox.Send(payload)
+			}
+
+		case <-svr.AppCtx.Done():
+			return
+		}
+	}
+
+}
+
 func (server *StreamServer) Connect(req *gen.StreamConnectReq, stream gen.StreamService_ConnectServer) error {
 	switch req.Action {
 
@@ -52,7 +74,8 @@ func (server *StreamServer) Connect(req *gen.StreamConnectReq, stream gen.Stream
 			return err
 		}
 		server.addListener(newListener)
-		newListener.Listen()
+		newListener.Listen() // wait
+		newListener.Close()
 
 	case gen.StreamConnectReq_LOGOUT:
 		listener, ok := server.getListener(req.Authed.SessionID)
@@ -68,9 +91,12 @@ func (server *StreamServer) Connect(req *gen.StreamConnectReq, stream gen.Stream
 
 // NewStreamServer
 func NewStreamServer(ctx context.Context) *StreamServer {
-	return &StreamServer{
+	//TODO(taco) move channel size to config
+	server := &StreamServer{
 		AppCtx:               ctx,
 		listenerLock:         &sync.Mutex{},
 		listenersBySessionID: map[string]*StreamListener{},
+		broadcastChannel:     make(chan *gen.StreamPayload, 300),
 	}
+	return server
 }

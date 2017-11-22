@@ -11,7 +11,7 @@ type StreamListener struct {
 	c          context.Context
 	cancelFunc context.CancelFunc
 	authed     gen.Authed
-	mailBox    chan []byte
+	mailBox    chan *gen.StreamPayload
 	sink       gen.StreamService_ConnectServer
 }
 
@@ -25,7 +25,7 @@ func newStreamListener(c context.Context, authed *gen.Authed, mailBoxSize int, s
 		c:          c,
 		cancelFunc: cancel,
 		authed:     *authed,
-		mailBox:    make(chan []byte, mailBoxSize),
+		mailBox:    make(chan *gen.StreamPayload, mailBoxSize),
 		sink:       sink,
 	}, nil
 }
@@ -43,8 +43,8 @@ func (rcvr *StreamListener) Listen() {
 	}
 }
 
-func (rcvr *StreamListener) Send(data []byte) {
-	rcvr.mailBox <- data
+func (rcvr *StreamListener) Send(payload *gen.StreamPayload) {
+	rcvr.mailBox <- payload
 }
 
 func (rcvr *StreamListener) Close() {
