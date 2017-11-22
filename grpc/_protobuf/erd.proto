@@ -136,7 +136,7 @@ message Activity {
 }
 
 service EntityService {
-  rpc CreateEntity(google.protobuf.Empty) returns (Activity);
+  rpc CreateEntity(Entity) returns (Activity);
   rpc MoveEntity(Move) returns (Activity);
 }
 

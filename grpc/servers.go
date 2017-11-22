@@ -12,18 +12,19 @@ import (
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
-func registerServices(c context.Context, grpcServer *grpc.Server) error {
+func registerServices(c context.Context, grpcServer *grpc.Server, streamBroadcastCh chan *gen.StreamPayload) error {
 	gen.RegisterEntityServiceServer(grpcServer, *server.NewEntityServer(c))
-	gen.RegisterStreamServiceServer(grpcServer, *server.NewStreamServer(c))
+	gen.RegisterStreamServiceServer(grpcServer, server.NewStreamServer(c, streamBroadcastCh))
 
 	healthpb.RegisterHealthServer(grpcServer, health.NewServer())
 
 	return nil
 }
 
-func Setup(c context.Context, opts ...grpc.ServerOption) (*grpcweb.WrappedGrpcServer, error) {
+func Setup(c context.Context, streamBroadcastCh chan *gen.StreamPayload, opts ...grpc.ServerOption) (*grpcweb.WrappedGrpcServer, error) {
 	s := grpc.NewServer(opts...)
-	err := registerServices(c, s)
+
+	err := registerServices(c, s, streamBroadcastCh)
 
 	wrappedGrpc := grpcweb.WrapServer(s)
 

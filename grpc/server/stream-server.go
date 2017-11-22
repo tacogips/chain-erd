@@ -90,13 +90,13 @@ func (server *StreamServer) Connect(req *gen.StreamConnectReq, stream gen.Stream
 }
 
 // NewStreamServer
-func NewStreamServer(ctx context.Context) *StreamServer {
+func NewStreamServer(ctx context.Context, broadcastCh chan *gen.StreamPayload) *StreamServer {
 	//TODO(taco) move channel size to config
 	server := &StreamServer{
 		AppCtx:               ctx,
 		listenerLock:         &sync.Mutex{},
 		listenersBySessionID: map[string]*StreamListener{},
-		broadcastChannel:     make(chan *gen.StreamPayload, 300),
+		broadcastChannel:     broadcastCh,
 	}
 	return server
 }

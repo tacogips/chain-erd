@@ -15,7 +15,7 @@ export namespace EntityService {
     static readonly service = EntityService;
     static readonly requestStream = false;
     static readonly responseStream = false;
-    static readonly requestType = google_protobuf_empty_pb.Empty;
+    static readonly requestType = erd_pb.Entity;
     static readonly responseType = erd_pb.Activity;
   }
   export class MoveEntity {
