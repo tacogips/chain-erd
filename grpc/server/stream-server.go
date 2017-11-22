@@ -98,5 +98,8 @@ func NewStreamServer(ctx context.Context, broadcastCh chan *gen.StreamPayload) *
 		listenersBySessionID: map[string]*StreamListener{},
 		broadcastChannel:     broadcastCh,
 	}
+
+	go server.ListenBroadcast()
+
 	return server
 }
