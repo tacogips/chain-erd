@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"errors"
 
 	"github.com/ajainc/chain/grpc/gen"
 )
@@ -14,15 +15,19 @@ type StreamListener struct {
 	sink       gen.StreamService_ConnectServer
 }
 
-func newStreamListener(c context.Context, authed gen.Authed, mailBoxSize int, sink gen.StreamService_ConnectServer) *StreamListener {
+func newStreamListener(c context.Context, authed *gen.Authed, mailBoxSize int, sink gen.StreamService_ConnectServer) (*StreamListener, error) {
+	if authed == nil {
+		return nil, errors.New("no auth")
+	}
+
 	c, cancel := context.WithCancel(c)
 	return &StreamListener{
 		c:          c,
 		cancelFunc: cancel,
-		authed:     authed,
+		authed:     *authed,
 		mailBox:    make(chan []byte, mailBoxSize),
 		sink:       sink,
-	}
+	}, nil
 }
 
 func (rcvr *StreamListener) Listen() {
