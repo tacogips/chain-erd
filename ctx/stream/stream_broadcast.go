@@ -16,15 +16,17 @@ func WithContext(c context.Context, payload chan<- *gen.StreamPayload) context.C
 	return c
 }
 
-func fromContext(c context.Context) (chan<- *gen.StreamPayload, bool) {
+func FromContext(c context.Context) chan<- *gen.StreamPayload {
 	ch, ok := c.Value(broadcastKey).(chan<- *gen.StreamPayload)
-	return ch, ok
+	if !ok {
+		panic(errors.New("now stream broad cast channel"))
+	}
+	return ch
 }
 
 func Broadcast(c context.Context, payload *gen.StreamPayload) error {
-	if ch, ok := fromContext(c); !ok {
-		return errors.New("broadcast channel not found") //TODO(taco) is to be panic better?
-	} else {
+	if ch := FromContext(c); !ok {
 		ch <- payload
 	}
+	return nil
 }

@@ -13,7 +13,9 @@ import (
 	"github.com/ajainc/chain/ctx/clock"
 	"github.com/ajainc/chain/ctx/docdb"
 	"github.com/ajainc/chain/ctx/logger"
+	"github.com/ajainc/chain/ctx/stream"
 	chaingrpc "github.com/ajainc/chain/grpc"
+	"github.com/ajainc/chain/grpc/gen"
 )
 
 //TODO (tacogips) implement commands with option
@@ -25,7 +27,8 @@ func main() {
 	defer cancelContext()
 
 	//  setup grpc server
-	grpcwebServer, err := chaingrpc.Setup(c)
+	streamBroadcastCh = stream.FromContext(c)
+	grpcwebServer, err := chaingrpc.Setup(c, streamBroadcastCh)
 	if err != nil {
 		panic(err)
 	}
@@ -93,6 +96,11 @@ func setupCtx() (context.Context, context.CancelFunc) {
 	if err != nil {
 		panic(err)
 	}
+
+	//  stream broadcaster
+	//TODO(taco) move broadcast channel size to config
+	streamBroadcastCh := make(chan *gen.StreamPayload, 300)
+	c = stream.WithContext(c, streamBroadcastCh)
 
 	return c, cancel
 }
