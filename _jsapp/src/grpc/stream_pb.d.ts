@@ -40,8 +40,8 @@ export namespace StreamConnectReq {
 }
 
 export class StreamPayload extends jspb.Message {
-  getEvent(): StreamPayload.Event;
-  setEvent(value: StreamPayload.Event): void;
+  getOperation(): StreamPayload.Operation;
+  setOperation(value: StreamPayload.Operation): void;
 
   hasEntity(): boolean;
   clearEntity(): void;
@@ -66,12 +66,12 @@ export class StreamPayload extends jspb.Message {
 
 export namespace StreamPayload {
   export type AsObject = {
-    event: StreamPayload.Event,
+    operation: StreamPayload.Operation,
     entity?: erd_pb.Entity.AsObject,
     rel?: erd_pb.Rel.AsObject,
   }
 
-  export enum Event {
+  export enum Operation {
     NEW = 0,
     MOD = 1,
     DELETE = 2,

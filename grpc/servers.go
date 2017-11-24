@@ -13,8 +13,15 @@ import (
 )
 
 func registerServices(c context.Context, grpcServer *grpc.Server, streamBroadcastCh chan *gen.StreamPayload) error {
-	gen.RegisterEntityServiceServer(grpcServer, *server.NewEntityServer(c))
-	gen.RegisterStreamServiceServer(grpcServer, server.NewStreamServer(c, streamBroadcastCh))
+
+	entityServer := server.NewEntityServer(c, streamBroadcastCh)
+	gen.RegisterEntityServiceServer(grpcServer, entityServer)
+
+	streamServer := server.NewStreamServer(c, streamBroadcastCh)
+	gen.RegisterStreamServiceServer(grpcServer, streamServer)
+
+	// watch streamBroadcastCh
+	go streamServer.WatchBroadcast()
 
 	healthpb.RegisterHealthServer(grpcServer, health.NewServer())
 

@@ -10,26 +10,29 @@ import (
 )
 
 type EntityServer struct {
-	AppCtx context.Context
+	appCtx            context.Context
+	streamBroadcastCh chan *gen.StreamPayload
 }
 
-func (server EntityServer) CreateEntity(_ go16ctx.Context, in *gen.Entity) (*gen.Activity, error) {
+func (server *EntityServer) CreateEntity(_ go16ctx.Context, in *gen.Entity) (*gen.Activity, error) {
 	ev := event.NewCeateEntityEvent(in)
-	activity, err := event.Exec(server.AppCtx, ev)
+	activity, err := event.Exec(server.appCtx, ev)
 	if err != nil {
 		return nil, err
 	}
 	return activity.ToGRPCActivity(), nil
 }
 
-func (server EntityServer) MoveEntity(ctx go16ctx.Context, in *gen.Move) (*gen.Activity, error) {
+func (server *EntityServer) MoveEntity(ctx go16ctx.Context, in *gen.Move) (*gen.Activity, error) {
 	// TODO(tacogis): implement
 	return nil, nil
 }
 
 //NewEntityServer create entityServer
-func NewEntityServer(ctx context.Context) *EntityServer {
+func NewEntityServer(ctx context.Context, streamBroadcastCh chan *gen.StreamPayload) *EntityServer {
+
 	return &EntityServer{
-		AppCtx: ctx,
+		appCtx:            ctx,
+		streamBroadcastCh: streamBroadcastCh,
 	}
 }

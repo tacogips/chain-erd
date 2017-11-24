@@ -45,7 +45,7 @@ func (svr *StreamServer) BroadcastChannel() chan<- *gen.StreamPayload {
 	return svr.broadcastChannel
 }
 
-func (svr *StreamServer) ListenBroadcast() {
+func (svr *StreamServer) WatchBroadcast() {
 	for {
 		select {
 		case payload := <-svr.broadcastChannel:
@@ -59,7 +59,6 @@ func (svr *StreamServer) ListenBroadcast() {
 			return
 		}
 	}
-
 }
 
 func (server *StreamServer) Connect(req *gen.StreamConnectReq, stream gen.StreamService_ConnectServer) error {
@@ -91,15 +90,10 @@ func (server *StreamServer) Connect(req *gen.StreamConnectReq, stream gen.Stream
 
 // NewStreamServer
 func NewStreamServer(ctx context.Context, broadcastCh chan *gen.StreamPayload) *StreamServer {
-	//TODO(taco) move channel size to config
-	server := &StreamServer{
+	return &StreamServer{
 		AppCtx:               ctx,
 		listenerLock:         &sync.Mutex{},
 		listenersBySessionID: map[string]*StreamListener{},
 		broadcastChannel:     broadcastCh,
 	}
-
-	go server.ListenBroadcast()
-
-	return server
 }

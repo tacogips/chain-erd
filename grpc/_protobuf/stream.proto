@@ -25,13 +25,13 @@ message StreamConnectReq {
 }
 
 message StreamPayload {
-  enum Event {
+  enum Operation {
     NEW    = 0;
     MOD    = 1;
     DELETE = 2;
   }
 
-  Event event = 1;
+  Operation operation = 1;
   oneof object {
     erd.Entity entity = 2;
     erd.Rel rel       = 3;
