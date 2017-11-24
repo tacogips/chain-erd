@@ -33,7 +33,6 @@ func (ev *CeateEntityEv) Description() string {
 }
 
 func (ev *CeateEntityEv) Exec(c context.Context) error {
-
 	db := docdb.FromContext(c)
 
 	ev.Entity.FillWithDefault()

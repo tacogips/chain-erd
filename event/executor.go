@@ -25,15 +25,18 @@ func Exec(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload
 		return nil, err
 	}
 
-	streamPayloads, _ := ev.ExecStreamPayloads(c)
-	//TODO(taco) retry if error?
-	go func() {
-
-		logger.Debugf(c, "stream out exec result %#v", streamPayloads)
-		for _, paylaod := range streamPayloads {
-			streamBroadcastCh <- paylaod
-		}
-	}()
+	streamPayloads, err := ev.ExecStreamPayloads(c)
+	if err != nil {
+		logger.Error(c, err)
+	} else {
+		//TODO(taco) retry if error?
+		go func() {
+			logger.Debugf(c, "stream out exec result %#v", streamPayloads)
+			for _, paylaod := range streamPayloads {
+				streamBroadcastCh <- paylaod
+			}
+		}()
+	}
 
 	return activity, nil
 }

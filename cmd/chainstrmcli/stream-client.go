@@ -36,6 +36,7 @@ func main() {
 	}
 
 	for {
+		println("waiting ...")
 		payload, err := streamConnCli.Recv()
 		if err != nil {
 			if err == io.EOF {

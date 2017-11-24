@@ -35,8 +35,8 @@ func GetEntityByObjectID(c context.Context, objectID string) (*gen.Entity, error
 	if err != nil {
 		return nil, err
 	}
-	var entity *gen.Entity
 
+	entity := new(gen.Entity)
 	err = UnmarshalEntity(result, entity)
 	if err != nil {
 		return nil, err
