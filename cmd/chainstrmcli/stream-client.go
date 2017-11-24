@@ -49,9 +49,9 @@ func main() {
 
 		switch obj := payload.Object.(type) {
 		case *gen.StreamPayload_Entity:
-			fmt.Printf("%#v\n", obj)
+			fmt.Printf("%#v\n", *obj)
 		case *gen.StreamPayload_Rel:
-			fmt.Printf("%#v\n", obj)
+			fmt.Printf("%#v\n", *obj)
 		default:
 		}
 	}

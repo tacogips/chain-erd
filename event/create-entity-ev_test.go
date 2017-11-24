@@ -7,6 +7,8 @@ import (
 	"github.com/HouzuoGuo/tiedot/db"
 	"github.com/ajainc/chain/ctx/docdb"
 	"github.com/ajainc/chain/ctx/docdb/dbtestutil"
+	"github.com/ajainc/chain/ctx/logger"
+	"github.com/ajainc/chain/event/dao"
 	"github.com/ajainc/chain/grpc/gen"
 	"github.com/stretchr/testify/assert"
 )
@@ -35,7 +37,6 @@ func TestCreateEntity(t *testing.T) {
 				H: 800.2,
 			},
 			Columns: []*gen.Column{},
-			ZIndex:  0,
 		}
 		expected := input
 		expected.Name = "NewEntity"
@@ -53,6 +54,7 @@ func TestCreateEntity(t *testing.T) {
 		doRedoCheck := data.redoCheck != nil
 
 		c := context.Background()
+		c, _ = logger.WithContext(c, logger.DiscardLogger)
 		c, closeDB, err := dbtestutil.WithTestDBContext(c)
 
 		errCheckIfNeed := func(data crateEntityTestData, err error) {
@@ -87,7 +89,7 @@ func TestCreateEntity(t *testing.T) {
 				errCheckIfNeed(data, err)
 
 				var actual gen.Entity
-				err = docdb.UnmarshalEntity(result, &actual)
+				err = dao.UnmarshalEntity(result, &actual)
 				errCheckIfNeed(data, err)
 
 				assert.Equal(t, data.expected[idx], actual)

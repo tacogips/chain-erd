@@ -10,7 +10,7 @@ import (
 )
 
 // InsertEntity
-func InsertEntity(c context.Context, entity *gen.Entity) error {
+func InsertEntity(c context.Context, entity gen.Entity) error {
 	db := docdb.FromContext(c)
 
 	var err error
@@ -19,7 +19,25 @@ func InsertEntity(c context.Context, entity *gen.Entity) error {
 	}
 
 	entities := db.Use(docdb.COLL_ENTITY)
-	_, err = entities.Insert(MarshalEntity(*entity))
+	_, err = entities.Insert(MarshalEntity(entity))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// UpdateEntity
+func UpdateEntity(c context.Context, id int, entity gen.Entity) error {
+	db := docdb.FromContext(c)
+
+	var err error
+	if err != nil {
+		return err
+	}
+
+	entities := db.Use(docdb.COLL_ENTITY)
+	err = entities.Update(id, MarshalEntity(entity))
 	if err != nil {
 		return err
 	}
@@ -28,21 +46,21 @@ func InsertEntity(c context.Context, entity *gen.Entity) error {
 }
 
 // GetEntityByObjectID
-func GetEntityByObjectID(c context.Context, objectID string) (*gen.Entity, error) {
+func GetEntityByObjectID(c context.Context, objectID string) (int, gen.Entity, error) {
 	db := docdb.FromContext(c)
 
-	_, result, err := docdb.GetByObjectID(db, docdb.COLL_ENTITY, objectID)
+	id, result, err := docdb.GetByObjectID(db, docdb.COLL_ENTITY, objectID)
 	if err != nil {
-		return nil, err
+		return 0, gen.Entity{}, err
 	}
 
 	entity := new(gen.Entity)
 	err = UnmarshalEntity(result, entity)
 	if err != nil {
-		return nil, err
+		return 0, gen.Entity{}, err
 	}
 
-	return entity, nil
+	return id, *entity, nil
 }
 
 func UnmarshalEntity(src map[string]interface{}, dst *gen.Entity) error {

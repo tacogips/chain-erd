@@ -29,8 +29,17 @@ func (server *EntityServer) CreateEntity(_ go16ctx.Context, in *gen.Entity) (*ge
 }
 
 func (server *EntityServer) MoveEntity(ctx go16ctx.Context, in *gen.Move) (*gen.Activity, error) {
-	// TODO(tacogis): implement
-	return nil, nil
+
+	logger.Debug(server.appCtx, "MoveEnity called")
+
+	ev := event.NewMoveEntityEvent(in.ObjectID, *in.From, *in.To)
+
+	activity, err := event.Exec(server.appCtx, ev, server.streamBroadcastCh)
+	if err != nil {
+		return nil, err
+	}
+
+	return activity.ToGRPCActivity(), nil
 }
 
 //NewEntityServer create entityServer

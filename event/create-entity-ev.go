@@ -15,13 +15,13 @@ import (
 func NewCeateEntityEvent(entity *gen.Entity) *CeateEntityEv {
 	return &CeateEntityEv{
 		eventID: uuid.NewV4().String(),
-		Entity:  entity,
+		Entity:  *entity,
 	}
 }
 
 type CeateEntityEv struct {
 	eventID string
-	Entity  *gen.Entity
+	Entity  gen.Entity
 }
 
 func (ev *CeateEntityEv) EventID() string {
@@ -60,7 +60,7 @@ func (ev *CeateEntityEv) Validate(db *db.DB) error {
 }
 
 func (ev *CeateEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
-	entity, err := dao.GetEntityByObjectID(c, ev.Entity.ObjectID)
+	_, entity, err := dao.GetEntityByObjectID(c, ev.Entity.ObjectID)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (ev *CeateEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPay
 		{
 			Operation: gen.StreamPayload_NEW,
 			Object: &gen.StreamPayload_Entity{
-				entity,
+				&entity,
 			},
 		},
 	}, nil
@@ -92,7 +92,7 @@ func (ev *CeateEntityEv) UndoStreamPayloads(c context.Context) ([]*gen.StreamPay
 		{
 			Operation: gen.StreamPayload_DELETE,
 			Object: &gen.StreamPayload_Entity{
-				ev.Entity,
+				&ev.Entity,
 			},
 		},
 	}, nil
