@@ -11,12 +11,8 @@ func Exec(c context.Context, ev Event) (*Activity, error) {
 		return nil, err
 	}
 
-	if err != nil {
-		return nil, err
-	}
-
 	activity := NewActivity(ev)
-	err = addActivity(*activity)
+	err = addActivityHistory(*activity)
 	if err != nil {
 		return nil, err
 	}

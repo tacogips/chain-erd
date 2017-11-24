@@ -23,7 +23,7 @@ func NewActivity(event Event) *Activity {
 }
 
 // AddActivity add new activity to activity hisotry
-func addActivity(activity Activity) error {
+func addActivityHistory(activity Activity) error {
 	// TODO(tacogips): impl
 	return nil
 }

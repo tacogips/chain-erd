@@ -43,6 +43,7 @@ func main() {
 				panic(err)
 			}
 		}
+
 		switch obj := payload.Object.(type) {
 		case *gen.StreamPayload_Entity:
 			fmt.Printf("%#v\n", obj)
@@ -50,7 +51,6 @@ func main() {
 			fmt.Printf("%#v\n", obj)
 		default:
 		}
-
 	}
 
 }

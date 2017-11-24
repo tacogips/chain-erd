@@ -20,6 +20,7 @@ func (server *EntityServer) CreateEntity(_ go16ctx.Context, in *gen.Entity) (*ge
 	if err != nil {
 		return nil, err
 	}
+
 	return activity.ToGRPCActivity(), nil
 }
 
