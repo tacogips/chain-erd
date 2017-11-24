@@ -6,6 +6,7 @@ import (
 	"io"
 
 	"github.com/ajainc/chain/grpc/gen"
+	"github.com/lunny/log"
 	"google.golang.org/grpc"
 )
 
@@ -38,6 +39,7 @@ func main() {
 		payload, err := streamConnCli.Recv()
 		if err != nil {
 			if err == io.EOF {
+				log.Info("disconnected")
 				return
 			} else {
 				panic(err)

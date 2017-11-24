@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/ajainc/chain/grpc/gen"
 )
@@ -30,15 +31,16 @@ func newStreamListener(c context.Context, authed *gen.Authed, mailBoxSize int, s
 	}, nil
 }
 
-func (rcvr *StreamListener) Listen() {
+func (rcvr *StreamListener) Listen() error {
 	for {
 		select {
 		case message := <-rcvr.mailBox:
-			println(message)
-			//TODO
-			//sink.Send()
+			err := rcvr.sink.Send(message)
+			if err != nil {
+				return fmt.Errorf("session <%s> has disconnected <%s>", rcvr.authed.SessionID, err.Error())
+			}
 		case <-rcvr.c.Done():
-			return
+			return nil
 		}
 	}
 }
