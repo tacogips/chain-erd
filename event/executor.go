@@ -1,9 +1,14 @@
 package event
 
-import "context"
+import (
+	"context"
+
+	"github.com/ajainc/chain/grpc/gen"
+)
 
 // Exec execute  Event.Do() and puts it to activities stack
-func Exec(c context.Context, ev Event) (*Activity, error) {
+func Exec(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload) (*Activity, error) {
+
 	var err error
 
 	err = ev.Exec(c)
@@ -17,12 +22,29 @@ func Exec(c context.Context, ev Event) (*Activity, error) {
 		return nil, err
 	}
 
+	streamPayloads, _ := ev.ExecStreamPayloads(c)
+	//TODO(taco) retry if error?
+	go func() {
+		for _, paylaod := range streamPayloads {
+			streamBroadcastCh <- paylaod
+		}
+	}()
+
 	return activity, nil
 }
 
 //Undo execute ev.Undo()
-func Undo(c context.Context, ev Event) error {
+func Undo(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload) error {
 	// TODO(tacogisp): impl
 	ev.Undo(c)
+
+	streamPayloads, _ := ev.ExecStreamPayloads(c)
+	//TODO(taco) retry if error?
+	go func() {
+		for _, paylaod := range streamPayloads {
+			streamBroadcastCh <- paylaod
+		}
+	}()
+
 	return nil
 }
