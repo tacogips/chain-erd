@@ -5,7 +5,6 @@ import (
 
 	"github.com/ajainc/chain/grpc/gen"
 	"github.com/ajainc/chain/grpc/server"
-	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -28,12 +27,10 @@ func registerServices(c context.Context, grpcServer *grpc.Server, streamBroadcas
 	return nil
 }
 
-func Setup(c context.Context, streamBroadcastCh chan *gen.StreamPayload, opts ...grpc.ServerOption) (*grpcweb.WrappedGrpcServer, error) {
+func Setup(c context.Context, streamBroadcastCh chan *gen.StreamPayload, opts ...grpc.ServerOption) (*grpc.Server, error) {
 	s := grpc.NewServer(opts...)
 
 	err := registerServices(c, s, streamBroadcastCh)
 
-	wrappedGrpc := grpcweb.WrapServer(s)
-
-	return wrappedGrpc, err
+	return s, err
 }

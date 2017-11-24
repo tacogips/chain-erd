@@ -7,6 +7,7 @@ import (
 )
 
 type Event interface {
+	EventID() string
 	Description() string
 	Exec(context.Context) error
 	Undo(context.Context) error

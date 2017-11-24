@@ -8,17 +8,24 @@ import (
 	"github.com/ajainc/chain/ctx/docdb"
 	"github.com/ajainc/chain/event/dao"
 	"github.com/ajainc/chain/grpc/gen"
+	uuid "github.com/satori/go.uuid"
 )
 
 // CeateEntityEv stands for Creating New Entity at specified coordinates
 func NewCeateEntityEvent(entity *gen.Entity) *CeateEntityEv {
 	return &CeateEntityEv{
-		Entity: entity,
+		eventID: uuid.NewV4().String(),
+		Entity:  entity,
 	}
 }
 
 type CeateEntityEv struct {
-	Entity *gen.Entity
+	eventID string
+	Entity  *gen.Entity
+}
+
+func (ev *CeateEntityEv) EventID() string {
+	return ev.eventID
 }
 
 func (ev *CeateEntityEv) Description() string {
@@ -26,6 +33,7 @@ func (ev *CeateEntityEv) Description() string {
 }
 
 func (ev *CeateEntityEv) Exec(c context.Context) error {
+
 	db := docdb.FromContext(c)
 
 	ev.Entity.FillWithDefault()

@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 
+	"github.com/ajainc/chain/ctx/logger"
 	"github.com/ajainc/chain/event"
 	"github.com/ajainc/chain/grpc/gen"
 
@@ -15,8 +16,11 @@ type EntityServer struct {
 }
 
 func (server *EntityServer) CreateEntity(_ go16ctx.Context, in *gen.Entity) (*gen.Activity, error) {
+
+	logger.Debug(server.appCtx, "CreatEnity called")
+
 	ev := event.NewCeateEntityEvent(in)
-	activity, err := event.Exec(server.appCtx, ev)
+	activity, err := event.Exec(server.appCtx, ev, server.streamBroadcastCh)
 	if err != nil {
 		return nil, err
 	}

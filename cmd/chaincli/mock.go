@@ -12,12 +12,11 @@ import (
 )
 
 func main() {
-	conn, err := grpc.Dial(":50051")
+	conn, err := grpc.Dial(":50051", grpc.WithInsecure())
 
 	if err != nil {
 		panic(err)
 	}
-
 	defer conn.Close()
 
 	entityClient := gen.NewEntityServiceClient(conn)
@@ -49,7 +48,7 @@ func main() {
 			if err != nil {
 				log.Error(err)
 			}
-			fmt.Printf("%#v", activity)
+			fmt.Printf("%#v\n", activity)
 		}
 	}
 

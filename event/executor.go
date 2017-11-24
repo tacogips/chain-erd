@@ -3,6 +3,7 @@ package event
 import (
 	"context"
 
+	"github.com/ajainc/chain/ctx/logger"
 	"github.com/ajainc/chain/grpc/gen"
 )
 
@@ -10,6 +11,8 @@ import (
 func Exec(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload) (*Activity, error) {
 
 	var err error
+
+	logger.Debugf(c, "execute event %#v", ev)
 
 	err = ev.Exec(c)
 	if err != nil {
@@ -25,6 +28,8 @@ func Exec(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload
 	streamPayloads, _ := ev.ExecStreamPayloads(c)
 	//TODO(taco) retry if error?
 	go func() {
+
+		logger.Debugf(c, "stream out exec result %#v", streamPayloads)
 		for _, paylaod := range streamPayloads {
 			streamBroadcastCh <- paylaod
 		}
@@ -35,12 +40,16 @@ func Exec(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload
 
 //Undo execute ev.Undo()
 func Undo(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload) error {
+
+	logger.Debugf(c, "undo event %#v", ev)
 	// TODO(tacogisp): impl
 	ev.Undo(c)
 
 	streamPayloads, _ := ev.ExecStreamPayloads(c)
 	//TODO(taco) retry if error?
 	go func() {
+
+		logger.Debugf(c, "stream out undo result %#v", streamPayloads)
 		for _, paylaod := range streamPayloads {
 			streamBroadcastCh <- paylaod
 		}
