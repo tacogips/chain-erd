@@ -15,7 +15,7 @@ export namespace AuthService {
     static readonly service = AuthService;
     static readonly requestStream = false;
     static readonly responseStream = false;
-    static readonly requestType = google_protobuf_empty_pb.Empty;
+    static readonly requestType = auth_pb.AuthRequest;
     static readonly responseType = auth_pb.Authed;
   }
 }

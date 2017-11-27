@@ -34,6 +34,7 @@
         "classnames": "^2.2.5",
         "enum-values": "^1.2.0",
         "global": "^4.3.2",
+        "grpc-web-client": "^0.3.1",
         "immutable": "^3.8.2",
         "isomorphic-fetch": "^2.2.1",
         "konva": "^1.7.6",

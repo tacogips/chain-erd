@@ -4,6 +4,8 @@ import { Map, List, Set } from 'immutable'
 
 import { Entity, Rel, Move, Coord,CoordWH, Transform } from 'grpc/erd_pb'
 
+import * as api from 'grpc/api'
+
 export interface EntityState {
     entities: Map<string, Entity>
     currentSelectEntities: Map<string, Entity>
@@ -31,12 +33,15 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 console.error(`invalid entity:alerady exists[${objectId}]`)
             }
 
+						api.createEntity(entity)
+
             return <EntityState>{
                 ...state,
                 entities: state.entities.set(objectId, entity),
                 seqentialchoiceEntities: List(),
             }
         }
+
 
         case actions.EntityActionTypes.MOVE_ENTITY: {
 
