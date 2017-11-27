@@ -26,6 +26,27 @@ export namespace EntityService {
     static readonly requestType = erd_pb.Move;
     static readonly responseType = erd_pb.Activity;
   }
+  export class TransformEntity {
+    static readonly methodName = "TransformEntity";
+    static readonly service = EntityService;
+    static readonly requestStream = false;
+    static readonly responseStream = false;
+    static readonly requestType = erd_pb.Transform;
+    static readonly responseType = erd_pb.Activity;
+  }
+}
+export class RelationService {
+  static serviceName = "erd.RelationService";
+}
+export namespace RelationService {
+  export class AddRelation {
+    static readonly methodName = "AddRelation";
+    static readonly service = RelationService;
+    static readonly requestStream = false;
+    static readonly responseStream = false;
+    static readonly requestType = erd_pb.Rel;
+    static readonly responseType = erd_pb.Activity;
+  }
 }
 export class ActivityService {
   static serviceName = "erd.ActivityService";

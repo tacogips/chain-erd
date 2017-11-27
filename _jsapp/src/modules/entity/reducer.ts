@@ -55,7 +55,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
 
 						//TODO(taco) move to saga
-						//api.moveEntity(move)
+						api.moveEntity(move)
 
             const entity = state.entities.get(objectId)
             entity.setCoord(move.getTo())
@@ -154,7 +154,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
 
 						//TODO(taco) move to saga
-						//api.transformEntity(transform)
+						api.transformEntity(transform)
 
             const entity = state.entities.get(objectId)
             entity.setCoord(transform.getTo().getCoord())
