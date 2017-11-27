@@ -11,9 +11,9 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// NewMoveEntityEvent stands for Move Entity to specified coordinates
-func NewMoveEntityEvent(entityObjectID string, from gen.Coord, to gen.Coord) *MoveEntityEv {
-	return &MoveEntityEv{
+// NewTransformEntityEvent stands for Creating New Entity at specified coordinates
+func NewTransformEntityEvent(entityObjectID string, from gen.CoordWH, to gen.CoordWH) *TransformEntityEv {
+	return &TransformEntityEv{
 		eventID:        uuid.NewV4().String(),
 		entityObjectID: entityObjectID,
 		from:           from,
@@ -21,22 +21,22 @@ func NewMoveEntityEvent(entityObjectID string, from gen.Coord, to gen.Coord) *Mo
 	}
 }
 
-type MoveEntityEv struct {
+type TransformEntityEv struct {
 	eventID        string
 	entityObjectID string
-	from           gen.Coord
-	to             gen.Coord
+	from           gen.CoordWH
+	to             gen.CoordWH
 }
 
-func (ev *MoveEntityEv) EventID() string {
+func (ev *TransformEntityEv) EventID() string {
 	return ev.eventID
 }
 
-func (ev *MoveEntityEv) Description() string {
-	return fmt.Sprintf("Move Entity")
+func (ev *TransformEntityEv) Description() string {
+	return fmt.Sprintf("Transform Entity")
 }
 
-func (ev *MoveEntityEv) Exec(c context.Context) error {
+func (ev *TransformEntityEv) Exec(c context.Context) error {
 	db := docdb.FromContext(c)
 
 	err := ev.Validate(db)
@@ -49,14 +49,15 @@ func (ev *MoveEntityEv) Exec(c context.Context) error {
 		return err
 	}
 
-	entity.Coord = &ev.to
+	entity.Coord = ev.to.Coord
+	entity.WidthHeight = ev.to.WidthHeight
 
 	err = dao.UpdateEntity(c, id, entity)
 
 	return err
 }
 
-func (ev *MoveEntityEv) Validate(db *db.DB) error {
+func (ev *TransformEntityEv) Validate(db *db.DB) error {
 
 	if !docdb.ObjectIDExists(db, docdb.COLL_ENTITY, ev.entityObjectID) {
 		return fmt.Errorf("entity object <%s> not exists", ev.entityObjectID)
@@ -64,7 +65,7 @@ func (ev *MoveEntityEv) Validate(db *db.DB) error {
 	return nil
 }
 
-func (ev *MoveEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
+func (ev *TransformEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
 	_, entity, err := dao.GetEntityByObjectID(c, ev.entityObjectID)
 	if err != nil {
 		return nil, err
@@ -80,18 +81,19 @@ func (ev *MoveEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPayl
 	}, nil
 }
 
-func (ev *MoveEntityEv) Undo(c context.Context) error {
+func (ev *TransformEntityEv) Undo(c context.Context) error {
 	id, entity, err := dao.GetEntityByObjectID(c, ev.entityObjectID)
 	if err != nil {
 		return err
 	}
 
-	entity.Coord = &ev.from
+	entity.Coord = ev.from.Coord
+	entity.WidthHeight = ev.from.WidthHeight
 
 	err = dao.UpdateEntity(c, id, entity)
 	return err
 }
 
-func (ev *MoveEntityEv) UndoStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
+func (ev *TransformEntityEv) UndoStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
 	return ev.ExecStreamPayloads(c)
 }

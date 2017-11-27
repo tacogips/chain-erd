@@ -46,7 +46,7 @@ func (server *EntityServer) TransformEntity(ctx go16ctx.Context, transform *gen.
 
 	logger.Debug(server.appCtx, "Tranform Entity called")
 
-	ev := event.NewMoveEntityEvent(in.ObjectID, *in.From, *in.To)
+	ev := event.NewTransformEntityEvent(transform.ObjectID, *transform.From, *transform.To)
 
 	activity, err := event.Exec(server.appCtx, ev, server.streamBroadcastCh)
 	if err != nil {
