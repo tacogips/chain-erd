@@ -210,7 +210,7 @@ proto.stream.StreamConnectReq.prototype.getAction = function() {
 
 /** @param {!proto.stream.StreamConnectReq.Action} value */
 proto.stream.StreamConnectReq.prototype.setAction = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3EnumField(this, 2, value);
 };
 
 
@@ -415,7 +415,7 @@ proto.stream.StreamPayload.prototype.getOperation = function() {
 
 /** @param {!proto.stream.StreamPayload.Operation} value */
 proto.stream.StreamPayload.prototype.setOperation = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3EnumField(this, 1, value);
 };
 
 

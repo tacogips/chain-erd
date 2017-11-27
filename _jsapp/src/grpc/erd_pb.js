@@ -183,7 +183,7 @@ proto.erd.Coord.prototype.getX = function() {
 
 /** @param {number} value */
 proto.erd.Coord.prototype.setX = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3FloatField(this, 1, value);
 };
 
 
@@ -198,7 +198,7 @@ proto.erd.Coord.prototype.getY = function() {
 
 /** @param {number} value */
 proto.erd.Coord.prototype.setY = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3FloatField(this, 2, value);
 };
 
 
@@ -352,7 +352,7 @@ proto.erd.WidthHeight.prototype.getW = function() {
 
 /** @param {number} value */
 proto.erd.WidthHeight.prototype.setW = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3FloatField(this, 1, value);
 };
 
 
@@ -367,7 +367,7 @@ proto.erd.WidthHeight.prototype.getH = function() {
 
 /** @param {number} value */
 proto.erd.WidthHeight.prototype.setH = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3FloatField(this, 2, value);
 };
 
 
@@ -595,7 +595,7 @@ proto.erd.Entity.prototype.getObjectId = function() {
 
 /** @param {string} value */
 proto.erd.Entity.prototype.setObjectId = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -610,7 +610,7 @@ proto.erd.Entity.prototype.getName = function() {
 
 /** @param {string} value */
 proto.erd.Entity.prototype.setName = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -685,7 +685,7 @@ proto.erd.Entity.prototype.getColor = function() {
 
 /** @param {string} value */
 proto.erd.Entity.prototype.setColor = function(value) {
-  jspb.Message.setField(this, 5, value);
+  jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
@@ -731,7 +731,7 @@ proto.erd.Entity.prototype.getDepth = function() {
 
 /** @param {number} value */
 proto.erd.Entity.prototype.setDepth = function(value) {
-  jspb.Message.setField(this, 7, value);
+  jspb.Message.setProto3IntField(this, 7, value);
 };
 
 
@@ -911,7 +911,7 @@ proto.erd.Column.prototype.getObjectId = function() {
 
 /** @param {string} value */
 proto.erd.Column.prototype.setObjectId = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -926,7 +926,7 @@ proto.erd.Column.prototype.getName = function() {
 
 /** @param {string} value */
 proto.erd.Column.prototype.setName = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -941,7 +941,7 @@ proto.erd.Column.prototype.getType = function() {
 
 /** @param {!proto.erd.ColumnType} value */
 proto.erd.Column.prototype.setType = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3EnumField(this, 3, value);
 };
 
 
@@ -1295,7 +1295,7 @@ proto.erd.EntityColumnAttributes.prototype.getIsFk = function() {
 
 /** @param {boolean} value */
 proto.erd.EntityColumnAttributes.prototype.setIsFk = function(value) {
-  jspb.Message.setField(this, 4, value);
+  jspb.Message.setProto3BooleanField(this, 4, value);
 };
 
 
@@ -1312,7 +1312,7 @@ proto.erd.EntityColumnAttributes.prototype.getIsPk = function() {
 
 /** @param {boolean} value */
 proto.erd.EntityColumnAttributes.prototype.setIsPk = function(value) {
-  jspb.Message.setField(this, 5, value);
+  jspb.Message.setProto3BooleanField(this, 5, value);
 };
 
 
@@ -1329,7 +1329,7 @@ proto.erd.EntityColumnAttributes.prototype.getIsUnique = function() {
 
 /** @param {boolean} value */
 proto.erd.EntityColumnAttributes.prototype.setIsUnique = function(value) {
-  jspb.Message.setField(this, 6, value);
+  jspb.Message.setProto3BooleanField(this, 6, value);
 };
 
 
@@ -1346,7 +1346,7 @@ proto.erd.EntityColumnAttributes.prototype.getIsNotNull = function() {
 
 /** @param {boolean} value */
 proto.erd.EntityColumnAttributes.prototype.setIsNotNull = function(value) {
-  jspb.Message.setField(this, 7, value);
+  jspb.Message.setProto3BooleanField(this, 7, value);
 };
 
 
@@ -1363,7 +1363,7 @@ proto.erd.EntityColumnAttributes.prototype.getIsAutoIncrement = function() {
 
 /** @param {boolean} value */
 proto.erd.EntityColumnAttributes.prototype.setIsAutoIncrement = function(value) {
-  jspb.Message.setField(this, 8, value);
+  jspb.Message.setProto3BooleanField(this, 8, value);
 };
 
 
@@ -1553,7 +1553,7 @@ proto.erd.EnumColumnAttribute.prototype.getDefaultValue = function() {
 
 /** @param {string} value */
 proto.erd.EnumColumnAttribute.prototype.setDefaultValue = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -1707,7 +1707,7 @@ proto.erd.StringColumnAttribute.prototype.getLength = function() {
 
 /** @param {number} value */
 proto.erd.StringColumnAttribute.prototype.setLength = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -1722,7 +1722,7 @@ proto.erd.StringColumnAttribute.prototype.getDefaultValue = function() {
 
 /** @param {string} value */
 proto.erd.StringColumnAttribute.prototype.setDefaultValue = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -1900,7 +1900,7 @@ proto.erd.NumberColumnAttribute.prototype.getLength = function() {
 
 /** @param {number} value */
 proto.erd.NumberColumnAttribute.prototype.setLength = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -1915,7 +1915,7 @@ proto.erd.NumberColumnAttribute.prototype.getDecimal = function() {
 
 /** @param {number} value */
 proto.erd.NumberColumnAttribute.prototype.setDecimal = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -1932,7 +1932,7 @@ proto.erd.NumberColumnAttribute.prototype.getIsUnsigned = function() {
 
 /** @param {boolean} value */
 proto.erd.NumberColumnAttribute.prototype.setIsUnsigned = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 
@@ -1947,7 +1947,7 @@ proto.erd.NumberColumnAttribute.prototype.getDefaultValue = function() {
 
 /** @param {number} value */
 proto.erd.NumberColumnAttribute.prototype.setDefaultValue = function(value) {
-  jspb.Message.setField(this, 4, value);
+  jspb.Message.setProto3FloatField(this, 4, value);
 };
 
 
@@ -2131,7 +2131,7 @@ proto.erd.Rel.prototype.getObjectId = function() {
 
 /** @param {string} value */
 proto.erd.Rel.prototype.setObjectId = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -2387,7 +2387,7 @@ proto.erd.RelPoint.prototype.getEntityObjectId = function() {
 
 /** @param {string} value */
 proto.erd.RelPoint.prototype.setEntityObjectId = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -2402,7 +2402,7 @@ proto.erd.RelPoint.prototype.getColumnObjectId = function() {
 
 /** @param {string} value */
 proto.erd.RelPoint.prototype.setColumnObjectId = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
@@ -2417,7 +2417,7 @@ proto.erd.RelPoint.prototype.getAssociation = function() {
 
 /** @param {!proto.erd.RelAssociation} value */
 proto.erd.RelPoint.prototype.setAssociation = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setProto3EnumField(this, 3, value);
 };
 
 
@@ -2755,7 +2755,7 @@ proto.erd.Move.prototype.getObjectId = function() {
 
 /** @param {string} value */
 proto.erd.Move.prototype.setObjectId = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -3188,7 +3188,7 @@ proto.erd.Transform.prototype.getObjectId = function() {
 
 /** @param {string} value */
 proto.erd.Transform.prototype.setObjectId = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -3402,7 +3402,7 @@ proto.erd.Activity.prototype.getId = function() {
 
 /** @param {string} value */
 proto.erd.Activity.prototype.setId = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -3417,7 +3417,7 @@ proto.erd.Activity.prototype.getDescription = function() {
 
 /** @param {string} value */
 proto.erd.Activity.prototype.setDescription = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

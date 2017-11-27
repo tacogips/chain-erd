@@ -1,4 +1,5 @@
 import path from 'path'
+import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { TsConfigPathsPlugin } from 'awesome-typescript-loader'
 
@@ -39,8 +40,8 @@ export default {
       filename: 'index.html'
     }),
 
-    new webpack.DefinePlugin({,
-			__GRPC_SERVER_HOST__:"localhost"
+    new webpack.DefinePlugin({
+			__GRPC_SERVER_HOST__:'"localhost"',
 			__GRPC_SERVER_PORT__:1212,
 			__GRPC_USE_TLS__:false,
     })

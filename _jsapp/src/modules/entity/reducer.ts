@@ -33,6 +33,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 console.error(`invalid entity:alerady exists[${objectId}]`)
             }
 
+						//TODO(taco) move to saga
 						api.createEntity(entity)
 
             return <EntityState>{
@@ -52,6 +53,9 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 console.error(`cant move invalid object [${objectId}]`)
                 return
             }
+
+						//TODO(taco) move to saga
+						api.moveEntity(move)
 
             const entity = state.entities.get(objectId)
             entity.setCoord(move.getTo())
@@ -99,7 +103,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
         }
 
-
         case actions.EntityActionTypes.SEQ_CHOICE_ENTITIES: {
             const objectId = <string>action.payload
             if (!objectId || objectId.length == 0 || !state.entities.has(objectId)) {
@@ -113,7 +116,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 seqentialChoiceEntities: state.seqentialChoiceEntities.push(objectId)
             }
         }
-
 
         case actions.EntityActionTypes.CANCEL_SELECTION: {
             return <EntityState>{
@@ -150,6 +152,9 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 console.error(`cant move invalid object [${objectId}]`)
                 return
             }
+
+						//TODO(taco) move to saga
+						api.transformEntity(transform)
 
             const entity = state.entities.get(objectId)
             entity.setCoord(transform.getTo().getCoord())

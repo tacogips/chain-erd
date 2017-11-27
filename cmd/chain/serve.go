@@ -22,7 +22,8 @@ import (
 //TODO (tacogips) implement commands with option
 func main() {
 
-	port := 50051
+	//TODO(taco) move to config file
+	port := 1212
 
 	c, cancelContext := setupCtx()
 	defer cancelContext()
@@ -36,7 +37,8 @@ func main() {
 		panic(err)
 	}
 
-	grpcWeb := false
+	//TODO(taco) move to config file
+	grpcWeb := true
 	if grpcWeb {
 		grpcwebServer := grpcweb.WrapServer(grpcServer)
 

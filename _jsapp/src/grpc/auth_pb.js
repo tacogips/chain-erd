@@ -271,7 +271,7 @@ proto.auth.Authed.prototype.getSessionId = function() {
 
 /** @param {string} value */
 proto.auth.Authed.prototype.setSessionId = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

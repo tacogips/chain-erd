@@ -5,6 +5,8 @@ import { Map, List, Set } from 'immutable'
 
 import { Entity, Rel, Move, Coord, CoordWH, Transform } from 'grpc/erd_pb'
 
+import * as api from 'grpc/api'
+
 export interface RelationState {
     relationOfEntities: RelationOfEntities
 }
@@ -105,7 +107,7 @@ export class RelationOfEntities {
         }
     }
 
-    //TODO(taco) performance bottle neck?
+    //TODO(taco) is this performance bottle neck?
     private static addToMapOfSet(key: string, val: string, src: Map<string, Set<string>>): Map<string, Set<string>> {
         if (!src.has(key)) {
             return src.set(key, Set([val]))
@@ -125,6 +127,9 @@ export const relationReducer: Reducer<RelationState> = (state: RelationState = i
 
         case actions.RelationActionTypes.ADD_RELATION: {
             const rel = <Rel>action.payload
+
+						//TODO(taco) move to saga
+						api.addRelation(rel)
 
             return <RelationState>{
                 ...state,

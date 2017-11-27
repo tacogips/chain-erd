@@ -40,10 +40,8 @@ import _ "github.com/gogo/protobuf/types"
 import _ "github.com/gogo/protobuf/types"
 import _ "github.com/golang/protobuf/ptypes/empty"
 
-import (
-	context "golang.org/x/net/context"
-	grpc "google.golang.org/grpc"
-)
+import context "golang.org/x/net/context"
+import grpc "google.golang.org/grpc"
 
 import io "io"
 
