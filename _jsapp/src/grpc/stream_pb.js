@@ -218,7 +218,7 @@ proto.stream.StreamPayload.prototype.getEvent = function() {
 
 /** @param {!proto.stream.StreamPayload.Event} value */
 proto.stream.StreamPayload.prototype.setEvent = function(value) {
-  jspb.Message.setField(this, 1, value);
+  jspb.Message.setProto3EnumField(this, 1, value);
 };
 
 
