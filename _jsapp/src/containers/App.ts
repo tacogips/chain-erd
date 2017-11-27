@@ -20,6 +20,5 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: AppProps) =
     }
 })
 
-
 export const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent)
 

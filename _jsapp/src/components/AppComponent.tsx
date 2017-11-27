@@ -16,7 +16,7 @@ export interface AppProps{
 
 export class AppComponent extends React.Component<AppProps, any> {
 		componentDidMount(){
-
+			this.props.onAppInit()
 		}
     render() {
         return (
