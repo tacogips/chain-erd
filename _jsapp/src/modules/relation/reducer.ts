@@ -129,7 +129,7 @@ export const relationReducer: Reducer<RelationState> = (state: RelationState = i
             const rel = <Rel>action.payload
 
 						//TODO(taco) move to saga
-						api.addRelation(rel)
+						//api.addRelation(rel)
 
             return <RelationState>{
                 ...state,

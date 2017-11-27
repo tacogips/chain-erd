@@ -138,12 +138,12 @@ message Activity {
 service EntityService {
   rpc CreateEntity(Entity) returns (Activity);
   rpc MoveEntity(Move) returns (Activity);
-  rpc TransformEntity(Transform) returns (Activity);
+//  rpc TransformEntity(Transform) returns (Activity);
 }
 
-service RelationService {
-  rpc AddRelation(Rel) returns (Activity);
-}
+//service RelationService {
+//  rpc AddRelation(Rel) returns (Activity);
+//}
 
 
 service ActivityService {
