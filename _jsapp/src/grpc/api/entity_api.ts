@@ -45,7 +45,7 @@ export function transformEntity(transform: Transform) {
             const { status, statusMessage, headers, message } = res
 
 						//TODO(taco) add to activity list
-            console.debug('-- move entity--')
+            console.debug('-- transform entity --')
             console.debug(status)
             console.debug(message)
         }
