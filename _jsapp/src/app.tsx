@@ -7,7 +7,7 @@ import { rootReducer, RootState } from './modules/rootReducer'
 import rootSaga from './modules/rootSaga'
 import { Stage, Layer, Group } from 'react-konva'
 import { Canvas } from 'containers/Canvas'
-import { ToolPane } from './containers/ToolPane'
+import { App } from 'containers/App'
 
 const initialState: RootState = {}
 
@@ -20,18 +20,5 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga)
 
-class App extends React.Component<{}, any> {
-    render() {
-        return (
-            <Provider store={store}>
-                <div>
-                    <ToolPane />
-                    <Canvas width={1300} height={1000} />
-                </div>
-            </Provider>
-        )
-    }
-}
-
-render(<App />, document.getElementById('app'))
+render(<App store={store}/>, document.getElementById('app'))
 
