@@ -19,6 +19,9 @@ func registerServices(c context.Context, grpcServer *grpc.Server, streamBroadcas
 	entityServer := server.NewEntityServer(c, streamBroadcastCh)
 	gen.RegisterEntityServiceServer(grpcServer, entityServer)
 
+	relationServer := server.NewRelationServer(c, streamBroadcastCh)
+	gen.RegisterRelationServiceServer(grpcServer, relationServer)
+
 	streamServer := server.NewStreamServer(c, streamBroadcastCh)
 	gen.RegisterStreamServiceServer(grpcServer, streamServer)
 
