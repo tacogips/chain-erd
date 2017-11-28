@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: AppProps) =
 					if(payload.hasEntity()){
 						dispatch(entityActionCreators.streamDownEntity(payload.getEntity()))
 					}else if (payload.hasRel()){
-  					payload.getRel()
+						dispatch(relActionCreators.streamDownRelation(payload.getRel()))
 					}
         })
     }
