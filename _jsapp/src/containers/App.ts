@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { rootReducer, RootState } from 'modules/rootReducer'
+import { actionCreators as authActionCreators} from 'modules/auth'
 import rootSaga from 'modules/rootSaga'
 import { Stage, Layer, Group } from 'react-konva'
 import { AppComponent, AppProps} from 'components/AppComponent'
@@ -16,7 +17,7 @@ const mapStateToProps = (state: RootState, ownProps: AppProps) => (<AppProps>{
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: AppProps) => (<AppProps>{
     ...ownProps,
     onAppInit: () => {
-        //return dispatch(actionCreators.connectingOneToMenyRel())
+      return dispatch(authActionCreators.authentication())
     }
 })
 

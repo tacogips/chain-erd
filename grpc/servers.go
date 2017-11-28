@@ -13,6 +13,9 @@ import (
 
 func registerServices(c context.Context, grpcServer *grpc.Server, streamBroadcastCh chan *gen.StreamPayload) error {
 
+	authServer := server.NewAuthServer(c)
+	gen.RegisterAuthServiceServer(grpcServer, authServer)
+
 	entityServer := server.NewEntityServer(c, streamBroadcastCh)
 	gen.RegisterEntityServiceServer(grpcServer, entityServer)
 

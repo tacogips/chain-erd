@@ -56,6 +56,7 @@ func (svr *StreamServer) WatchBroadcast() {
 		case payload := <-svr.broadcastChannel:
 			for _, mailbox := range svr.listenersBySessionID {
 				//TODO(taco) prevent send to listner who generate this payload
+				// if aechSessionID != payload.UserSessionID{ ...
 				mailbox.Send(payload)
 			}
 
