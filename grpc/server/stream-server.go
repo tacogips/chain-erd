@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/ajainc/chain/ctx/logger"
+	"github.com/ajainc/chain/event/dao"
 	"github.com/ajainc/chain/grpc/gen"
 )
 
@@ -81,6 +82,26 @@ func (server *StreamServer) Connect(req *gen.StreamConnectReq, stream gen.Stream
 			return err
 		}
 		server.addListener(newListener)
+
+		// load all data
+		//TODO (taco) move to apropriate place
+		go func() {
+			entities, err := dao.GetAllEntities(server.appCtx)
+			if err != nil {
+				logger.Errorf(server.appCtx, "failed to get all entities before send to stream")
+			}
+			for _, entity := range entities {
+				newListener.Send(gen.NewEntitySteamPayload(gen.StreamPayload_NEW, entity))
+			}
+
+			rels, err := dao.GetAllRelations(server.appCtx)
+
+			for _, rel := range rels {
+				newListener.Send(gen.NewRelationSteamPayload(gen.StreamPayload_NEW, rel))
+			}
+
+		}()
+
 		err = newListener.Listen() // wait
 		if err != nil {
 			logger.Warnf(server.appCtx, err.Error())

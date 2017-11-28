@@ -14,11 +14,11 @@ import (
 )
 
 type crateEntityTestData struct {
-	input         []CeateEntityEv
+	input         []CreateEntityEv
 	expected      []gen.Entity
-	optionalCheck func(string, int, *db.DB, CeateEntityEv, gen.Entity, gen.Entity)
+	optionalCheck func(string, int, *db.DB, CreateEntityEv, gen.Entity, gen.Entity)
 	errChech      func(string, error)
-	redoCheck     func(string, int, *db.DB, CeateEntityEv)
+	redoCheck     func(string, int, *db.DB, CreateEntityEv)
 }
 
 func TestCreateEntity(t *testing.T) {
@@ -42,7 +42,7 @@ func TestCreateEntity(t *testing.T) {
 		expected.Name = "NewEntity"
 
 		d := crateEntityTestData{}
-		d.input = []CeateEntityEv{{Entity: input}}
+		d.input = []CreateEntityEv{{Entity: input}}
 		d.expected = []gen.Entity{expected}
 
 		datas = append(datas, d)

@@ -19,7 +19,7 @@ func (server *EntityServer) CreateEntity(_ go16ctx.Context, in *gen.Entity) (*ge
 
 	logger.Debug(server.appCtx, "CreatEnity called")
 
-	ev := event.NewCeateEntityEvent(in)
+	ev := event.NewCreateEntityEvent(in)
 	activity, err := event.Exec(server.appCtx, ev, server.streamBroadcastCh)
 	if err != nil {
 		return nil, err

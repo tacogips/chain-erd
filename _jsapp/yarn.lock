@@ -2900,9 +2900,9 @@ react-dom@16.1.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-konva@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-1.6.2.tgz#03720beb9422717d00dee5942c87800c3ba1afde"
+react-konva@^1.6.4:
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-1.6.4.tgz#7e5665abad208a5379635308c00f9bc339c57542"
   dependencies:
     fbjs "^0.8.14"
     react-reconciler "^0.5.0"

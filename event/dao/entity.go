@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ajainc/chain/ctx/docdb"
+	"github.com/ajainc/chain/ctx/logger"
 	"github.com/ajainc/chain/grpc/gen"
 	"github.com/fatih/structs"
 	"github.com/mitchellh/mapstructure"
@@ -61,6 +62,33 @@ func GetEntityByObjectID(c context.Context, objectID string) (int, gen.Entity, e
 	}
 
 	return id, *entity, nil
+}
+
+//GetAllEntities
+func GetAllEntities(c context.Context) ([]*gen.Entity, error) {
+	db := docdb.FromContext(c)
+
+	entities := db.Use(docdb.COLL_ENTITY)
+	var result []*gen.Entity
+	entities.ForEachDoc(func(id int, docContent []byte) bool {
+		doc, err := entities.Read(id)
+		if err != nil {
+			logger.Error(c, err)
+			return false
+		}
+
+		entity := new(gen.Entity)
+		err = UnmarshalEntity(doc, entity)
+		if err != nil {
+			logger.Error(c, err)
+			return false
+		}
+		result = append(result, entity)
+
+		return true
+	})
+
+	return result, nil
 }
 
 func UnmarshalEntity(src map[string]interface{}, dst *gen.Entity) error {

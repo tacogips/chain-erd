@@ -10,6 +10,8 @@ export type RelationActionTypes = string
 export module RelationActionTypes {
     export const ADD_RELATION: RelationActionTypes = 'ADD_RELATION'
     export const RERENDER_BY_ENTITY_MOVE: RelationActionTypes = 'RERENDER_BY_ENTITY_MOVE'
+
+    export const STREAM_DOWN_RELATION: RelationActionTypes = 'STREAM_DOWN_RELATION'
 }
 
 // === actions ===============
@@ -23,6 +25,11 @@ export interface RerenderByEntityMove extends FSAction<{ entityObjectId: string,
     payload: { entityObjectId: string, coord: Coord }
 }
 
+
+export interface StreamDownRelation extends FSAction<Rel> {
+    type: RelationActionTypes,
+    payload: Rel
+}
 
 export type RelationAction =
     AddRelation |
@@ -41,6 +48,13 @@ export const actionCreators = {
         return <RerenderByEntityMove>{
             type: RelationActionTypes.RERENDER_BY_ENTITY_MOVE,
             payload: { entityObjectId: entityObjectId, coord: coord }
+        }
+    },
+
+    streamDownRelation: (rel: Rel) => {
+        return <StreamDownRelation>{
+            type: RelationActionTypes.STREAM_DOWN_RELATION,
+            payload: rel
         }
     }
 }

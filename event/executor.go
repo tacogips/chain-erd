@@ -48,10 +48,9 @@ func Undo(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload
 	// TODO(tacogisp): impl
 	ev.Undo(c)
 
-	streamPayloads, _ := ev.ExecStreamPayloads(c)
+	streamPayloads, _ := ev.UndoStreamPayloads(c)
 	//TODO(taco) retry if error?
 	go func() {
-
 		logger.Debugf(c, "stream out undo result %#v", streamPayloads)
 		for _, paylaod := range streamPayloads {
 			streamBroadcastCh <- paylaod

@@ -19,14 +19,14 @@ export function authenticatePromise(): Promise<Authed> {
             onEnd: (res: grpc.UnaryOutput<Authed>) => {
                 const { status, statusMessage, headers, message } = res
 
-								console.log("called")
-							if (status == 0){
+                console.log("called")
+                if (status == 0) {
 
-								console.log("succ")
-                resolve(message)
-							}else{
-								reject(statusMessage)
-							}
+                    console.log("succ")
+                    resolve(message)
+                } else {
+                    reject(statusMessage)
+                }
             }
         })
     })

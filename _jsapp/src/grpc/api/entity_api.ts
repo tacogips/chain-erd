@@ -12,7 +12,7 @@ export function createEntity(entity: Entity) {
         onEnd: (res: grpc.UnaryOutput<Activity>) => {
             const { status, statusMessage, headers, message } = res
 
-						//TODO(taco) add to activity list
+            //TODO(taco) add to activity list
             console.debug('-- create entity--')
             console.debug(status)
             console.debug(message)
@@ -28,7 +28,7 @@ export function moveEntity(move: Move) {
         onEnd: (res: grpc.UnaryOutput<Activity>) => {
             const { status, statusMessage, headers, message } = res
 
-						//TODO(taco) add to activity list
+            //TODO(taco) add to activity list
             console.debug('-- move entity--')
             console.debug(status)
             console.debug(message)
@@ -44,7 +44,7 @@ export function transformEntity(transform: Transform) {
         onEnd: (res: grpc.UnaryOutput<Activity>) => {
             const { status, statusMessage, headers, message } = res
 
-						//TODO(taco) add to activity list
+            //TODO(taco) add to activity list
             console.debug('-- transform entity --')
             console.debug(status)
             console.debug(message)

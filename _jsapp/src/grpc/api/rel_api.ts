@@ -12,7 +12,7 @@ export function addRelation(rel: Rel) {
         onEnd: (res: grpc.UnaryOutput<Activity>) => {
             const { status, statusMessage, headers, message } = res
 
-						//TODO(taco) add to activity list
+            //TODO(taco) add to activity list
             console.debug('-- add rel --')
             console.debug(status)
             console.debug(message)

@@ -2,21 +2,21 @@ import * as actions from './actions'
 import { Reducer } from 'redux'
 import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 
-import {Authentication, AuthenticateSuccess} from "./actions";
+import { Authentication, AuthenticateSuccess } from "./actions";
 import { Authed } from 'grpc/auth_pb'
 
 export interface AuthState {
-    is_authed: boolean
+    isAuthed: boolean
     authInfo?: Authed
 }
 
 export const initialState: AuthState = {
-    is_authed: false,
+    isAuthed: false,
     authInfo: null
 }
 
 // reducer
-export const controlReducer: Reducer<AuthState> = (state: AuthState = initialState, action: actions.AuthAction) => {
+export const authReducer: Reducer<AuthState> = (state: AuthState = initialState, action: actions.AuthAction) => {
     switch (action.type) {
 
         case actions.AuthActionTypes.AUTHENTICATE_SUCCSESS:
@@ -24,7 +24,7 @@ export const controlReducer: Reducer<AuthState> = (state: AuthState = initialSta
 
             return {
                 ...state,
-                is_authed: true,
+                isAuthed: true,
                 authInfo: authenticationSuccess.payload,
             }
 

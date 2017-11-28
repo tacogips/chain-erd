@@ -11,28 +11,28 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// CeateEntityEv stands for Creating New Entity at specified coordinates
-func NewCeateEntityEvent(entity *gen.Entity) *CeateEntityEv {
-	return &CeateEntityEv{
+// CreateEntityEv stands for Creating New Entity at specified coordinates
+func NewCreateEntityEvent(entity *gen.Entity) *CreateEntityEv {
+	return &CreateEntityEv{
 		eventID: uuid.NewV4().String(),
-		Entity:  *entity,
+		Entity:  entity,
 	}
 }
 
-type CeateEntityEv struct {
+type CreateEntityEv struct {
 	eventID string
-	Entity  gen.Entity
+	Entity  *gen.Entity
 }
 
-func (ev *CeateEntityEv) EventID() string {
+func (ev *CreateEntityEv) EventID() string {
 	return ev.eventID
 }
 
-func (ev *CeateEntityEv) Description() string {
+func (ev *CreateEntityEv) Description() string {
 	return fmt.Sprintf("Create Entity")
 }
 
-func (ev *CeateEntityEv) Exec(c context.Context) error {
+func (ev *CreateEntityEv) Exec(c context.Context) error {
 	db := docdb.FromContext(c)
 
 	ev.Entity.FillWithDefault()
@@ -42,12 +42,12 @@ func (ev *CeateEntityEv) Exec(c context.Context) error {
 		return err
 	}
 
-	err = dao.InsertEntity(c, ev.Entity)
+	err = dao.InsertEntity(c, *ev.Entity)
 
 	return err
 }
 
-func (ev *CeateEntityEv) Validate(db *db.DB) error {
+func (ev *CreateEntityEv) Validate(db *db.DB) error {
 	err := ev.Entity.Validate()
 	if err != nil {
 		return err
@@ -59,7 +59,7 @@ func (ev *CeateEntityEv) Validate(db *db.DB) error {
 	return nil
 }
 
-func (ev *CeateEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
+func (ev *CreateEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
 	_, entity, err := dao.GetEntityByObjectID(c, ev.Entity.ObjectID)
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (ev *CeateEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPay
 	}, nil
 }
 
-func (ev *CeateEntityEv) Undo(c context.Context) error {
+func (ev *CreateEntityEv) Undo(c context.Context) error {
 	coll := docdb.COLL_ENTITY
 	db := docdb.FromContext(c)
 
@@ -87,12 +87,12 @@ func (ev *CeateEntityEv) Undo(c context.Context) error {
 	return entities.Delete(id)
 }
 
-func (ev *CeateEntityEv) UndoStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
+func (ev *CreateEntityEv) UndoStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
 	return []*gen.StreamPayload{
 		{
 			Operation: gen.StreamPayload_DELETE,
 			Object: &gen.StreamPayload_Entity{
-				&ev.Entity,
+				ev.Entity,
 			},
 		},
 	}, nil
