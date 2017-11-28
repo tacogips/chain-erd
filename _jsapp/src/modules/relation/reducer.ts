@@ -152,6 +152,14 @@ export const relationReducer: Reducer<RelationState> = (state: RelationState = i
             }
         }
 
+        case actions.RelationActionTypes.STREAM_DOWN_RELATION: {
+            const rel = <Rel>action.payload
+            return <RelationState>{
+                ...state,
+                relationOfEntities: state.relationOfEntities.add(rel)
+            }
+        }
+
         default:
             return state
     }

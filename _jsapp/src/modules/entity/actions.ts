@@ -20,6 +20,8 @@ export module EntityActionTypes {
     export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
     export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
 
+    export const STREAM_DOWN_ENTITY: EntityActionTypes = 'STREAM_DOWN_ENTITY'
+
 }
 
 // === actions ===============
@@ -81,6 +83,13 @@ export interface TransformingEntity extends FSAction<{ objectId: string, coordWH
     }
 }
 
+
+export interface StreamDownEntity extends FSAction<Entity> {
+    type: EntityActionTypes,
+    payload: Entity
+}
+
+
 // Transforming
 export interface TransformFinishedEntity extends FSAction<Transform> {
     type: EntityActionTypes,
@@ -97,7 +106,8 @@ export type EntityAction =
     MoveEntity |
     MovingEntity |
     TransformingEntity |
-    TransformFinishedEntity
+    TransformFinishedEntity |
+		StreamDownEntity
 
 
 // === action creator =================
@@ -170,6 +180,13 @@ export const actionCreators = {
         return <TransformFinishedEntity>{
             type: EntityActionTypes.TRANSFORM_FINISHED_ENTITY,
             payload: transform
+        }
+    },
+
+    streamDownEntity: (entity: Entity) => {
+        return <StreamDownEntity>{
+            type: EntityActionTypes.STREAM_DOWN_ENTITY,
+            payload: entity
         }
     }
 }

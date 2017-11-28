@@ -33,13 +33,14 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: AppProps) =
     onConnectStreaming: (authed: Authed) => {
         // async call
         streamApi.connectToStream(authed, (payload: StreamPayload) => {
-            //dispatch(authActionCreators.authentication(true))
+					if(payload.hasEntity()){
+						dispatch(entityActionCreators.streamDownEntity(payload.getEntity()))
+					}else if (payload.hasRel()){
+  					payload.getRel()
+					}
         })
     }
 })
-
-
-
 
 export const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent)
 

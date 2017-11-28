@@ -2,7 +2,7 @@ import * as actions from './actions'
 import { Reducer } from 'redux'
 import { Map, List, Set } from 'immutable'
 
-import { Entity, Rel, Move, Coord,CoordWH, Transform } from 'grpc/erd_pb'
+import { Entity, Rel, Move, Coord, CoordWH, Transform } from 'grpc/erd_pb'
 
 import * as api from 'grpc/api'
 
@@ -33,8 +33,8 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 console.error(`invalid entity:alerady exists[${objectId}]`)
             }
 
-						//TODO(taco) move to saga
-						api.createEntity(entity)
+            //TODO(taco) move to saga
+            api.createEntity(entity)
 
             return <EntityState>{
                 ...state,
@@ -54,8 +54,8 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 return
             }
 
-						//TODO(taco) move to saga
-						api.moveEntity(move)
+            //TODO(taco) move to saga
+            api.moveEntity(move)
 
             const entity = state.entities.get(objectId)
             entity.setCoord(move.getTo())
@@ -63,13 +63,13 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             return <EntityState>{
                 ...state,
                 entities: state.entities.set(objectId, entity),
-								seqentialchoiceEntities:List()
+                seqentialchoiceEntities: List()
             }
         }
 
         case actions.EntityActionTypes.MOVING_ENTITY: {
 
-            const {objectId, coord} = <{objectId:string,coord:Coord}>action.payload
+            const { objectId, coord } = <{ objectId: string, coord: Coord }>action.payload
 
             if (!state.entities.has(objectId)) {
                 console.error(`cant move invalid object [${objectId}]`)
@@ -82,7 +82,7 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             return <EntityState>{
                 ...state,
                 entities: state.entities.set(objectId, entity),
-								seqentialchoiceEntities:List()
+                seqentialchoiceEntities: List()
             }
         }
 
@@ -149,17 +149,32 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             const objectId = transform.getObjectId()
 
             if (!state.entities.has(objectId)) {
-                console.error(`cant move invalid object [${objectId}]`)
+                console.error(`cant transform invalid object [${objectId}]`)
                 return
             }
 
-						//TODO(taco) move to saga
-						api.transformEntity(transform)
+
+						console.debug('transform finished')
+            //TODO(taco) move to saga
+            api.transformEntity(transform)
 
             const entity = state.entities.get(objectId)
             entity.setCoord(transform.getTo().getCoord())
             entity.setWidthHeight(transform.getTo().getWidthHeight())
 
+            return <EntityState>{
+                ...state,
+                entities: state.entities.set(objectId, entity)
+            }
+        }
+
+
+        case actions.EntityActionTypes.STREAM_DOWN_ENTITY: {
+            const entity = <Entity>action.payload
+            const objectId = entity.getObjectId()
+
+					console.debug('stream down')
+					console.debug(objectId)
             return <EntityState>{
                 ...state,
                 entities: state.entities.set(objectId, entity)

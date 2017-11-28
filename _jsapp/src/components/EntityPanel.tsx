@@ -215,7 +215,7 @@ export class EntityPanel extends React.Component<EntityPanelProps, EntityPanelSt
             x={topLeft.x + w} y={topLeft.y + h}
             onMouseDownPre={anchorOnMouseDownPre}
             transforming={genTransformHdr(anchorTransformBottomRight, entity)}
-            transformed={genTransformHdr(anchorTransformBottomRight, entity)}
+            transformed={genTransformfinishedFn(anchorTransformBottomRight)}
         />)
 
         return anchors
