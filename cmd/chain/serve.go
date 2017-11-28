@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,35 +15,56 @@ import (
 	"github.com/ajainc/chain/ctx/docdb"
 	"github.com/ajainc/chain/ctx/logger"
 	chaingrpc "github.com/ajainc/chain/grpc"
+	"github.com/ajainc/chain/grpc/gen"
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
 )
 
 //TODO (tacogips) implement commands with option
 func main() {
 
-	port := 50051
+	//TODO(taco) move to config file
+	port := 1212
 
 	c, cancelContext := setupCtx()
 	defer cancelContext()
 
 	//  setup grpc server
-	grpcwebServer, err := chaingrpc.Setup(c)
+	//TODO(taco) move broadcast channel size to config
+	streamBroadcastCh := make(chan *gen.StreamPayload, 300)
+	grpcServer, err := chaingrpc.Setup(c, streamBroadcastCh)
+
 	if err != nil {
 		panic(err)
 	}
 
-	handler := func(resp http.ResponseWriter, req *http.Request) {
-		grpcwebServer.ServeHttp(resp, req)
-	}
+	//TODO(taco) move to config file
+	grpcWeb := true
+	if grpcWeb {
+		grpcwebServer := grpcweb.WrapServer(grpcServer)
 
-	grpcHttpServer := http.Server{
-		Addr:    fmt.Sprintf(":%d", port),
-		Handler: http.HandlerFunc(handler),
-	}
+		handler := func(resp http.ResponseWriter, req *http.Request) {
+			grpcwebServer.ServeHttp(resp, req)
+		}
+		grpcHttpServer := http.Server{
+			Addr:    fmt.Sprintf(":%d", port),
+			Handler: http.HandlerFunc(handler),
+		}
 
-	go func() {
-		logger.Infof(c, "server started. listening on :%d", port)
-		grpcHttpServer.ListenAndServe() // TODO(tacogips): use HTTP/2
-	}()
+		go func() {
+			logger.Infof(c, "grpc web server started. listening on :%d", port)
+			grpcHttpServer.ListenAndServe() // TODO(tacogips): use HTTP/2
+		}()
+
+	} else {
+		listener, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+		if err != nil {
+			panic(err)
+		}
+		go func() {
+			logger.Infof(c, "grpc server started. listening on :%d", port)
+			grpcServer.Serve(listener)
+		}()
+	}
 
 	waitShutdownDone := make(chan struct{})
 	sigs := make(chan os.Signal, 1)

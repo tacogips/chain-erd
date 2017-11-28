@@ -72,6 +72,16 @@ func Errorf(c context.Context, f string, s ...interface{}) {
 	l.Errorf(f, s...)
 }
 
+func Warn(c context.Context, s ...interface{}) {
+	l := FromContext(c)
+	l.Warn(s...)
+}
+
+func Warnf(c context.Context, f string, s ...interface{}) {
+	l := FromContext(c)
+	l.Warnf(f, s...)
+}
+
 func Info(c context.Context, s ...interface{}) {
 	l := FromContext(c)
 	l.Info(s...)

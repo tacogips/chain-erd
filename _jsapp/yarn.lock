@@ -44,6 +44,10 @@
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-5.4.0.tgz#f3658535af7f1f502acd6da7daf405ffeb1f7ee4"
 
+"@types/text-encoding@0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@types/text-encoding/-/text-encoding-0.0.30.tgz#2ad7bc19287094c9d2754d238e0994dd2995781f"
+
 "@types/uuid@^3.4.3":
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.4.3.tgz#121ace265f5569ce40f4f6d0ff78a338c732a754"
@@ -744,6 +748,10 @@ braces@^2.3.0:
 brorand@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
+
+browser-headers@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/browser-headers/-/browser-headers-0.2.1.tgz#35cb1caa56e758946fb4ddd80344b9dba48d0924"
 
 browserify-aes@^1.0.0, browserify-aes@^1.0.4:
   version "1.0.6"
@@ -1678,6 +1686,10 @@ google-protobuf@^3.2.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.4.0.tgz#58fbe51555a0a56b2dd3fc6f6d869fa21d57ab0a"
 
+google-protobuf@^3.2.7:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.5.0.tgz#b8cc63c74d83457bd8a9a904503c8efb26bca339"
+
 graceful-fs@^4.1.2:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
@@ -1685,6 +1697,14 @@ graceful-fs@^4.1.2:
 "graceful-readlink@>= 1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
+
+grpc-web-client@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/grpc-web-client/-/grpc-web-client-0.3.1.tgz#ab1abe15856306e47deb97b0fd2dbd3f56e5878e"
+  dependencies:
+    "@types/text-encoding" "0.0.30"
+    browser-headers "^0.2.1"
+    text-encoding "^0.6.4"
 
 handle-thing@^1.2.5:
   version "1.2.5"
@@ -3503,6 +3523,10 @@ tar@^2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
+
+text-encoding@^0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/text-encoding/-/text-encoding-0.6.4.tgz#e399a982257a276dae428bb92845cb71bdc26d19"
 
 timers-browserify@^2.0.2:
   version "2.0.2"

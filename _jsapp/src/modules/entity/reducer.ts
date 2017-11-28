@@ -4,6 +4,8 @@ import { Map, List, Set } from 'immutable'
 
 import { Entity, Rel, Move, Coord,CoordWH, Transform } from 'grpc/erd_pb'
 
+import * as api from 'grpc/api'
+
 export interface EntityState {
     entities: Map<string, Entity>
     currentSelectEntities: Map<string, Entity>
@@ -31,12 +33,16 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 console.error(`invalid entity:alerady exists[${objectId}]`)
             }
 
+						//TODO(taco) move to saga
+						api.createEntity(entity)
+
             return <EntityState>{
                 ...state,
                 entities: state.entities.set(objectId, entity),
                 seqentialchoiceEntities: List(),
             }
         }
+
 
         case actions.EntityActionTypes.MOVE_ENTITY: {
 
@@ -47,6 +53,9 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 console.error(`cant move invalid object [${objectId}]`)
                 return
             }
+
+						//TODO(taco) move to saga
+						api.moveEntity(move)
 
             const entity = state.entities.get(objectId)
             entity.setCoord(move.getTo())
@@ -94,7 +103,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
             }
         }
 
-
         case actions.EntityActionTypes.SEQ_CHOICE_ENTITIES: {
             const objectId = <string>action.payload
             if (!objectId || objectId.length == 0 || !state.entities.has(objectId)) {
@@ -108,7 +116,6 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 seqentialChoiceEntities: state.seqentialChoiceEntities.push(objectId)
             }
         }
-
 
         case actions.EntityActionTypes.CANCEL_SELECTION: {
             return <EntityState>{
@@ -145,6 +152,9 @@ export const entityReducer: Reducer<EntityState> = (state: EntityState = initial
                 console.error(`cant move invalid object [${objectId}]`)
                 return
             }
+
+						//TODO(taco) move to saga
+						api.transformEntity(transform)
 
             const entity = state.entities.get(objectId)
             entity.setCoord(transform.getTo().getCoord())

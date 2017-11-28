@@ -10,8 +10,8 @@ export module EntityActionTypes {
     export const CREATE_NEW_ENTITY: EntityActionTypes = 'CREATE_NEW_ENTIY'
     export const DELETE_ENTITY: EntityActionTypes = 'DELETE_ENTIY'
     export const MOVE_ENTITY: EntityActionTypes = 'MOVE_ENTITY'
-    export const MOVING_ENTITY: EntityActionTypes = 'MOVING_ENTITY'
 
+    export const MOVING_ENTITY: EntityActionTypes = 'MOVING_ENTITY'
     export const SELECT_ENTITY: EntityActionTypes = 'SELECT_ENTITY'
     export const CHOICE_ENTITIES: EntityActionTypes = 'CHOICE_ENTITIES'
     export const SEQ_CHOICE_ENTITIES: EntityActionTypes = 'SEQ_CHOICE_ENTITIES'
@@ -19,6 +19,7 @@ export module EntityActionTypes {
 
     export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
     export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
+
 
 }
 

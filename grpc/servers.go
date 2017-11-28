@@ -5,25 +5,35 @@ import (
 
 	"github.com/ajainc/chain/grpc/gen"
 	"github.com/ajainc/chain/grpc/server"
-	"github.com/improbable-eng/grpc-web/go/grpcweb"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 )
 
-func registerServices(c context.Context, grpcServer *grpc.Server) error {
-	gen.RegisterEntityServiceServer(grpcServer, *server.NewEntityServer(c))
+func registerServices(c context.Context, grpcServer *grpc.Server, streamBroadcastCh chan *gen.StreamPayload) error {
+
+	authServer := server.NewAuthServer(c)
+	gen.RegisterAuthServiceServer(grpcServer, authServer)
+
+	entityServer := server.NewEntityServer(c, streamBroadcastCh)
+	gen.RegisterEntityServiceServer(grpcServer, entityServer)
+
+	streamServer := server.NewStreamServer(c, streamBroadcastCh)
+	gen.RegisterStreamServiceServer(grpcServer, streamServer)
+
+	// watch streamBroadcastCh
+	go streamServer.WatchBroadcast()
+
 	healthpb.RegisterHealthServer(grpcServer, health.NewServer())
 
 	return nil
 }
 
-func Setup(c context.Context, opts ...grpc.ServerOption) (*grpcweb.WrappedGrpcServer, error) {
+func Setup(c context.Context, streamBroadcastCh chan *gen.StreamPayload, opts ...grpc.ServerOption) (*grpc.Server, error) {
 	s := grpc.NewServer(opts...)
-	err := registerServices(c, s)
 
-	wrappedGrpc := grpcweb.WrapServer(s)
+	err := registerServices(c, s, streamBroadcastCh)
 
-	return wrappedGrpc, err
+	return s, err
 }

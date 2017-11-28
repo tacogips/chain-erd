@@ -6,10 +6,42 @@ import * as github_com_gogo_protobuf_gogoproto_gogo_pb from "./github.com/gogo/p
 import * as google_protobuf_duration_pb from "google-protobuf/google/protobuf/duration_pb";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as erd_pb from "./erd_pb";
+import * as auth_pb from "./auth_pb";
+
+export class StreamConnectReq extends jspb.Message {
+  hasAuthed(): boolean;
+  clearAuthed(): void;
+  getAuthed(): auth_pb.Authed | undefined;
+  setAuthed(value?: auth_pb.Authed): void;
+
+  getAction(): StreamConnectReq.Action;
+  setAction(value: StreamConnectReq.Action): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): StreamConnectReq.AsObject;
+  static toObject(includeInstance: boolean, msg: StreamConnectReq): StreamConnectReq.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: StreamConnectReq, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): StreamConnectReq;
+  static deserializeBinaryFromReader(message: StreamConnectReq, reader: jspb.BinaryReader): StreamConnectReq;
+}
+
+export namespace StreamConnectReq {
+  export type AsObject = {
+    authed?: auth_pb.Authed.AsObject,
+    action: StreamConnectReq.Action,
+  }
+
+  export enum Action {
+    REGISTER = 0,
+    LOGOUT = 1,
+  }
+}
 
 export class StreamPayload extends jspb.Message {
-  getEvent(): StreamPayload.Event;
-  setEvent(value: StreamPayload.Event): void;
+  getOperation(): StreamPayload.Operation;
+  setOperation(value: StreamPayload.Operation): void;
 
   hasEntity(): boolean;
   clearEntity(): void;
@@ -34,12 +66,12 @@ export class StreamPayload extends jspb.Message {
 
 export namespace StreamPayload {
   export type AsObject = {
-    event: StreamPayload.Event,
+    operation: StreamPayload.Operation,
     entity?: erd_pb.Entity.AsObject,
     rel?: erd_pb.Rel.AsObject,
   }
 
-  export enum Event {
+  export enum Operation {
     NEW = 0,
     MOD = 1,
     DELETE = 2,

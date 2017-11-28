@@ -1,32 +1,62 @@
 package event
 
-import "context"
+import (
+	"context"
+
+	"github.com/ajainc/chain/ctx/logger"
+	"github.com/ajainc/chain/grpc/gen"
+)
 
 // Exec execute  Event.Do() and puts it to activities stack
-func Exec(c context.Context, ev Event) (*Activity, error) {
+func Exec(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload) (*Activity, error) {
+
 	var err error
+
+	logger.Debugf(c, "execute event %#v", ev)
 
 	err = ev.Exec(c)
 	if err != nil {
 		return nil, err
 	}
 
+	activity := NewActivity(ev)
+	err = addActivityHistory(*activity)
 	if err != nil {
 		return nil, err
 	}
 
-	activity := NewActivity(ev)
-	err = addActivity(*activity)
+	streamPayloads, err := ev.ExecStreamPayloads(c)
 	if err != nil {
-		return nil, err
+		logger.Error(c, err)
+	} else {
+		//TODO(taco) retry if error?
+		go func() {
+			logger.Debugf(c, "stream out exec result %#v", streamPayloads)
+			for _, paylaod := range streamPayloads {
+				streamBroadcastCh <- paylaod
+			}
+		}()
 	}
 
 	return activity, nil
 }
 
 //Undo execute ev.Undo()
-func Undo(c context.Context, ev Event) error {
+func Undo(c context.Context, ev Event, streamBroadcastCh chan *gen.StreamPayload) error {
+
+	logger.Debugf(c, "undo event %#v", ev)
 	// TODO(tacogisp): impl
 	ev.Undo(c)
+
+	streamPayloads, _ := ev.ExecStreamPayloads(c)
+	//TODO(taco) retry if error?
+	go func() {
+
+		logger.Debugf(c, "stream out undo result %#v", streamPayloads)
+		for _, paylaod := range streamPayloads {
+			streamBroadcastCh <- paylaod
+		}
+	}()
+
 	return nil
 }

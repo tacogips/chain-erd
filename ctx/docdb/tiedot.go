@@ -79,7 +79,7 @@ func WithContextWithName(c context.Context, conf Config, tempDirPrefix string, d
 	c = context.WithValue(c, key, db)
 
 	closeFunc := func() error {
-		logger.Debug(c, "closing tiedot DB at <%s>", dbDirPath)
+		logger.Debugf(c, "closing tiedot DB at <%s>", dbDirPath)
 
 		db.Close()
 		os.RemoveAll(dbDirPath)

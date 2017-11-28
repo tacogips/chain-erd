@@ -5,6 +5,7 @@ package erd;
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 option go_package                      = "gen";
 option (gogoproto.marshaler_all)       = true;
@@ -26,8 +27,6 @@ enum Order {
   ASC  = 0;
   DESC = 1;
 }
-
-message Empty {}
 
 // version_id will be used to detect conflict action.
 message Entity {
@@ -139,7 +138,13 @@ message Activity {
 service EntityService {
   rpc CreateEntity(Entity) returns (Activity);
   rpc MoveEntity(Move) returns (Activity);
+  rpc TransformEntity(Transform) returns (Activity);
 }
+
+service RelationService {
+  rpc AddRelation(Rel) returns (Activity);
+}
+
 
 service ActivityService {
   rpc Redo(Activity) returns (Activity);

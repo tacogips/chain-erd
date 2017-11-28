@@ -6,18 +6,26 @@ import (
 
 	"github.com/HouzuoGuo/tiedot/db"
 	"github.com/ajainc/chain/ctx/docdb"
+	"github.com/ajainc/chain/event/dao"
 	"github.com/ajainc/chain/grpc/gen"
+	uuid "github.com/satori/go.uuid"
 )
 
 // CeateEntityEv stands for Creating New Entity at specified coordinates
 func NewCeateEntityEvent(entity *gen.Entity) *CeateEntityEv {
 	return &CeateEntityEv{
-		Entity: *entity,
+		eventID: uuid.NewV4().String(),
+		Entity:  *entity,
 	}
 }
 
 type CeateEntityEv struct {
-	Entity gen.Entity
+	eventID string
+	Entity  gen.Entity
+}
+
+func (ev *CeateEntityEv) EventID() string {
+	return ev.eventID
 }
 
 func (ev *CeateEntityEv) Description() string {
@@ -34,8 +42,7 @@ func (ev *CeateEntityEv) Exec(c context.Context) error {
 		return err
 	}
 
-	entities := db.Use(docdb.COLL_ENTITY)
-	_, err = entities.Insert(docdb.MarshalEntity(ev.Entity))
+	err = dao.InsertEntity(c, ev.Entity)
 
 	return err
 }
@@ -52,9 +59,24 @@ func (ev *CeateEntityEv) Validate(db *db.DB) error {
 	return nil
 }
 
+func (ev *CeateEntityEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
+	_, entity, err := dao.GetEntityByObjectID(c, ev.Entity.ObjectID)
+	if err != nil {
+		return nil, err
+	}
+
+	return []*gen.StreamPayload{
+		{
+			Operation: gen.StreamPayload_NEW,
+			Object: &gen.StreamPayload_Entity{
+				&entity,
+			},
+		},
+	}, nil
+}
+
 func (ev *CeateEntityEv) Undo(c context.Context) error {
 	coll := docdb.COLL_ENTITY
-
 	db := docdb.FromContext(c)
 
 	id, _, err := docdb.GetByObjectID(db, coll, ev.Entity.ObjectID)
@@ -63,5 +85,16 @@ func (ev *CeateEntityEv) Undo(c context.Context) error {
 	}
 	entities := db.Use(coll)
 	return entities.Delete(id)
+}
+
+func (ev *CeateEntityEv) UndoStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
+	return []*gen.StreamPayload{
+		{
+			Operation: gen.StreamPayload_DELETE,
+			Object: &gen.StreamPayload_Entity{
+				&ev.Entity,
+			},
+		},
+	}, nil
 
 }
