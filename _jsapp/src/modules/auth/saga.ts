@@ -1,22 +1,24 @@
-import { AuthActionTypes, actionCreators, AuthAction } from './actions'
+import { AuthActionTypes, actionCreators, AuthAction ,AuthenticationOpt } from './actions'
 import { Reducer } from 'redux'
 import { call, put, takeEvery, takeLatest, take, select } from 'redux-saga/effects'
 import { newRelation } from 'grpc/util/relation'
 
 import { Authed } from 'grpc/auth_pb'
-import * as auth_api from 'grpc/api/auth_api'
+import * as authApi from 'grpc/api/auth_api'
+import * as streamApi from 'grpc/api/stream_api'
 
 import { List } from 'immutable'
 import { RootState } from 'modules/rootReducer'
 
+import {  StreamPayload } from "grpc/stream_pb";
+
 function* auth() {
 	try{
-		const authed = yield call(auth_api.authenticatePromise)
+		const authed = yield call(authApi.authenticatePromise)
 
    	yield put(actionCreators.authenticateSuccess(authed))
 
 	}catch(err){
-		//TODO (taco) do something if auth failed
 		console.error(err)
 	}
 }

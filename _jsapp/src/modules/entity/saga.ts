@@ -34,8 +34,8 @@ function* onSelectEntity(action: EntityAction) {
 
         const latestState = <RootState>(yield select())
 
-			console.debug("choice")
-			console.debug(latestState.entity.seqentialChoiceEntities.size)
+        console.debug("choice")
+        console.debug(latestState.entity.seqentialChoiceEntities.size)
 
         if (latestState.entity.seqentialChoiceEntities.size >= 2) {
             //TODO (taco) add rel
@@ -67,7 +67,6 @@ function* onMovingEntity(action: EntityAction) {
     const { objectId, coord } = movingEntity.payload
     yield put(relationActionCreators.rerenderByEntityMove(objectId, coord))
 }
-
 
 export function* entityWatcher() {
     yield takeLatest(EntityActionTypes.CREATE_NEW_ENTITY, onCreateEntity)

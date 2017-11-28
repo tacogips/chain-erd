@@ -15,6 +15,8 @@ export module ControlActionTypes {
 
     export const CONNECTING_ONE_TO_MENY_REL: ControlActionTypes = 'CONNECTING_ONE_TO_MENY_REL'
     export const FINISH_CONNECTING_REL: ControlActionTypes = 'FINISH_CONNECTING_REL'
+
+    export const CONNETED_TO_STREAM: ControlActionTypes = 'CONNETED_TO_STREAM'
 }
 
 export interface EntityActionOption {
@@ -30,7 +32,6 @@ export interface CancelAction extends EmptyAction {
     type: ControlActionTypes
 }
 
-
 export interface ConnectingOneToMenyRel extends EmptyAction {
     type: ControlActionTypes,
 }
@@ -39,8 +40,16 @@ export interface FinishConnectingRel extends EmptyAction {
     type: ControlActionTypes,
 }
 
+export interface ConnectedToStream extends EmptyAction {
+    type: ControlActionTypes,
+}
 
-export type ControlAction = PrepareNewEntity
+export type ControlAction =
+    PrepareNewEntity |
+    CancelAction |
+    ConnectingOneToMenyRel |
+    FinishConnectingRel |
+    ConnectedToStream
 
 // === action creator =================
 export const actionCreators = {
@@ -75,6 +84,13 @@ export const actionCreators = {
         return <CancelAction>{
             type: ControlActionTypes.FINISH_CONNECTING_REL,
         }
-    }
+    },
+
+    connectedToStream: () => {
+			return <ConnectedToStream> {
+			    type: ControlActionTypes.CONNETED_TO_STREAM,
+			}
+		}
+
 }
 

@@ -12,15 +12,15 @@ export interface grpcConnectInfo {
 }
 
 function url(serverHost: string, serverPort: number, useTLS: boolean): string {
-	const protocol = useTLS ? "https://": "http://"
-	return `${protocol}${serverHost}:${serverPort}`
+    const protocol = useTLS ? "https://" : "http://"
+    return `${protocol}${serverHost}:${serverPort}`
 }
 
 export const grpcConnection: grpcConnectInfo = {
     serverHost: __GRPC_SERVER_HOST__,
     serverPort: __GRPC_SERVER_PORT__,
     useTLS: __GRPC_USE_TLS__,
-    url: url(__GRPC_SERVER_HOST__,__GRPC_SERVER_PORT__,__GRPC_USE_TLS__),
+    url: url(__GRPC_SERVER_HOST__, __GRPC_SERVER_PORT__, __GRPC_USE_TLS__),
 }
 
 

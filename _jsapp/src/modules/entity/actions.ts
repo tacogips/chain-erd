@@ -20,7 +20,6 @@ export module EntityActionTypes {
     export const TRANSFORMING_ENTITY: EntityActionTypes = 'TRANSFORMING_ENTITY'
     export const TRANSFORM_FINISHED_ENTITY: EntityActionTypes = 'TRANSFORM_FINISHED_ENTITY'
 
-
 }
 
 // === actions ===============
