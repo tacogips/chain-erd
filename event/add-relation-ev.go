@@ -64,6 +64,7 @@ func (ev *AddRelationEv) ExecStreamPayloads(c context.Context) ([]*gen.StreamPay
 		return nil, err
 	}
 
+	//TODO(taco) use helper
 	return []*gen.StreamPayload{
 		{
 			Operation: gen.StreamPayload_NEW,
@@ -87,6 +88,7 @@ func (ev *AddRelationEv) Undo(c context.Context) error {
 }
 
 func (ev *AddRelationEv) UndoStreamPayloads(c context.Context) ([]*gen.StreamPayload, error) {
+	//TODO(taco) use helper
 	return []*gen.StreamPayload{
 		{
 			Operation: gen.StreamPayload_DELETE,

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ajainc/chain/ctx/docdb"
+	"github.com/ajainc/chain/ctx/logger"
 	"github.com/ajainc/chain/grpc/gen"
 	"github.com/fatih/structs"
 	"github.com/mitchellh/mapstructure"
@@ -42,6 +43,33 @@ func GetRelationByObjectID(c context.Context, objectID string) (int, gen.Rel, er
 	}
 
 	return id, *rel, nil
+}
+
+//GetAllRelations
+func GetAllRelations(c context.Context) ([]*gen.Rel, error) {
+	db := docdb.FromContext(c)
+
+	rels := db.Use(docdb.COLL_REL)
+	var result []*gen.Rel
+	rels.ForEachDoc(func(id int, docContent []byte) bool {
+		doc, err := rels.Read(id)
+		if err != nil {
+			logger.Error(c, err)
+			return false
+		}
+
+		entity := new(gen.Rel)
+		err = UnmarshalRelation(doc, entity)
+		if err != nil {
+			logger.Error(c, err)
+			return false
+		}
+		result = append(result, entity)
+
+		return true
+	})
+
+	return result, nil
 }
 
 func UnmarshalRelation(src map[string]interface{}, dst *gen.Rel) error {
