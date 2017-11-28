@@ -91,12 +91,14 @@ func (server *StreamServer) Connect(req *gen.StreamConnectReq, stream gen.Stream
 				logger.Errorf(server.appCtx, "failed to get all entities before send to stream")
 			}
 			for _, entity := range entities {
+				logger.Debugf(server.appCtx, "stream down entity %#v", *entity)
 				newListener.Send(gen.NewEntitySteamPayload(gen.StreamPayload_NEW, entity))
 			}
 
 			rels, err := dao.GetAllRelations(server.appCtx)
 
 			for _, rel := range rels {
+				logger.Debugf(server.appCtx, "stream down relation %#v", *rel)
 				newListener.Send(gen.NewRelationSteamPayload(gen.StreamPayload_NEW, rel))
 			}
 
