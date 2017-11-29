@@ -3,23 +3,55 @@
 
 # chain
 
-ER Diagram drawing tool for everyone
+Entity-Relation Diagram Drawing Tool For Everyone
+
+prototype image below
+
+![](./doc/example.gif)
+
+
+# How to Run
+
+### install dependencies
+`make install-dev-deps`
+
+### run backend
+```
+cd cmd/chain
+go run serve.go
+```
+
+### run frontend
+```
+cd _jsapp
+yarn install
+yarn start
+```
+
+## TODO
+- [ ] run dev mode with docker-compose
+- [ ] 1-binarize with go-bindata
+- [ ] better-looking
+- [ ] editing column
+- [ ] save as file
+- [ ] load from file
+- [ ] move as command-line tool
+- [ ] auto geneate DDL
+- [ ] multi select entities
+- [ ] grouping entities
+- [ ] self association
+- [ ] alpha release
+- [ ] authentication, share another one
+- [ ] use react-motion for fluent moving instead of konva event handler
 
 # Contribution
-# Dependencies
-## Server
-- grpc
-- protobuf
-- gogoproto
+PR's are welcome!
 
-run
-`make install-dev-deps`
-to install dependencies
+Let us invite you to chain slack team from invitation page.
 
-## Frontend
-`cd _jsapp`
-`yarn install`
+https://chaininvite.herokuapp.com/
 
-## TODOS
-- [ ] IRI compatible quads.
-- [ ] use react-motion for fluent moving instead of konva event handler
+## About chain (server-mode)
+
+![0% center](./doc/chain_server_mode_archtecture.png)
+
