@@ -13,7 +13,10 @@ prototype image below
 # How to Run
 
 ### install dependencies
-`make install-dev-deps`
+```
+make install-dev-deps
+dep ensure
+```
 
 ### run backend
 ```

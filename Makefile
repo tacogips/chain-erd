@@ -38,6 +38,7 @@ doc:
 		./$${dir}/*.proto && cd - ; \
 
 install-dev-deps:
+	go get -u github.com/golang/dep/cmd/dep
 	go get -u google.golang.org/grpc
 	go get -u github.com/golang/protobuf/proto
 	go get -u github.com/gogo/protobuf/jsonpb
