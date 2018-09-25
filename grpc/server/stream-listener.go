@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/grpc/gen"
 )
 
 type StreamListener struct {

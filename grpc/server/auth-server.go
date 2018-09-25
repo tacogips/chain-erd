@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 
-	"github.com/ajainc/chain/ctx/logger"
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/ctx/logger"
+	"github.com/tacogips/chain-erd/grpc/gen"
 	uuid "github.com/satori/go.uuid"
 
 	go16ctx "golang.org/x/net/context"

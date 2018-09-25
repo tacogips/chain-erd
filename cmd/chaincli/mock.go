@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/grpc/gen"
 	"github.com/lunny/log"
 	"github.com/satori/go.uuid"
 	"google.golang.org/grpc"

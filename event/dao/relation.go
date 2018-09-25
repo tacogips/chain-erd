@@ -3,9 +3,9 @@ package dao
 import (
 	"context"
 
-	"github.com/ajainc/chain/ctx/docdb"
-	"github.com/ajainc/chain/ctx/logger"
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/ctx/docdb"
+	"github.com/tacogips/chain-erd/ctx/logger"
+	"github.com/tacogips/chain-erd/grpc/gen"
 	"github.com/fatih/structs"
 	"github.com/mitchellh/mapstructure"
 )

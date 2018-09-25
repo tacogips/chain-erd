@@ -7,7 +7,7 @@ import (
 	"os"
 
 	tdb "github.com/HouzuoGuo/tiedot/db"
-	"github.com/ajainc/chain/ctx/logger"
+	"github.com/tacogips/chain-erd/ctx/logger"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
 )

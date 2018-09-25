@@ -5,9 +5,9 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/ajainc/chain/ctx/logger"
-	"github.com/ajainc/chain/event/dao"
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/ctx/logger"
+	"github.com/tacogips/chain-erd/event/dao"
+	"github.com/tacogips/chain-erd/grpc/gen"
 )
 
 type StreamServer struct {

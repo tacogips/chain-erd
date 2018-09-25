@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 
-	"github.com/ajainc/chain/ctx/logger"
-	"github.com/ajainc/chain/event"
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/ctx/logger"
+	"github.com/tacogips/chain-erd/event"
+	"github.com/tacogips/chain-erd/grpc/gen"
 
 	go16ctx "golang.org/x/net/context"
 )

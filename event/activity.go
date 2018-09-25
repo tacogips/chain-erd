@@ -1,6 +1,6 @@
 package event
 
-import "github.com/ajainc/chain/grpc/gen"
+import "github.com/tacogips/chain-erd/grpc/gen"
 
 type Activity struct {
 	ActivityID string

@@ -3,8 +3,8 @@ package event
 import (
 	"context"
 
-	"github.com/ajainc/chain/ctx/logger"
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/ctx/logger"
+	"github.com/tacogips/chain-erd/grpc/gen"
 )
 
 // Exec execute  Event.Do() and puts it to activities stack

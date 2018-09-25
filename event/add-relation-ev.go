@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/HouzuoGuo/tiedot/db"
-	"github.com/ajainc/chain/ctx/docdb"
-	"github.com/ajainc/chain/event/dao"
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/ctx/docdb"
+	"github.com/tacogips/chain-erd/event/dao"
+	"github.com/tacogips/chain-erd/grpc/gen"
 	uuid "github.com/satori/go.uuid"
 )
 

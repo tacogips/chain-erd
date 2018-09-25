@@ -11,12 +11,12 @@ import (
 
 	clk "github.com/101loops/clock"
 	"github.com/Sirupsen/logrus"
-	"github.com/ajainc/chain/ctx/clock"
-	"github.com/ajainc/chain/ctx/docdb"
-	"github.com/ajainc/chain/ctx/logger"
-	chaingrpc "github.com/ajainc/chain/grpc"
-	"github.com/ajainc/chain/grpc/gen"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	"github.com/tacogips/chain-erd/ctx/clock"
+	"github.com/tacogips/chain-erd/ctx/docdb"
+	"github.com/tacogips/chain-erd/ctx/logger"
+	chaingrpc "github.com/tacogips/chain-erd/grpc"
+	"github.com/tacogips/chain-erd/grpc/gen"
 )
 
 //TODO (tacogips) implement commands with option

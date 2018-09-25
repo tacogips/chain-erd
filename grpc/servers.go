@@ -3,8 +3,8 @@ package grpc
 import (
 	"context"
 
-	"github.com/ajainc/chain/grpc/gen"
-	"github.com/ajainc/chain/grpc/server"
+	"github.com/tacogips/chain-erd/grpc/gen"
+	"github.com/tacogips/chain-erd/grpc/server"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"

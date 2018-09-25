@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"os"
 
-	"github.com/ajainc/chain/ctx/docdb"
+	"github.com/tacogips/chain-erd/ctx/docdb"
 )
 
 // WithTestDBContext create empty database ad random temp dir path.

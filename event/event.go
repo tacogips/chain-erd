@@ -3,7 +3,7 @@ package event
 import (
 	"context"
 
-	"github.com/ajainc/chain/grpc/gen"
+	"github.com/tacogips/chain-erd/grpc/gen"
 )
 
 type Event interface {
