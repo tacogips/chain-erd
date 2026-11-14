@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package erd;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package                      = "gen";
+option (gogoproto.marshaler_all)       = true;
+option (gogoproto.sizer_all)           = true;
+option (gogoproto.unmarshaler_all)     = true;
+option (gogoproto.goproto_getters_all) = false;
+
+message Coord {
+  double x = 1;
+  double y = 2;
+}
+
+message WidthHeight {
+  double w = 1;
+  double h = 2;
+}
+
+enum Order {
+  ASC  = 0;
+  DESC = 1;
+}
+
+// version_id will be used to detect conflict action.
+message Entity {
+  string object_id         = 1 [ (gogoproto.customname) = "ObjectID" ];
+  string name              = 2;
+  Coord coord              = 3; // position of top-left
+  WidthHeight width_height = 4;
+  string color             = 5;
+  repeated Column columns  = 6;
+  int32 depth              = 7;
+}
+
+// TODO tacogips add other types
+enum ColumnType {
+  BIT       = 0;
+  TINYINT   = 1;
+  BOOL      = 2;
+  SMALLINT  = 3;
+  MIDIUM    = 4;
+  INT       = 5;
+  INTEGER   = 6;
+  VARCHAR   = 7;
+  CHAR      = 8;
+  DATE      = 9;
+  DATETIME  = 10;
+  TIMESTAMP = 11;
+}
+
+message Column {
+  string object_id             = 1;
+  string name                  = 2;
+  ColumnType type              = 3;
+  EntityColumnAttributes attrs = 4;
+}
+
+message EntityColumnAttributes {
+  EnumColumnAttribute attr_enum     = 1 [ (gogoproto.nullable) = true ];
+  NumberColumnAttribute attr_number = 2 [ (gogoproto.nullable) = true ];
+  StringColumnAttribute attr_string = 3 [ (gogoproto.nullable) = true ];
+  bool is_fk                        = 4;
+  bool is_pk                        = 5;
+  bool is_unique                    = 6;
+  bool is_not_null                  = 7;
+  bool is_auto_increment            = 8;
+}
+
+message EnumColumnAttribute {
+  repeated string values = 1;
+  string default_value   = 2;
+}
+
+message StringColumnAttribute {
+  int32 length         = 1;
+  string default_value = 2;
+}
+
+message NumberColumnAttribute {
+  int32 length         = 1;
+  int32 decimal        = 2;
+  bool is_unsigned     = 3;
+  double default_value = 4;
+}
+
+// relation between enitities
+message Rel {
+  string object_id            = 1 [ (gogoproto.customname) = "ObjectID" ];
+  RelPoint point_begin        = 2;
+  RelPoint point_end          = 3;
+  RelationAttribute attribute = 4;
+}
+
+message RelPoint {
+  string entity_object_id  = 1;
+  string column_object_id  = 2 [ (gogoproto.nullable) = true ];
+  RelAssociation association = 3;
+}
+
+enum RelAssociation {
+  One  = 0;
+  Many = 1;
+}
+
+message RelationAttribute {
+  repeated Coord bent_points = 1; // sorted from start_point to end_end
+}
+
+message Move {
+  string object_id = 1 [ (gogoproto.customname) = "ObjectID" ];
+  Coord from       = 2;
+  Coord to         = 3;
+}
+
+message CoordWH {
+  Coord coord              = 1;
+  WidthHeight width_height = 2;
+}
+
+message Transform {
+  string object_id = 1 [ (gogoproto.customname) = "ObjectID" ];
+  CoordWH from     = 2;
+  CoordWH to       = 3;
+}
+
+message Activity {
+  string id          = 1 [ (gogoproto.customname) = "ID" ];
+  string description = 2;
+}
+
+service EntityService {
+  rpc CreateEntity(Entity) returns (Activity);
+  rpc MoveEntity(Move) returns (Activity);
+  rpc TransformEntity(Transform) returns (Activity);
+}
+
+service RelationService {
+  rpc AddRelation(Rel) returns (Activity);
+}
+
+
+service ActivityService {
+  rpc Redo(Activity) returns (Activity);
+  rpc Undo(Activity) returns (Activity);
+}
