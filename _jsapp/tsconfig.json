@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "ES2015",
+        "lib": ["dom", "ES2017"],
+        "sourceMap": true,
+        "jsx": "react",
+        "moduleResolution": "node",
+        "rootDirs": [
+            "./src"
+        ],
+        "alwaysStrict": true,
+        "outFile": "./dist/",
+        "strict": true,
+        "removeComments": true,
+        "baseUrl": ".",
+        "paths": {
+            "*": ["src/*"]
+        }
+    },
+    "exclude": [
+        "dist",
+        "node_modules"
+    ]
+}
